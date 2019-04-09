@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1>アンケート</h1>
+    <page-title>
+      アンケート
+    </page-title>
   </div>
 </template>
 

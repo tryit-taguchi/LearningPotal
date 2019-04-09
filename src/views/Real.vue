@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h1>現社・競合車確認</h1>
+    <page-title>
+      <template v-slot:left>現車・競合車確認</template>
+      新型 vs ワゴンR vs N-WGN vs ムーヴ
+    </page-title>
   </div>
 </template>
 

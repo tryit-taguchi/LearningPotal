@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1>キャッチフレーズ</h1>
+    <page-title>
+      一言キャッチフレーズ
+    </page-title>
   </div>
 </template>
 
