@@ -17,11 +17,10 @@
 
 <script>
 export default {
-//	mixins: [Mixin],
   data: function () {
     return {
       current: 0,
-      questions: [],
+      questions: [{}],
       userSelects: [null, null, null, null]
     }
   },
@@ -40,8 +39,8 @@ export default {
         alert('回答を選択してください');
       }
     },
-    collback_QuestionsLoad: function(data) {
-			this.questions = data;
+    collback_QuestionsLoad: function(response) {
+			this.questions = response.data;
     }
   },
 	mounted: function () {
