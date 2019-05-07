@@ -24,13 +24,14 @@ export default {
 .page-title {
   position: relative;
   display: flex;
-  height: 80px;
+  height: 100px;
   font-size: 3rem;
-  margin: 20px 0 0;
+  margin: 0;
+  padding: 2rem 0 0;
 }
 .before {
   position: absolute;
-  top: -2rem;
+  top: 0;
   font-size: 2rem;
   line-height: 1;
   background-color: rgba(0, 0, 0, 0);
