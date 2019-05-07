@@ -14,7 +14,7 @@
 main{
   width: 100%;
   max-width: 1024px;
-  margin: 160px auto 0;
+  margin: 130px auto 0;
   position: relative;
 }
 </style>
