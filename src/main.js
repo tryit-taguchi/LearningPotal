@@ -1,9 +1,14 @@
+/*
+npm install js-cookie --save
+npm install dotenv --save
+*/
 import Vue from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import Cookies from 'js-cookie';
 import './registerServiceWorker'
 
 import ajax from './js/ajax';
@@ -15,8 +20,15 @@ Vue.mixin(ajax)
 //var ajax         = new Object;
 
 Vue.use(VueAxios, axios);
-
 Vue.prototype.$axios = axios;
+//Vue.use(Cookies, Cookies);
+Vue.prototype.$cookies = Cookies;
+
+//console.log("API_BASE_URL");
+//console.log(this.$dotenv.process.env.API_BASE_URL);
+//console.log(process.env.API_BASE_URL);
+//console.log(process.env);
+
 //Vue.prototype.$ajax  = ajax;
 /*
 var ajax         = new Object;

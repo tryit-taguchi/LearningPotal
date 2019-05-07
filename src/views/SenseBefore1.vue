@@ -41,10 +41,19 @@ export default {
     },
     collback_QuestionsLoad: function(response) {
 			this.questions = response.data;
+    },
+    collback_AnswerPost: function(response) {
+			console.log(response.data);
     }
   },
 	mounted: function () {
-		this.getJson('http://subcontract.t4u.bz/rest/orientation',this.collback_QuestionsLoad);
+		//this.$cookies.set('loginId', '124');
+		console.log(this.$cookies.get('loginId'));
+		console.log(this.$cookies.get('PHPSESSID'));
+		console.log(this.$cookies.get('LOGIN_DATE'));
+		//Cookies.set('name','value', { expires: 0.5 });
+		this.getJson(process.env.VUE_APP_API_URL_BASE+'/enquetes_1',this.collback_QuestionsLoad);
+		this.postJson(process.env.VUE_APP_API_URL_BASE+'/enquetes_1',this.collback_AnswerPost);
 	}
 }
 </script>
