@@ -1,7 +1,7 @@
 <template>
   <div class="question-layout">
     <page-title>
-      <template v-slot:left>試乗① 質問（選択）<span style="font-size:2.0em">1</span></template>
+      <template v-slot:left>試乗レポート<span style="font-size:2.0em">1</span></template>
       新旧比較 現行 vs 新型
     </page-title>
     <div style="padding-left:100px;">
@@ -57,6 +57,7 @@
   // justify-content: center;
   align-items: center;
 }
+
 .button-area{
   $_padding: 10px;
   $_icon-size: 30px;
@@ -68,8 +69,8 @@
   &-balloon{
     position: relative;
     align-self: center;
-    background-color: #EB4D4B;
-    // border: 2px solid #fff;
+    background-color: rgba(36, 1, 8, 1);
+    border: 2px solid #fff;
     border-radius: 4px;
     margin: 0 30px 0 0;
     background-image: url(../assets/icon_exclamation.png);
@@ -77,9 +78,9 @@
     background-repeat: no-repeat;
     background-position: 10px center;
     line-height: 1;
-    color: #fff;
     padding: $_padding $_padding $_padding $_padding*2+$_icon-size;
-    &::before {
+    &::before,
+    &::after{
       display: block;
       content: "";
       width: 0;
@@ -91,21 +92,21 @@
     }
     &::before{
       border-width: 10px 0 10px 20px;
-      border-color: transparent transparent transparent #EB4D4B;
+      border-color: transparent transparent transparent #fff;
       right: -20px;
     }
-    // &::after{
-    //  border-width: 8px 0 8px 17px;
-    //  border-color: transparent transparent transparent rgba(36, 1, 8, 1);
-    //  right: -16px;
-    // }
+    &::after{
+      border-width: 8px 0 8px 17px;
+      border-color: transparent transparent transparent rgba(36, 1, 8, 1);
+      right: -16px;
+    }
   }
   [type="button"],
   [type="submit"],
   button,
   .button{
     align-self: center;
-    background-color: #666;
+    background-color: rgb(68,114,196);
     height: 50px;
     font-size: 20px;
     color: #fff;
@@ -119,10 +120,8 @@
   .button-primary{
     background-color: #EB4D4B;
   }
-  .button-blue{
-    background-color: #0C95BA;
-  }
 }
+
 </style>
 
 <script>

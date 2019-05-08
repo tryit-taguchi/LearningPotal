@@ -6,12 +6,12 @@
     <section class="voice">
       <h2>みんなの声</h2>
       <ul class="voice-list">
-        <li><router-link to="/sensebefore1Result">オリエンテーション</router-link></li>
-        <li><router-link to="/sensebefore1Result">キャッチフレーズ</router-link></li>
-        <li><router-link to="/sensebefore1Result">まとめ１</router-link></li>
-        <li><router-link to="/sensebefore1Result">比較 ①、②、③</router-link></li>
-        <li><router-link to="/sensebefore1Result">座学</router-link></li>
-        <li><router-link to="/sensebefore1Result">まとめ２</router-link></li>
+        <li><router-link to="/questions_1_r">オリエンテーション</router-link></li>
+        <li><router-link to="/catchphrase_r">キャッチフレーズ</router-link></li>
+        <li><router-link to="/questions_3_r">まとめ１</router-link></li>
+        <li><router-link to="/reporting_all_r">比較 ①、②、③</router-link></li>
+        <li><router-link to="/questions_2_r">座学</router-link></li>
+        <li><router-link to="/questions_4_r">まとめ２</router-link></li>
       </ul>
     </section>
     <nav class="top-navi">
@@ -22,50 +22,50 @@
             <span class="top-navi-title">オリエンテ<span class="cho">ー</span>ション</span>
         </li>
 -->
-        <li id="js-navi-before1">
-          <router-link to="/sensebefore1">
+        <li id="js-navi-questions_1">
+          <router-link to="/questions_1_q">
             <img src="../assets/icon_navi_01.png" alt="">
             <span class="top-navi-title">オリエンテ<span class="cho">ー</span>ション</span>
           </router-link>
         </li>
-        <li id="js-navi-trial1">
-          <router-link to="/trial1">
+        <li id="js-navi-reporting_1">
+          <router-link to="/reporting_1_q">
             <img src="../assets/icon_navi_02.png" alt="">
             <span class="top-navi-title">試乗１</span>
           </router-link>
         </li>
-        <li id="js-navi-before2">
-          <router-link to="/sensebefore2">
+        <li id="js-navi-questions_2">
+          <router-link to="/questions_2_q">
             <img src="../assets/icon_navi_03.png" alt="">
             <span class="top-navi-title">座学</span>
           </router-link>
         </li>
-        <li id="js-navi-trial2">
-          <router-link to="/trial2">
+        <li id="js-navi-reporting_2">
+          <router-link to="/reporting_2_q">
             <img src="../assets/icon_navi_02.png" alt="">
             <span class="top-navi-title">試乗２</span>
           </router-link>
         </li>
-        <li id="js-navi-real">
-          <router-link to="/real">
+        <li id="js-navi-reporting_3">
+          <router-link to="/reporting_3_q">
             <img src="../assets/icon_navi_02.png" alt="">
             <span class="top-navi-title">現車・競合車確認</span>
           </router-link>
         </li>
-        <li id="js-navi-after">
-          <router-link to="/senseafter">
+        <li id="js-navi-questions_3">
+          <router-link to="/questions_3_q">
             <img src="../assets/icon_navi_03.png" alt="">
             <span class="top-navi-title">まとめ１</span>
           </router-link>
         </li>
-        <li id="js-navi-last">
-          <router-link to="/senselast">
+        <li id="js-navi-questions_4">
+          <router-link to="/questions_4_q">
             <img src="../assets/icon_navi_03.png" alt="">
             <span class="top-navi-title">まとめ２</span>
           </router-link>
         </li>
-        <li id="js-navi-catchword">
-          <router-link to="/catchword">
+        <li id="js-navi-catchphrase">
+          <router-link to="/catchphrase_i">
             <img src="../assets/icon_navi_04.png" alt="">
             <span class="top-navi-title">キャッチフレ<span class="cho">ー</span>ズ</span>
           </router-link>
@@ -76,14 +76,14 @@
             <span class="top-navi-title">Ｑ＆Ａ</span>
           </router-link>
         </li>
-        <li id="js-navi-understanding">
-          <router-link to="/understanding">
+        <li id="js-navi-examinations_1">
+          <router-link to="/examinations_1_q">
             <img src="../assets/icon_navi_07.png" alt="">
             <span class="top-navi-title">理解度確認テスト</span>
           </router-link>
         </li>
-        <li id="js-navi-enquete">
-          <router-link to="/enquete">
+        <li id="js-navi-enquetes_1">
+          <router-link to="/enquetes_1_q">
             <img src="../assets/icon_navi_06.png" alt="">
             <span class="top-navi-title">アンケ<span class="cho">ー</span>ト</span>
           </router-link>
