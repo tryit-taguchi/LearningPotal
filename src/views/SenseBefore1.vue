@@ -52,8 +52,8 @@ export default {
 		console.log(this.$cookies.get('PHPSESSID'));
 		console.log(this.$cookies.get('LOGIN_DATE'));
 		//Cookies.set('name','value', { expires: 0.5 });
-		this.getJson(process.env.VUE_APP_API_URL_BASE+'/enquetes_1',this.collback_QuestionsLoad);
-		this.postJson(process.env.VUE_APP_API_URL_BASE+'/enquetes_1',this.collback_AnswerPost);
+		this.getJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_QuestionsLoad);
+		this.postJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_AnswerPost);
 	}
 }
 </script>

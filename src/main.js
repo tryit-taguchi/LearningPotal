@@ -12,35 +12,18 @@ import Cookies from 'js-cookie';
 import './registerServiceWorker'
 
 import ajax from './js/ajax';
-Vue.mixin(ajax)
+Vue.mixin(ajax);
+import common from './js/common';
+Vue.mixin(common);
+//var serverInfo;
+//Vue.mixin(serverInfo);
 
 //import { Mixin } from './js/common.js';
 //require('./js/common.js');
 
-//var ajax         = new Object;
-
 Vue.use(VueAxios, axios);
 Vue.prototype.$axios = axios;
-//Vue.use(Cookies, Cookies);
 Vue.prototype.$cookies = Cookies;
-
-//console.log("API_BASE_URL");
-//console.log(this.$dotenv.process.env.API_BASE_URL);
-//console.log(process.env.API_BASE_URL);
-//console.log(process.env);
-
-//Vue.prototype.$ajax  = ajax;
-/*
-var ajax         = new Object;
-
-ajax.getJson = function(url,$obj) {
-	fetch(url).then(function (response) {
-		return response.json();
-	}).then(function (json) {
-		$obj.questions = json;
-	});
-}
-*/
 
 // コンポーネントを全て自動でグローバルに登録
 const files = require.context('./components', true, /\.vue$/);
@@ -58,7 +41,20 @@ require('@/css/style.scss')
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+	router,
+	store,
+	render: h => h(App),
+	created: function(){
+		// -- ローディング時はじめの処理
+		// サーバの共通情報を読む
+		console.log(process.env.VUE_APP_API_URL_BASE+'/serverInfo');
+		this.getJson(process.env.VUE_APP_API_URL_BASE+'/serverInfo',this.collback_ServerInfo);
+	},
+	methods: {
+	    collback_ServerInfo: function(response) {
+			// this.serverInfo 変数に共通サーバ情報を収納
+			this.serverInfo = response.data;
+			console.log(response.data);
+	    }
+	}
 }).$mount('#app')

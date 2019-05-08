@@ -1,6 +1,7 @@
 <template>
   <div>
     ログイン
+    <input type="text" name="SEAT_CD" value="A01">
     <input type="submit" value="Login" v-on:click="login">
   </div>
 </template>
