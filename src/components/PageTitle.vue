@@ -41,7 +41,7 @@ export default {
   flex: 0 1 304px;
   position: relative;
   color: #fff;
-  background-color: #EB4D4B;
+  background-color: #242424;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -56,8 +56,8 @@ export default {
   padding: 0 1em;
 }
 .left + .right {
-  color: #333;
-  background-color: #F7F7F7;
+  color: #fff;
+  background-color: #c3002f;
 }
 .page-title.sticky {
   position: sticky;

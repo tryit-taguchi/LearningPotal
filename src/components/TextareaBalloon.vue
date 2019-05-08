@@ -69,11 +69,12 @@ textarea {
     background-color: #fff;
     border-radius: 10px;
     font-size: 2.0rem;
-    border: 1px solid #666;
+    border: none;
     width: 100%;
     line-height: 1.2;
     font-family: "Nissan Brand font", "新ゴ";
     color: #000;
+    resize: none;
   }
   textarea{
     @extend %textarea;

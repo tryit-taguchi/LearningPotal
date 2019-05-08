@@ -35,51 +35,16 @@ export default {
 </script>
 
 <style lang="scss">
-
-// color
-
-$primary: #EB4D4B;
-$secondary: #7F1787 !default;
-$white: #fff !default;
-$black: #333 !default;
-$gray: #666 !default;
-
-// height size
-// ----
-//  20 : バー
-// 120 : ヘッダー
-//  40 : マージン
-// 580 : メイン
-//   8 : 余り
-// 768 : 合計
-
-$header-height: 120px !default;
-$header-margin-bottom: 40px !default;
-$header-height-content: 120px !default;
-$header-content-height: 120px !default;
-$main-height: 580px !default;
-
-// z-index
-
-$header-z-index: 100 !default;
-
-// column size
-
-$rt-col-w: 720px;
-$lt-col-w: 1024px - $rt-col-w;
-
-
-
 .reporting-radio{
   display: flex;
-  border-bottom: 1px solid $white;
+  border-bottom: 1px solid #fff;
   padding: 5px 0;
   font-size: 3rem;
   .lt{
     margin-left: auto;
   }
   .rt{
-    flex: 0 0 $rt-col-w;
+    flex: 0 0 720px;
     display: flex;
     justify-content: space-between;
     padding: 0 50px;
@@ -92,7 +57,7 @@ $lt-col-w: 1024px - $rt-col-w;
       width: 1em;
       height: 1em;
       display: inline-block;
-      border: 2px solid $primary;
+      border: 2px solid #c3002f;
       border-radius: 2px;
       font-size: 1em;
       line-height: 1;
@@ -110,12 +75,12 @@ $lt-col-w: 1024px - $rt-col-w;
     vertical-align: middle;
   }
   input[type="radio"]:checked + label{
-    // color: $white;
+    // color: #fff;
     background-color: rgba(0,0,0,0);
     &::before{
       content: "✓";
-      color: $white;
-      background-color: $primary;
+      color: #fff;
+      background-color: #c3002f;
     }
   }
 }

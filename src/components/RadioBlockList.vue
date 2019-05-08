@@ -38,7 +38,7 @@ export default {
     margin-bottom: 5px;
     span:nth-child(1){
       flex: 0 1 calc(1024px - 720px);
-      background-color: #666;
+      background-color: #242424;
       margin-left: auto;
       text-align: center;
       color: #fff;
@@ -47,7 +47,7 @@ export default {
     span:nth-child(2){
       flex: 0 0 720px;
       background-color: #fff;
-      color: #333;
+      color: #000;
       padding: 5px;
     }
   }

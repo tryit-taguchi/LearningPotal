@@ -35,7 +35,7 @@ export default {
     flex: 0 1 30%;
     position: relative;
     color: #fff;
-    background-color: #EB4D4B;
+    background-color: #242424;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -52,7 +52,7 @@ export default {
   }
   &-simple{
     color: #fff;
-    background-color: #EB4D4B;
+    background-color: #c3002f;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,7 +65,7 @@ export default {
   }
   &-simple-primary{
     color: #fff;
-    background-color: #EB4D4B;
+    background-color: #c3002f;
     display: flex;
     justify-content: center;
     align-items: center;
