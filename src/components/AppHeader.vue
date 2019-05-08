@@ -16,10 +16,15 @@
 
 <script>
 export default {
-  props: {
-    userName: String,
-    userCompany: String
-  }
+	props: {
+		userName: String,
+		userCompany: String
+	},
+	mounted: function () {
+		console.log("------- AppHeader.vue");
+		console.log(this.userCompany);
+		console.log(this.userName);
+	}
 }
 </script>
 

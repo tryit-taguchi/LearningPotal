@@ -21,11 +21,16 @@ main{
 
 <script>
 export default {
-  data: function(){
-    return {
-      userCompany: 'XXX会社',
-      userName: '○○○'
-    }
-  }
+	data: function(){
+		return {
+			userCompany: 'XXX会社',
+			userName: '○○○'
+		}
+	},
+	mounted: function () {
+		console.log("------- App.vue");
+		console.log(this.userCompany);
+		console.log(this.userName);
+	}
 }
 </script>

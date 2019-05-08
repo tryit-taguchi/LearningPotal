@@ -366,9 +366,46 @@ $top-navi-colors: (
 
 <script>
 export default {
-  data: function(){
-    return {
-    }
-  }
+	data: function(){
+		return {
+		}
+	},
+	mounted: function () {
+		var seatCd    = this.$cookies.set('SEAT_CD');
+		var lectureDt = this.$cookies.set('LECTURE_DT');
+		var nowYMD    = this.dateToFormatString(new Date(), '%YYYY%-%MM%-%DD%');
+		var toLogin   = false;
+		console.log("------- Home.vue");
+		console.log("seatCd:" + seatCd);
+		console.log("lectureDt:" + lectureDt);
+		console.log("nowYMD:" + nowYMD);
+
+		if( seatCd == null || seatCd == "" ) {
+			toLogin = true;
+		} else {
+			if( seatCd.slice( 0, 1) != "#" ) {
+				// 講師モードでなければ、日付も確認する
+				if( nowYMD != lectureDt ) {
+					toLogin = true;
+				}
+			}
+		}
+
+		// ログインすべきだったらログイン画面に遷移
+		if( toLogin == true ) {
+			this.$router.push({ name: 'login' });
+		}
+
+/*
+				this.$cookies.set('USER_ID');
+		if( this.$cookies.set('SEAT_CD') == 
+				this.$cookies.set('GROUP_CD');
+				this.$cookies.set('MEMBER_NAME');
+				this.$cookies.set('COMPANY_NAME');
+				this.$cookies.set('LECTURE_DT');
+
+		if( 
+*/
+	}
 }
 </script>
