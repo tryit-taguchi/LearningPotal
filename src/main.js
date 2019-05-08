@@ -22,8 +22,10 @@ Vue.mixin(common);
 //require('./js/common.js');
 
 Vue.use(VueAxios, axios);
+Vue.use(router);
 Vue.prototype.$axios = axios;
 Vue.prototype.$cookies = Cookies;
+//Vue.prototype.$router = router;
 
 // コンポーネントを全て自動でグローバルに登録
 const files = require.context('./components', true, /\.vue$/);

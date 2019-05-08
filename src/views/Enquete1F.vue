@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title>
-      理解度確認テスト
+      アンケート 回答完了
     </page-title>
   </div>
 </template>

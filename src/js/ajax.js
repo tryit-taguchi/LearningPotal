@@ -58,7 +58,7 @@ export default {
 				collback(cacheJson);
 			});
 		},
-		postJson: function(url,collback) {
+		postJson: function(url,params,collback) {
 			console.log("POST実行");
 
 			var $this = this;
@@ -80,20 +80,11 @@ export default {
 				return config;
 			});
 
-			//$this.$axios.get(url).then(function (response) {
-
-			let params = new FormData();
-			params.append("apikey","取得したAPIキー");
-			params.append("query","おはよう" );
-			//var params = { apikey: '取得したAPIキー', query: 'おはよう' };
-console.log(params);
-// Content-Type: application/x-www-form-urlencoded
 			$this.$axios({
 				method  : 'POST',
 				url     : url,
 				timeout : 2000,  // ms
 				data    : params,
-//				headers: { 'Content-Type': 'application/json','Cookie': 'token=${token}' },
 				headers: {
 					'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
 					'Content-Type': 'application/x-www-form-urlencoded'
@@ -103,8 +94,6 @@ console.log(params);
 //				xsrfHeaderName: 'X-CSRF-Token',
 //				withCredentials: true
 			}).then(function (response) {
-				//console.log("ajax result");
-				//console.log(response.data);
 				localStorage.setItem(url,JSON.stringify(response.data));
 				console.log("POST サーバからロード");
 				collback(response.data);

@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-for="(question, index) in questions">
-      <page-title before-title="オリエンテーション">
+      <page-title before-title="オリエンテーション 回答（棒グラフ）">
         <template v-slot:left><span class="page-title-lt-l">Q</span>uestion<span class="page-title-lt-xl">{{index+1}}</span></template>
         {{questions[index].text}}
       </page-title>

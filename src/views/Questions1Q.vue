@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-title before-text="オリエンテーション">
+    <page-title before-text="オリエンテーション 質問（選択）">
       <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{current+1}}</span></template>
       {{questions[current].text}}
     </page-title>
@@ -53,7 +53,11 @@ export default {
 		console.log(this.$cookies.get('LOGIN_DATE'));
 		//Cookies.set('name','value', { expires: 0.5 });
 		this.getJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_QuestionsLoad);
-		this.postJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_AnswerPost);
+
+		let params = new FormData();
+		params.append("apikey","取得したAPIキー");
+		params.append("query","おはよう" );
+		this.postJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',params,this.collback_AnswerPost);
 	}
 }
 </script>

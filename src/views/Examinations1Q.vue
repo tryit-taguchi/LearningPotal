@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title>
-      一言キャッチフレーズ
+      理解度確認テスト 質問（選択）
     </page-title>
   </div>
 </template>

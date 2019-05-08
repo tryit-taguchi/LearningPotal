@@ -1,8 +1,8 @@
 <template>
   <div>
-    <page-title before-text="まとめ１">
-      <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{questions[current].number}}</span></template>
-      {{questions[current].question}}
+    <page-title before-text="まとめ① 回答一覧（棒グラフ）（みんなの声用）">
+      <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{current+1}}</span></template>
+      {{questions[current].text}}
     </page-title>
     <div style="padding-left:200px;">
       <p class="bulb">あなたの回答を選択してください</p>
@@ -14,9 +14,9 @@
     </div>
   </div>
 </template>
+
 <script>
 export default {
-//	mixins: [Mixin],
   data: function () {
     return {
       current: 0,
@@ -41,13 +41,23 @@ export default {
     },
     collback_QuestionsLoad: function(response) {
 			this.questions = response.data;
+    },
+    collback_AnswerPost: function(response) {
+			console.log(response.data);
     }
   },
 	mounted: function () {
-		this.getJson('http://subcontract.t4u.bz/rest/qa1',this.collback_QuestionsLoad);
+		//this.$cookies.set('loginId', '124');
+		console.log(this.$cookies.get('loginId'));
+		console.log(this.$cookies.get('PHPSESSID'));
+		console.log(this.$cookies.get('LOGIN_DATE'));
+		//Cookies.set('name','value', { expires: 0.5 });
+		this.getJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_QuestionsLoad);
+		this.postJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_AnswerPost);
 	}
 }
 </script>
+
 <style lang="scss">
-  
+
 </style>

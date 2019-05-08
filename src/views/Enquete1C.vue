@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title>
-      アンケート
+      アンケート 確認
     </page-title>
   </div>
 </template>

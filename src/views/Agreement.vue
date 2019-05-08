@@ -1,6 +1,6 @@
 <template>
   <div>
-    規約
+    誓約書
   </div>
 </template>
 
