@@ -9,7 +9,7 @@
         <!-- <img src="../assets/title.svg" width="640" alt="CMC GROUP Learning Portal"> -->
         Learning Portal
       </div>
-      <span class="username">ようこそ！ {{userCompany}} {{userName}}さん</span>
+      <span class="username" v-if="userName != ''">ようこそ！ {{userCompany}} {{userName}}さん</span>
     </div>
   </header>
 </template>
@@ -21,9 +21,11 @@ export default {
 		userCompany: String
 	},
 	mounted: function () {
+		/*
 		console.log("------- AppHeader.vue");
 		console.log(this.userCompany);
 		console.log(this.userName);
+		*/
 	}
 }
 </script>

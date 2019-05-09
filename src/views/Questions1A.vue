@@ -1,50 +1,54 @@
 <template>
   <div>
-    <template v-for="(question, index) in questions">
-      <page-title before-title="オリエンテーション 回答（棒グラフ）">
-        <template v-slot:left><span class="page-title-lt-l">Q</span>uestion<span class="page-title-lt-xl">{{index+1}}</span></template>
-        {{questions[index].text}}
-      </page-title>
-      <p style="font-size: 3rem;margin:0;text-align:center;">ここに結果グラフ</p>
-    </template>
+    <page-title before-text="オリエンテーション 回答（棒グラフ）">
+      <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
+      {{question.QUESTION_STR}}
+    </page-title>
+    <p style="font-size: 3rem;margin:0;text-align:center;">ここに結果グラフ</p>
+    <div style="text-align:right;">
+      <base-button text="前へ" @click="prevPage" v-if="questionNo>1" />
+      <base-button text="回答" @click="nextPage" />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  data: function () {
-    return {
-      current: 0,
-      questions: [
-        {
-          text: '現行デイズ、この１年でだいたい何台売った？',
-          answers: ['0台','1～5台','6～9台','10台以上']
-        },
-        {
-          text: '新型デイズが出たら、年間何台売る自信がある？',
-          answers: ['1～3台','4～6台','7～9台','10～12台','13～15台','16台以上']
-        },
-        {
-          text: '現行デイズがワゴンRと競合したらどう思う？',
-          answers: ['全戦全勝！必ず勝つ','勝てる気がする','五分五分','まずい・困ったと思う','スルーして別のクルマをすすめる']
-        },
-        {
-          text: '現行デイズがN-WGNと競合したらどう思う？',
-          answers: ['全戦全勝！必ず勝つ','勝てる気がする','五分五分','まずい・困ったと思う','スルーして別のクルマをすすめる']
-        }
-      ],
-      userSelects: [null, null, null, null]
-    }
-  },
-  methods: {
-    nextQuestion: function(e){
-      // if(this.userSelects[this.current]!==null){
-      //   this.current++;
-      // }else{
-      //   alert('回答を選択してください');
-      // }
-    }
-  }
+	// データ定義
+	data: function(){
+		return {
+			questionNo: 1,
+			question: {
+			},
+		}
+	},
+	// 初回処理（createdではDOM操作をしない）
+	created: function () {
+		this.isLogin(); // ログインチェック
+		this.getJson(process.env.VUE_APP_API_URL_BASE+'/questions_1/' + this.questionNo+'/' + this.getMemberId(),this.collback_getData);
+	},
+	// メソッド群
+	methods: {
+		// バリデーション
+		validation: function () {
+			return true;
+		},
+		// 前ページへ
+		prevPage: function(e){
+			this.questionNo--;
+			this.$router.push({ name: 'questions_1_q' });
+		},
+		// 回答
+		nextPage: function(e){
+			this.questionNo++;
+			this.$router.push({ name: 'questions_1_q' });
+		},
+		// サーバサイドからのコールバック
+		collback_getData: function(response) {
+			console.log("getData");
+			this.question = response.data;
+		}
+	}
 }
 </script>
 

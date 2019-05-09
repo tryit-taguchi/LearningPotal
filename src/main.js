@@ -34,7 +34,7 @@ files.keys().forEach(key => {
   components[key.replace(/(\.\/|\.vue)/g, '')] = files(key).default;
 });
 Object.keys(components).forEach(key => {
-  console.log(key);
+  //console.log(key);
   Vue.component(key, components[key]);
 });
 
@@ -49,14 +49,14 @@ new Vue({
 	created: function(){
 		// -- ローディング時はじめの処理
 		// サーバの共通情報を読む
-		console.log(process.env.VUE_APP_API_URL_BASE+'/serverInfo');
+		//console.log(process.env.VUE_APP_API_URL_BASE+'/serverInfo');
 		this.getJson(process.env.VUE_APP_API_URL_BASE+'/serverInfo',this.collback_ServerInfo);
 	},
 	methods: {
 	    collback_ServerInfo: function(response) {
 			// this.serverInfo 変数に共通サーバ情報を収納
 			this.serverInfo = response.data;
-			console.log(response.data);
+			//console.log(response.data);
 	    }
 	}
 }).$mount('#app')

@@ -10,6 +10,64 @@ export default {
 	created: function () {
 	},
 	methods: {
+		// ログインチェック
+		isLogin : function() {
+			var seatCd    = this.$cookies.set('SEAT_CD');
+			var lectureDt = this.$cookies.set('LECTURE_DT');
+			var nowYMD    = this.dateToFormatString(new Date(), '%YYYY%-%MM%-%DD%');
+			var toLogin   = false;
+			console.log("------- Home.vue");
+			console.log("seatCd:" + seatCd);
+			console.log("lectureDt:" + lectureDt);
+			console.log("nowYMD:" + nowYMD);
+
+			if( seatCd == null || seatCd == "" ) {
+				toLogin = true;
+			} else {
+				if( seatCd.slice( 0, 1) != "#" ) {
+					// 講師モードでなければ、日付も確認する
+					if( nowYMD != lectureDt ) {
+						toLogin = true;
+					}
+				}
+			}
+
+			// ログインすべきだったらログイン画面に遷移
+			if( toLogin == true ) {
+				this.toLogout();
+				this.$router.push({ name: 'login' });
+			} else {
+				this.$parent.userCompany = this.$cookies.get('COMPANY_NAME');
+				this.$parent.userName    = this.$cookies.get('MEMBER_NAME');
+			}
+		},
+		// ログイン情報をクッキーに保存
+		toLogin : function(login) {
+			this.$cookies.set('MEMBER_ID',login.MEMBER_ID);
+			this.$cookies.set('SEAT_CD',login.SEAT_CD);
+			this.$cookies.set('GROUP_CD',login.GROUP_CD);
+			this.$cookies.set('MEMBER_NAME',login.MEMBER_NAME);
+			this.$cookies.set('COMPANY_NAME',login.COMPANY_NAME);
+			this.$cookies.set('LECTURE_DT',login.LECTURE_DT);
+			this.$parent.userCompany = login.COMPANY_NAME;
+			this.$parent.userName    = login.MEMBER_NAME;
+		},
+		// ログイン情報をクッキーに保存
+		toLogout : function() {
+			this.$cookies.set('MEMBER_ID','');
+			this.$cookies.set('SEAT_CD','');
+			this.$cookies.set('GROUP_CD','');
+			this.$cookies.set('MEMBER_NAME','');
+			this.$cookies.set('COMPANY_NAME','');
+			this.$cookies.set('LECTURE_DT','');
+			this.$parent.userCompany = '';
+			this.$parent.userName    = '';
+		},
+		// ユーザーID取得
+		getMemberId : function() {
+			return this.$cookies.get('MEMBER_ID');
+		},
+
 		dateToFormatString : function(date, fmt, locale, pad) {
 			// %fmt% を日付時刻表記に。
 			// 引数
