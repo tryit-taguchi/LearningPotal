@@ -39,10 +39,8 @@ export default {
 				this.$cookies.set('MEMBER_NAME',this.login.MEMBER_NAME);
 				this.$cookies.set('COMPANY_NAME',this.login.COMPANY_NAME);
 				this.$cookies.set('LECTURE_DT',this.login.LECTURE_DT);
-/*
 				this.userCompany = this.login.COMPANY_NAME;
 				this.userName    = this.login.MEMBER_NAME;
-				*/
 
 /*
 				console.log("------- Login.vue");
