@@ -2,8 +2,7 @@
   <header class="page-header">
     <div class="inner">
       <router-link to="/">
-        <!-- <img class="logo" src="../assets/logo.svg" alt=""> -->
-        <span class="logo">NISSAN</span>
+        <img class="logo" src="../assets/logo.png" alt="">
       </router-link>
       <div class="title">
         <!-- <img src="../assets/title.svg" width="640" alt="CMC GROUP Learning Portal"> -->
@@ -51,11 +50,11 @@ export default {
     width: auto;
     cursor: pointer;
 
-    display: block;
-    width: 100px;
-    height: 120px;
-    box-shadow: inset 0 0 0 1px #fff;
-    color: #fff;
+    // display: block;
+    // width: 100px;
+    // height: 120px;
+    // box-shadow: inset 0 0 0 1px #fff;
+    // color: #fff;
   }
   .title {
     margin: 0 0 0 140px;
