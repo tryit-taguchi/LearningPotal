@@ -28,12 +28,7 @@ export default {
 		console.log('-- '+this.pageType+'_a');
 		// セッション情報の取得等
 		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
-		this.startSession(function ($this){
-				// このコールバック内にはthisが$thisで引き渡されてくるので注意
-				console.log("セッションを読み込み終わって状態を取得したら問題データを読み込む");
-				$this.$parent.questionNo = $this.$parent.session.question_atr[$this.pageType].currentQuestionNo;
-				$this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+$this.pageType+'/' + $this.questionNo+'/' + $this.getMemberId(),$this.collback_getData);
-		});
+		this.startSession(this.callback_getSession);
 	},
 	// メソッド群
 	methods: {
@@ -52,7 +47,15 @@ export default {
 			this.session.question_atr[this.pageType].currentQuestionNo++;
 			this.jump({ name: this.pageType+'_q' });
 		},
-		// サーバサイドからのコールバック
+		// -- サーバサイドからのコールバック
+		// セッション読み込み後
+		callback_getSession: function() {
+			console.log("セッションを読み込み終わって状態を取得したら問題データを読み込む");
+			this.$parent.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
+			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType+'/' + this.questionNo+'/' + this.getMemberId(),this.collback_getData);
+			//this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+		},
+		// 問題データ取得
 		collback_getData: function(response) {
 			console.log("getData");
 			this.question = response.data;
