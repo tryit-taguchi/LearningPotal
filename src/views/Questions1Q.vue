@@ -20,15 +20,20 @@ export default {
 	// データ定義
 	data: function(){
 		return {
+			session: {},
+			pageType: 'questions_1',
 			questionNo: 1,
-			question: {
-			},
+			question: {},
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
 	created: function () {
+		console.log('-- '+this.pageType+'_q');
+		// セッション情報の取得等
+		this.session = this.$parent.session;
+		this.questionNo = this.session.question_atr[this.pageType].currentQuestionNo;
 		this.isLogin(); // ログインチェック
-		this.getJson(process.env.VUE_APP_API_URL_BASE+'/questions_1/' + this.questionNo+'/' + this.getMemberId(),this.collback_getData);
+		this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType+'/' + this.questionNo+'/' + this.getMemberId(),this.collback_getData);
 	},
 	// メソッド群
 	methods: {
@@ -39,14 +44,14 @@ export default {
 		// 前ページへ
 		prevPage: function(e){
 			this.questionNo--;
-			this.$router.push({ name: 'questions_1_a' });
+			this.$router.push({ name: this.pageType+'_a' });
 		},
 		// 回答
 		nextPage: function(e){
 			if( this.validation() ) {
 				let params = new FormData();
 				params.append("selectedNo",this.question.selectedNo);
-				this.getJson(process.env.VUE_APP_API_URL_BASE+'/questions_1/' + this.questionNo+'/' + this.getMemberId(),this.collback_postData);
+				this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType+'/' + this.questionNo+'/' + this.getMemberId(),this.collback_postData);
 			}
 		},
 		// サーバサイドからのコールバック
@@ -58,7 +63,7 @@ export default {
 		collback_postData: function(response) {
 			this.result = response.data;
 			if( this.result != null ) {
-				this.$router.push({ name: 'questions_1_a' });
+				this.$router.push({ name: this.pageType+'_a' });
 			} else {
 				alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
 			}

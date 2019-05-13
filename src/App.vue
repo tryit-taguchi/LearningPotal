@@ -25,9 +25,11 @@ export default {
 		return {
 			userCompany: '',
 			userName: '',
+			session: '',
 		}
 	},
-	mounted: function () {
+	created: function () {
+		console.log("------- App.vue");
 		/*
 		console.log("------- App.vue");
 		console.log(this.userCompany);

@@ -16,11 +16,12 @@ export default {
 			var lectureDt = this.$cookies.set('LECTURE_DT');
 			var nowYMD    = this.dateToFormatString(new Date(), '%YYYY%-%MM%-%DD%');
 			var toLogin   = false;
-			console.log("------- Home.vue");
+			/*
+			console.log("------- isLogin");
 			console.log("seatCd:" + seatCd);
 			console.log("lectureDt:" + lectureDt);
 			console.log("nowYMD:" + nowYMD);
-
+			*/
 			if( seatCd == null || seatCd == "" ) {
 				toLogin = true;
 			} else {

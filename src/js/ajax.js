@@ -11,11 +11,10 @@ export default {
 	},
 	methods: {
 		getJson: function(url,collback) {
-			console.log("GET実行");
+			console.log("HTTPメソッド「GET」実行");
 			var $this = this;
 			var storage = localStorage.getItem(url);
 			var cacheJson = null;
-			var loadFlg = true;
 			// axiosでキャッシュされないようにする
 			$this.$axios.interceptors.request.use(function (config) {
 				if (typeof config.params === 'undefined') {
@@ -59,12 +58,11 @@ export default {
 			});
 		},
 		postJson: function(url,params,collback) {
-			console.log("POST実行");
+			console.log("HTTPメソッド「POST」実行");
 
 			var $this = this;
-			var storage = localStorage.getItem(url);
-			var cacheJson = null;
-			var loadFlg = true;
+			//var storage = localStorage.getItem(url);
+			//var cacheJson = null;
 			// axiosでキャッシュされないようにする
 			$this.$axios.interceptors.request.use(function (config) {
 				if (typeof config.params === 'undefined') {
@@ -83,24 +81,65 @@ export default {
 			$this.$axios({
 				method  : 'POST',
 				url     : url,
-				timeout : 2000,  // ms
+				timeout : 3000,  // ms
 				data    : params,
 				headers: {
 					'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
 					'Content-Type': 'application/x-www-form-urlencoded'
-//					'Content-Type': 'application/json',
-//					 Cookie: "cookie1=value; cookie2=value; cookie3=value;"
-					}//,
-//				xsrfHeaderName: 'X-CSRF-Token',
-//				withCredentials: true
+					}
 			}).then(function (response) {
 				localStorage.setItem(url,JSON.stringify(response.data));
 				console.log("POST サーバからロード");
 				collback(response.data);
 			}).catch(function (response) {
+				alert("通信ができません。");
+				/*
 				console.log("POST ストレージからロード");
 				cacheJson = JSON.parse(storage);
 				collback(cacheJson);
+				*/
+			});
+		},
+		deleteJson: function(url,collback) {
+			console.log("HTTPメソッド「DELETE」実行");
+
+			var $this = this;
+			//var storage = localStorage.getItem(url);
+			//var cacheJson = null;
+			// axiosでキャッシュされないようにする
+			$this.$axios.interceptors.request.use(function (config) {
+				if (typeof config.params === 'undefined') {
+					config.params = {};
+				}
+				if (typeof config.params === 'object') {
+					if (typeof URLSearchParams === 'function' && config.params instanceof URLSearchParams)
+						config.params.append('_', Date.now());
+					else
+						config.params._ = Date.now();
+				}
+
+				return config;
+			});
+
+			$this.$axios({
+				method  : 'DELETE',
+				url     : url,
+				timeout : 3000,  // ms
+				headers: {
+					'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
+					'Content-Type': 'application/x-www-form-urlencoded'
+					}
+			}).then(function (response) {
+				localStorage.setItem(url,JSON.stringify(response.data));
+				console.log("POST サーバからロード");
+				collback(response.data);
+			}).catch(function (response) {
+				alert("通信ができません。");
+				/*
+				console.log("POST ストレージからロード");
+				cacheJson = JSON.parse(storage);
+				collback(cacheJson);
+				*/
 			});
 		}
 	}
