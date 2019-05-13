@@ -10,7 +10,7 @@ export default {
 	created: function () {
 	},
 	methods: {
-		getJson: function(url,collback) {
+		getJson: async function(url,collback) {
 			console.log("HTTPメソッド「GET」実行");
 			var $this = this;
 			var storage = localStorage.getItem(url);
@@ -31,7 +31,7 @@ export default {
 			});
 
 			//$this.$axios.get(url).then(function (response) {
-			$this.$axios({
+			await $this.$axios({
 				method  : 'GET',
 				url     : url,
 				timeout : 1000,  // ms
@@ -57,14 +57,14 @@ export default {
 				collback(cacheJson);
 			});
 		},
-		postJson: function(url,params,collback) {
+		postJson: async function(url,params,collback) {
 			console.log("HTTPメソッド「POST」実行");
 
 			var $this = this;
 			//var storage = localStorage.getItem(url);
 			//var cacheJson = null;
 			// axiosでキャッシュされないようにする
-			$this.$axios.interceptors.request.use(function (config) {
+			await $this.$axios.interceptors.request.use(function (config) {
 				if (typeof config.params === 'undefined') {
 					config.params = {};
 				}
