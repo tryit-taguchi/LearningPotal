@@ -7,21 +7,61 @@
 // https://yk0807.com/techblog/2018/08/30/axios%E3%81%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E9%80%81%E4%BF%A1%E3%81%A7%E3%83%8F%E3%83%9E%E3%81%A3%E3%81%9F%E8%A9%B1/
 //var serverInfo;
 export default {
+	// データ定義
 	created: function () {
 	},
 	methods: {
+		// ページジャンプ
+		jump : function(url) {
+			// ジャンプ前にセッションをDBに吐き出す
+			let params = new FormData();
+			params.append("session",JSON.stringify(this.$parent.session));
+			var membarId = this.$cookies.set('MEMBER_ID');
+			if( !this.isEmpty(membarId) ) {
+				// セッションの書き込み
+				console.log("セッションの書き込み");
+				this.postJson(process.env.VUE_APP_API_URL_BASE+'/session/'+membarId,params,null);
+			}
+			// ジャンプ
+			this.$router.push(url);
+		},
+		// セッションのスタート
+		startSession : function(callback) {
+			var obj = this;
+			console.log("セッションのスタート");
+			var membarId = this.$cookies.set('MEMBER_ID');
+			if( !this.isEmpty(membarId) ) {
+				// セッションの読み込み
+				console.log("セッションの読み込み membarId:"+membarId);
+				//var session = this.$parent.session;
+				this.getJson(process.env.VUE_APP_API_URL_BASE+'/session/'+membarId,function(response) {
+					//console.log("--------------- collback_startSession");
+					try {
+						if( response.data != null ) {
+							obj.$parent.session = response.data;
+							if( callback != null ) {
+								callback(obj);
+							}
+						}
+					} catch(e) {
+						console.log(e);
+					}
+				});
+			}
+		},
+		// phpと同じようなempty
+		isEmpty : function(val) {
+			if( val == null ) return true;
+			if( val == '' )   return true;
+			if( val == 0 )    return true;
+			return false;
+		},
 		// ログインチェック
-		isLogin : function() {
+		isLogin : async function() {
 			var seatCd    = this.$cookies.set('SEAT_CD');
 			var lectureDt = this.$cookies.set('LECTURE_DT');
 			var nowYMD    = this.dateToFormatString(new Date(), '%YYYY%-%MM%-%DD%');
 			var toLogin   = false;
-			/*
-			console.log("------- isLogin");
-			console.log("seatCd:" + seatCd);
-			console.log("lectureDt:" + lectureDt);
-			console.log("nowYMD:" + nowYMD);
-			*/
 			if( seatCd == null || seatCd == "" ) {
 				toLogin = true;
 			} else {
@@ -32,7 +72,6 @@ export default {
 					}
 				}
 			}
-
 			// ログインすべきだったらログイン画面に遷移
 			if( toLogin == true ) {
 				this.toLogout();
@@ -41,6 +80,7 @@ export default {
 				this.$parent.userCompany = this.$cookies.get('COMPANY_NAME');
 				this.$parent.userName    = this.$cookies.get('MEMBER_NAME');
 			}
+			return await this.startSession(); // セッションのスタート
 		},
 		// ログイン情報をクッキーに保存
 		toLogin : function(login) {

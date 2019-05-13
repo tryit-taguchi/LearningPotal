@@ -10,10 +10,9 @@ export default {
 	created: function () {
 	},
 	methods: {
-		getJson: async function(url,collback) {
-			console.log("HTTPメソッド「GET」実行");
+		getJson: async function(url,collback,collback2) {
+			console.log("HTTPメソッド「GET」実行 : " + url);
 			var $this = this;
-			var storage = localStorage.getItem(url);
 			var cacheJson = null;
 			// axiosでキャッシュされないようにする
 			$this.$axios.interceptors.request.use(function (config) {
@@ -31,7 +30,7 @@ export default {
 			});
 
 			//$this.$axios.get(url).then(function (response) {
-			await $this.$axios({
+			return await $this.$axios({
 				method  : 'GET',
 				url     : url,
 				timeout : 1000,  // ms
@@ -45,16 +44,27 @@ export default {
 			 Cookie: "cookie1=value; cookie2=value; cookie3=value;",
 				xsrfHeaderName: 'X-CSRF-Token',
 				withCredentials: true
-			}).then(function (response) {
-				//console.log("ajax result");
-				//console.log(response.data);
-				localStorage.setItem(url,JSON.stringify(response.data));
-				console.log("GET サーバからロード");
-				collback(response.data);
+			}).then(await function (response) {
+				console.log("GET サーバからロード : " + url);
+				if( collback.name != "" ) {
+					console.log("関数名 : " + collback.name);
+				} else {
+					console.log("関数名 : 無名関数");
+				}
+				if( collback != null ) {
+					localStorage.setItem(url,JSON.stringify(response.data));
+					collback(response.data);
+				}
 			}).catch(function (response) {
-				console.log("GET ストレージからロード");
+				console.log("キャッチされた？");
+/*
+				console.log("GET ストレージからロード : " + url);
+				var storage = localStorage.getItem(url);
 				cacheJson = JSON.parse(storage);
-				collback(cacheJson);
+				if( collback != null ) {
+					collback(cacheJson);
+				}
+*/
 			});
 		},
 		postJson: async function(url,params,collback) {
@@ -90,7 +100,9 @@ export default {
 			}).then(function (response) {
 				localStorage.setItem(url,JSON.stringify(response.data));
 				console.log("POST サーバからロード");
-				collback(response.data);
+				if( collback != null ) {
+					collback(response.data);
+				}
 			}).catch(function (response) {
 				alert("通信ができません。");
 				/*
@@ -132,7 +144,9 @@ export default {
 			}).then(function (response) {
 				localStorage.setItem(url,JSON.stringify(response.data));
 				console.log("POST サーバからロード");
-				collback(response.data);
+				if( collback != null ) {
+					collback(response.data);
+				}
 			}).catch(function (response) {
 				alert("通信ができません。");
 				/*

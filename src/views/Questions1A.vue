@@ -36,10 +36,13 @@ export default {
 	created: function () {
 		console.log('-- '+this.pageType+'_a');
 		// セッション情報の取得等
-		this.session = this.$parent.session;
-		this.questionNo = this.session.question_atr[this.pageType].currentQuestionNo;
-		this.isLogin(); // ログインチェック
-		this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType+'/' + this.questionNo+'/' + this.getMemberId(),this.collback_getData);
+		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
+		this.startSession(function ($this){
+				// このコールバック内にはthisが$thisで引き渡されてくるので注意
+				console.log("セッションを読み込み終わって状態を取得したら問題データを読み込む");
+				$this.$parent.questionNo = $this.$parent.session.question_atr[$this.pageType].currentQuestionNo;
+				$this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+$this.pageType+'/' + $this.questionNo+'/' + $this.getMemberId(),$this.collback_getData);
+		});
 	},
 	// メソッド群
 	methods: {
@@ -50,13 +53,13 @@ export default {
 		// 前ページへ
 		prevPage: function(e){
 			this.questionNo--;
-			this.$router.push({ name: this.pageType+'_q' });
+			this.jump({ name: this.pageType+'_q' });
 		},
 		// 回答
 		nextPage: function(e){
 			this.questionNo++;
 			this.session.question_atr[this.pageType].currentQuestionNo++;
-			this.$router.push({ name: this.pageType+'_q' });
+			this.jump({ name: this.pageType+'_q' });
 		},
 		// サーバサイドからのコールバック
 		collback_getData: function(response) {

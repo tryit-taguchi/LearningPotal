@@ -50,7 +50,8 @@ export default {
 			if( this.login != null ) {
 				// ログイン情報をクッキーに保存
 				this.toLogin(this.login);
-				this.$router.push({ name: 'agreement' }); // ログインできたら誓約書画面に遷移
+				//this.$router.push({ name: 'agreement' }); // ログインできたら誓約書画面に遷移
+				this.jump({ name: 'agreement' }); // ログインできたら誓約書画面に遷移
 				//console.log("登録されている受講者です");
 			} else {
 				// 違ってたらログアウトさせる
