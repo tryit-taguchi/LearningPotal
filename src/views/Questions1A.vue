@@ -9,6 +9,7 @@
       <base-button text="前へ" @click="prevPage" v-if="questionNo>1" />
       <base-button text="回答" @click="nextPage" />
     </div>
+    <bar-chart :width="824" :height="400" :props="dataObj" style="backgroundColor:#fff"></bar-chart>
   </div>
 </template>
 
@@ -21,6 +22,14 @@ export default {
 			pageType: 'questions_1',
 			questionNo: 1,
 			question: {},
+      // グラフ描画用のデータ群(仮)
+      dataObj: {
+        title: "Q1. 現行フォレスター、この１年でだいたい何台売った？",
+        label: ["①0台","②1～5台","③6～9台","④10台以上"],
+        data: [25,75,0,0],
+        sum:[1,3,0,0],
+        selected: 1
+      }
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
