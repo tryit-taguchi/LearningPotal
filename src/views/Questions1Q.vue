@@ -22,7 +22,9 @@ export default {
 		return {
 			pageType: 'questions_1',
 			questionNo: 1,
-			question: {},
+			question: {
+					selectedNo: -1,
+				},
 			questionName: "",
 		}
 	},
@@ -33,6 +35,18 @@ export default {
 		this.isLogin();
 		this.startSession(this.callback_getSession);
 	},
+	/*
+	watch: {
+		question: function () {
+			console.log("テスト：この関数は question が変わるごとに実行されます。");
+		}
+	},
+	*/
+	/*
+	components: {
+		RadioBlockList: require('./RadioBlockList'),
+	},
+	*/
 	// メソッド群
 	methods: {
 		// バリデーション
@@ -46,7 +60,6 @@ export default {
 		// 前ページへ
 		prevPage: function(e){
 			this.questionNo--;
-			//this.$router.push({ name: this.pageType+'_a' });
 			this.jump({ name: this.pageType+'_a' });
 		},
 		// 回答
@@ -70,6 +83,17 @@ export default {
 		// 問題データ取得後
 		collback_getData: function(response) {
 			this.question = response.data;
+			this.$forceUpdate();
+			/* 
+//console.log(this.$refs);
+//console.log(this.$refs.radiobox_1.value);
+//console.log(this.$refs.radiobox_1.vModel);
+//console.log(this.$refs.radio-block-list.vModel);
+			this.$nextTick(() => {
+				this.question.selectedNo = 2;
+				console.log(response.data);
+			});
+			*/
 		},
 		// 回答データ送信後
 		collback_postData: function(response) {
