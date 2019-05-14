@@ -13,28 +13,31 @@ export default {
 	methods: {
 		// ページジャンプ
 		jump : function(url) {
+			// ジャンプ
+			this.$router.push(url);
+		},
+		// フォームサブミット
+		submit : function(url,form,callback) {
 			// ジャンプ前にセッションをDBに吐き出す
 			let params = new FormData();
 			params.append("session",JSON.stringify(this.$parent.session));
-			var membarId = this.$cookies.set('MEMBER_ID');
-			if( !this.isEmpty(membarId) ) {
-				// セッションの書き込み
-				console.log("セッションの書き込み");
-				this.postJson(process.env.VUE_APP_API_URL_BASE+'/session/'+membarId,params,null);
+			params.append("form",JSON.stringify(form));
+			var memberId = this.getMemberId();
+			if( !this.isEmpty(memberId) ) {
+				console.log("データの送信");
+				this.postJson(url,params,callback);
 			}
-			// ジャンプ
-			this.$router.push(url);
 		},
 		// セッションのスタート
 		startSession : function(callback) {
 			var obj = this;
-			console.log("セッションのスタート");
-			var membarId = this.$cookies.set('MEMBER_ID');
-			if( !this.isEmpty(membarId) ) {
+			//console.log("セッションのスタート");
+			var memberId = this.$cookies.set('MEMBER_ID');
+			if( !this.isEmpty(memberId) ) {
 				// セッションの読み込み
-				console.log("セッションの読み込み membarId:"+membarId);
+				console.log("セッションの読み込み memberId:"+memberId);
 				//var session = this.$parent.session;
-				this.getJson(process.env.VUE_APP_API_URL_BASE+'/session/'+membarId,function(response) {
+				this.getJson(process.env.VUE_APP_API_URL_BASE+'/session/'+memberId,function(response) {
 					//console.log("--------------- collback_startSession");
 					try {
 						if( response.data != null ) {
@@ -80,7 +83,7 @@ export default {
 				this.$parent.userCompany = this.$cookies.get('COMPANY_NAME');
 				this.$parent.userName    = this.$cookies.get('MEMBER_NAME');
 			}
-			return await this.startSession(); // セッションのスタート
+			return;
 		},
 		// ログイン情報をクッキーに保存
 		toLogin : function(login) {

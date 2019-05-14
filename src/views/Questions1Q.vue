@@ -27,7 +27,7 @@ export default {
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
-	created: async function () {
+	created: function () {
 		console.log('-- '+this.pageType+'_q');
 		// セッション情報の取得等
 		this.isLogin();
@@ -48,9 +48,11 @@ export default {
 		// 回答
 		nextPage: function(e){
 			if( this.validation() ) {
-				let params = new FormData();
-				params.append("selectedNo",this.question.selectedNo);
-				this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType+'/' + this.questionNo+'/' + this.getMemberId(),this.collback_postData);
+				var form = {
+						"selectedNo" : this.question.selectedNo,
+					};
+				console.log("memberId : "+this.getMemberId());
+				this.submit(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType+'/' + this.questionNo+'/' + this.getMemberId(),form,this.collback_postData);
 			}
 		},
 		// -- サーバサイドからのコールバック
@@ -59,13 +61,13 @@ export default {
 			console.log("セッションを読み込み終わって状態を取得したら問題データを読み込む");
 			this.$parent.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
 			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType+'/' + this.questionNo+'/' + this.getMemberId(),this.collback_getData);
-			//this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 		},
-		// 問題データ取得
+		// 問題データ取得後
 		collback_getData: function(response) {
 			this.question = response.data;
 		},
-		// 回答データ送信
+		// 回答データ送信後
 		collback_postData: function(response) {
 			this.result = response.data;
 			if( this.result != null ) {

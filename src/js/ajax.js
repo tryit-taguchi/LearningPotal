@@ -10,7 +10,7 @@ export default {
 	created: function () {
 	},
 	methods: {
-		getJson: async function(url,collback,collback2) {
+		getJson: async function(url,collback) {
 			console.log("HTTPメソッド「GET」実行 : " + url);
 			var $this = this;
 			var cacheJson = null;
@@ -46,11 +46,13 @@ export default {
 				withCredentials: true
 			}).then(await function (response) {
 				console.log("GET サーバからロード : " + url);
+				/*
 				if( collback.name != "" ) {
 					console.log("関数名 : " + collback.name);
 				} else {
 					console.log("関数名 : 無名関数");
 				}
+				*/
 				if( collback != null ) {
 					localStorage.setItem(url,JSON.stringify(response.data));
 					collback(response.data);
