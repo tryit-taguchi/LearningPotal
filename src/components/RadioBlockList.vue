@@ -12,7 +12,7 @@ export default {
   props: {
     labels: Array,
     name: String,
-    value: String
+    value: Number
   },
   data() {
     return { vModel: this.value }
