@@ -59,9 +59,9 @@ export default {
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
 		callback_getSession: function() {
-			console.log("セッションを読み込み終わって状態を取得したら問題データを読み込む");
+			// セッションを読み込み終わって状態を取得したら問題データを読み込む
 			this.$parent.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType+'/' + this.questionNo+'/' + this.getMemberId(),this.collback_getData);
+			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
 			//this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 		},
 		// 問題データ取得
