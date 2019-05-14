@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-title before-text="オリエンテーション 質問（選択）">
+    <page-title :before-text="questionName">
       <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
       {{question.QUESTION_STR}}
     </page-title>

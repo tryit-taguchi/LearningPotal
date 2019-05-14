@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-title before-text="オリエンテーション 回答（棒グラフ）">
+    <page-title :before-text="questionName">
       <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
       {{question.QUESTION_STR}}
     </page-title>
@@ -23,6 +23,7 @@ export default {
 			questionNo: 1,
 			question: {},
       // グラフ描画用のデータ群(仮)
+
       dataObj: {
         title: "Q1. 現行フォレスター、この１年でだいたい何台売った？",
         label: ["①0台","②1～5台","③6～9台","④10台以上"],
@@ -30,6 +31,8 @@ export default {
         sum:[1,3,0,0],
         selected: 1
       }
+
+//      dataObj: {},
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
@@ -52,7 +55,6 @@ export default {
 		},
 		// 回答
 		nextPage: function(e){
-			this.questionNo++;
 			this.session.question_atr[this.pageType].currentQuestionNo++;
 			this.jump({ name: this.pageType+'_q' });
 		},
@@ -62,13 +64,22 @@ export default {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
 			this.$parent.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
 			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
-			//this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 		},
-		// 問題データ取得
+		// 問題データ取得後
 		collback_getData: function(response) {
-			console.log("getData");
 			this.question = response.data;
-		}
+/*
+			this.dataObj.title
+        title: "Q1. 現行フォレスター、この１年でだいたい何台売った？",
+        label: ["①0台","②1～5台","③6～9台","④10台以上"],
+        data: [25,75,0,0],
+        sum:[1,3,0,0],
+        selected: 1
+      }
+*/
+			this.$forceUpdate();
+		},
 	}
 }
 </script>
