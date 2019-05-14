@@ -15,7 +15,12 @@ export default {
     value: Number
   },
   data() {
-    return { vModel: this.value }
+    return { }
+  },
+  computed: {
+    vModel: function(){
+      return this.value
+    }
   },
   watch: {
     vModel(val) {
