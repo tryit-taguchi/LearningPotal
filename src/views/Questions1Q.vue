@@ -22,7 +22,9 @@ export default {
 		return {
 			pageType: 'questions_1',
 			questionNo: 1,
-			question: {},
+			question: {
+				selectedNo: 2
+			},
 			questionName: "",
 		}
 	},

@@ -1,8 +1,18 @@
 <template>
   <div class="radio-block-list">
     <template v-for="(label, index) in labels">
-      <input type="radio" :name="name" :id="name+'_'+index" :value="index" :checked="index===value">
-      <label :for="name+'_'+index"><span>{{index+1}}</span><span>{{label}}</span></label>
+      <input
+        type="radio"
+        :name="name"
+        :id="name+'_'+index"
+        :value="index"
+        :checked="index===value"
+        @change="$emit('input', Number($event.target.value))"
+      >
+      <label :for="name+'_'+index">
+        <span>{{index+1}}</span>
+        <span>{{label}}</span>
+      </label>
     </template>
   </div>
 </template>
