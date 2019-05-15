@@ -1,7 +1,7 @@
 <template>
   <div class="radio-block-list">
     <template v-for="(label, index) in labels">
-      <input type="radio" v-model="vModel" :name="name" :id="name+'_'+index" :value="index">
+      <input type="radio" :name="name" :id="name+'_'+index" :value="index" :checked="index===value">
       <label :for="name+'_'+index"><span>{{index+1}}</span><span>{{label}}</span></label>
     </template>
   </div>
@@ -12,15 +12,10 @@ export default {
   props: {
     labels: Array,
     name: String,
-    value: Number
+    value: String
   },
   data() {
     return { }
-  },
-  computed: {
-    vModel: function(){
-      return this.value
-    }
   },
   watch: {
     vModel(val) {
