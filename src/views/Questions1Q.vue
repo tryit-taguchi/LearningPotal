@@ -60,6 +60,7 @@ export default {
 		// 前ページへ
 		prevPage: function(e){
 			this.questionNo--;
+			this.$parent.session.question_atr[this.pageType].currentQuestionNo--;
 			this.jump({ name: this.pageType+'_a' });
 		},
 		// 回答
@@ -76,7 +77,8 @@ export default {
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
-			this.$parent.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
+			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
+console.log("読み込む問題："+this.questionNo);
 			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 		},

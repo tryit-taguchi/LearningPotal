@@ -13,13 +13,31 @@ export default {
 	methods: {
 		// ページジャンプ
 		jump : function(url) {
+			console.log("ページジャンプ");
+			console.log(url);
 			// ジャンプ
 			this.$router.push(url);
+		},
+		// セッションをクローズして遷移
+		transfer : function(url) {
+			let params = new FormData();
+			localStorage.setItem('session',JSON.stringify(this.$parent.session)); // ストレージに保存
+			params.append("session",JSON.stringify(this.$parent.session));
+			var memberId = this.getMemberId();
+			if( !this.isEmpty(memberId) ) {
+				console.log("データの送信");
+				console.log(this.$parent.session);
+				this.postJson(process.env.VUE_APP_API_URL_BASE+'/session/'+memberId,params,this.toTransfer(url));
+			}
+		},
+		toTransfer : function(url) {
+			this.jump(url);
 		},
 		// フォームサブミット
 		submit : function(url,form,callback) {
 			// ジャンプ前にセッションをDBに吐き出す
 			let params = new FormData();
+			localStorage.setItem('session',JSON.stringify(this.$parent.session)); // ストレージに保存
 			params.append("session",JSON.stringify(this.$parent.session));
 			params.append("form",JSON.stringify(form));
 			var memberId = this.getMemberId();
@@ -30,8 +48,19 @@ export default {
 		},
 		// セッションのスタート
 		startSession : function(callback) {
+			console.log("セッションスタート");
+			//console.log(this.$parent.session.question_atr);
+			if( !this.isEmpty(this.$parent.session) ) {
+				console.log("セッションが存在するからサーバから読み込まない");
+				this.$parent.session = JSON.parse(localStorage.getItem('session'));
+				if( callback != null ) {
+					callback();
+				}
+				return;
+			}
+
 			var obj = this;
-			//console.log("セッションのスタート");
+
 			var memberId = this.$cookies.set('MEMBER_ID');
 			if( !this.isEmpty(memberId) ) {
 				// セッションの読み込み
@@ -43,7 +72,7 @@ export default {
 						if( response.data != null ) {
 							obj.$parent.session = response.data;
 							if( callback != null ) {
-								callback(obj);
+								callback();
 							}
 						}
 					} catch(e) {
@@ -96,8 +125,9 @@ export default {
 			this.$parent.userCompany = login.COMPANY_NAME;
 			this.$parent.userName    = login.MEMBER_NAME;
 		},
-		// ログイン情報をクッキーに保存
+		// ログイン情報をクッキーに保存(クリア）
 		toLogout : function() {
+			localStorage.removeItem('session');
 			this.$cookies.set('MEMBER_ID','');
 			this.$cookies.set('SEAT_CD','');
 			this.$cookies.set('GROUP_CD','');
