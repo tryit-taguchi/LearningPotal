@@ -4,12 +4,10 @@
       <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
       {{question.QUESTION_STR}}
     </page-title>
-
-    <bar-chart :width="824" :height="400" :props="dataObj" style="backgroundColor:#fff"></bar-chart>
-
+    <bar-chart :width="824" :height="400" :props="dataObj" style="backgroundColor:#fff;width:824px;margin:0 auto;"></bar-chart>
     <div style="text-align:right;">
-      <base-button text="前へ" @click="prevPage" />
-      <base-button text="次へ" @click="nextPage" />
+      <base-button text="前へ" @click="prevPage" v-if="questionNo>1" />
+      <base-button text="回答" @click="nextPage" />
     </div>
   </div>
 </template>
@@ -23,9 +21,8 @@ export default {
 			pageType: 'questions_1',
 			questionNo: 1,
 			question: {},
-			questionName: "",
       // グラフ描画用のデータ群(仮)
-/*
+
       dataObj: {
         title: "Q1. 現行フォレスター、この１年でだいたい何台売った？",
         label: ["①0台","②1～5台","③6～9台","④10台以上"],
@@ -33,16 +30,8 @@ export default {
         sum:[1,3,0,0],
         selected: 1
       }
-*/
-//      dataObj: {},
-      dataObj: {
-        title: "",
-        label: ["","","",""],
-        data: [0,0,0,0],
-        sum:[0,0,0,0],
-        selected: 1
-      }
 
+//      dataObj: {},
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
@@ -60,36 +49,34 @@ export default {
 		},
 		// 前ページへ
 		prevPage: function(e){
+			this.questionNo--;
 			this.jump({ name: this.pageType+'_q' });
 		},
 		// 回答
 		nextPage: function(e){
-			console.log(this.session.question_atr);
-			console.log(this.pageType);
-			this.$parent.session.question_atr[this.pageType].currentQuestionNo++;
-			//this.jump({ name: this.pageType+'_q' });
-			this.transfer({ name: this.pageType+'_q' });
+			this.session.question_atr[this.pageType].currentQuestionNo++;
+			this.jump({ name: this.pageType+'_q' });
 		},
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
-			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-console.log("読み込む問題："+this.questionNo);
+			this.$parent.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
 			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
 			this.question = response.data;
-			this.dataObj = {
+/*
+			this.dataObj.title
         title: "Q1. 現行フォレスター、この１年でだいたい何台売った？",
         label: ["①0台","②1～5台","③6～9台","④10台以上"],
         data: [25,75,0,0],
         sum:[1,3,0,0],
         selected: 1
-      };
-console.log("test");
+      }
+*/
 			this.$forceUpdate();
 		},
 	}
