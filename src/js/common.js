@@ -51,15 +51,17 @@ export default {
 			var obj = this;
 
 			console.log("セッションスタート");
-			//console.log(this.$parent.session.question_atr);
+			console.log(this.$parent.session);
 			if( !this.isEmpty(this.$parent.session) ) {
-				console.log("セッションをストレージから読み込み");
-				obj.$parent.session = JSON.parse(localStorage.getItem('session'));
-				//console.log(obj.$parent.session);
-				if( callback != null ) {
-					callback();
+				if( !this.isEmpty(localStorage.getItem('session')) ) {
+					console.log("セッションをストレージから読み込み");
+					obj.$parent.session = JSON.parse(localStorage.getItem('session'));
+					//console.log(obj.$parent.session);
+					if( callback != null ) {
+						callback();
+					}
+					return;
 				}
-				return;
 			}
 
 			var memberId = this.$cookies.set('MEMBER_ID');
@@ -131,6 +133,7 @@ export default {
 		// ログイン情報をクッキーに保存(クリア）
 		toLogout : function() {
 			localStorage.removeItem('session');
+			delete this.$parent.session;
 			this.$cookies.set('MEMBER_ID','');
 			this.$cookies.set('SEAT_CD','');
 			this.$cookies.set('GROUP_CD','');

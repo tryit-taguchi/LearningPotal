@@ -24,6 +24,8 @@ export default {
 	},
 	// 初回処理
 	mounted: function () {
+		console.log("ログアウト処理");
+		this.toLogout();
 	},
 	// メソッド群
 	methods: {
