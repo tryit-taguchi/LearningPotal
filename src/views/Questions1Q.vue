@@ -22,7 +22,9 @@ export default {
 		return {
 			pageType: 'questions_1',
 			questionNo: 1,
-			question: {},
+			question: {
+					selectedNo: null,
+				},
 			questionName: "",
 		}
 	},
@@ -83,7 +85,7 @@ console.log("読み込む問題："+this.questionNo);
 		// 問題データ取得後
 		collback_getData: function(response) {
 			this.question = response.data;
-			this.$forceUpdate();
+//			this.question.$forceUpdate();
 			/* 
 //console.log(this.$refs);
 //console.log(this.$refs.radiobox_1.value);
