@@ -53,7 +53,7 @@ export default {
 		validation: function () {
 			if( this.question.selectedNo == null ) {
 				alert("回答を選択して下さい。");
-				return false;
+//				return false;
 			}
 			return true;
 		},

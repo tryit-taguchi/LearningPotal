@@ -48,18 +48,19 @@ export default {
 		},
 		// セッションのスタート
 		startSession : function(callback) {
+			var obj = this;
+
 			console.log("セッションスタート");
 			//console.log(this.$parent.session.question_atr);
 			if( !this.isEmpty(this.$parent.session) ) {
-				console.log("セッションが存在するからサーバから読み込まない");
-				this.$parent.session = JSON.parse(localStorage.getItem('session'));
+				console.log("セッションをストレージから読み込み");
+				obj.$parent.session = JSON.parse(localStorage.getItem('session'));
+				//console.log(obj.$parent.session);
 				if( callback != null ) {
 					callback();
 				}
 				return;
 			}
-
-			var obj = this;
 
 			var memberId = this.$cookies.set('MEMBER_ID');
 			if( !this.isEmpty(memberId) ) {
@@ -71,6 +72,8 @@ export default {
 					try {
 						if( response.data != null ) {
 							obj.$parent.session = response.data;
+							console.log("セッションをサーバから読み込み完了");
+							//console.log(obj.$parent.session);
 							if( callback != null ) {
 								callback();
 							}
