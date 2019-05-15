@@ -15,13 +15,13 @@ export default {
 		jump : function(url) {
 			console.log("ページジャンプ");
 			console.log(url);
+			localStorage.setItem('session',JSON.stringify(this.$parent.session)); // ストレージに保存
 			// ジャンプ
 			this.$router.push(url);
 		},
 		// セッションをクローズして遷移
 		transfer : function(url) {
 			let params = new FormData();
-			localStorage.setItem('session',JSON.stringify(this.$parent.session)); // ストレージに保存
 			params.append("session",JSON.stringify(this.$parent.session));
 			var memberId = this.getMemberId();
 			if( !this.isEmpty(memberId) ) {

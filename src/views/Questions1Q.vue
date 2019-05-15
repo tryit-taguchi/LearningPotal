@@ -22,9 +22,7 @@ export default {
 		return {
 			pageType: 'questions_1',
 			questionNo: 1,
-			question: {
-					selectedNo: -1,
-				},
+			question: {},
 			questionName: "",
 		}
 	},
@@ -53,7 +51,7 @@ export default {
 		validation: function () {
 			if( this.question.selectedNo == null ) {
 				alert("回答を選択して下さい。");
-//				return false;
+				return false;
 			}
 			return true;
 		},
