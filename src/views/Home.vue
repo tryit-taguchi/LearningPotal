@@ -374,9 +374,16 @@ export default {
 	// 初回処理（createdではDOM操作をしない）
 	created: function () {
 		this.isLogin(); // ログインチェック
+		// セッション情報の取得等
+		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
+		this.startSession(this.callback_getSession);
 	},
 	// メソッド群
 	methods: {
+		// セッション読み込み後
+		callback_getSession: function() {
+			// セッションを読み込み終わって状態
+		},
 	}
 }
 </script>

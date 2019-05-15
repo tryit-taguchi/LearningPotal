@@ -25,7 +25,7 @@ export default {
 			params.append("session",JSON.stringify(this.$parent.session));
 			var memberId = this.getMemberId();
 			if( !this.isEmpty(memberId) ) {
-				console.log("データの送信");
+				console.log("セッションをサーバに書き込み memberId:"+memberId);
 				console.log(this.$parent.session);
 				this.postJson(process.env.VUE_APP_API_URL_BASE+'/session/'+memberId,params,this.toTransfer(url));
 			}
