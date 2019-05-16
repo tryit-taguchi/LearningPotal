@@ -2,62 +2,16 @@
   import {HorizontalBar, mixins} from 'vue-chartjs'
   export default {
     extends: HorizontalBar,
-    props: ['chartData', 'title'],
+    props: ['chartData', 'options'],
     mixins: [mixins.reactiveProp],
-    data () {
-      return {
-        options: {
-          layout: {
-            padding: {
-              right: 30
-            }
-          },
-          animation: {
-            duration: 0
-          },
-          scales: {
-            xAxes: [{
-              ticks: {
-                display: false
-              },
-              gridLines: {
-                drawBorder: false,
-              }
-            }],
-            yAxes: [{
-              ticks: {
-                fontSize: 12
-              },
-              gridLines: {
-                display:false
-              },
-            }]
-          },
-          legend: {
-            labels: {
-              fontSize: 12
-            }
-          },
-          tooltips: {
-            enabled: false
-          },
-          title: {
-            display: true,
-            fontSize: 24,
-            text: this.title
-          },
-          maintainAspectRatio:false
-        },
-      }
-    },
     mounted () {
       this.addPlugin({
-        afterDatasetsDraw: function(chart) {
+        afterDatasetsDraw: (chart)=>{
           var ctx = chart.ctx;
-          chart.data.datasets.forEach(function(dataset, i) {
+          chart.data.datasets.forEach((dataset, i)=>{
             var meta = chart.getDatasetMeta(i);
             if (!meta.hidden) {
-              meta.data.forEach(function(element, index) {
+              meta.data.forEach((element, index)=>{
                 ctx.font = Chart.helpers.fontString(12, 'normal', 'Helvetica Neue');
                 ctx.fillStyle = '#666';
                 ctx.textAlign = 'center';
@@ -77,7 +31,6 @@
         }
       });
       this.renderChart(this.chartData, this.options)
-
     }
   }
 </script>

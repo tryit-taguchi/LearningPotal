@@ -4,7 +4,7 @@
       <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
       {{question.QUESTION_STR}}
     </page-title>
-    <bar-chart :width="824" :height="400" :chart-data="chartData" :title="dataObj.questionStr" style="backgroundColor:#fff;width:824px;margin:0 auto;"></bar-chart>
+    <bar-chart-answer :width="824" :height="400" :chart-data="dataObj"></bar-chart-answer>
     <div style="text-align:right;">
       <base-button text="前へ" @click="prevPage" />
       <base-button text="回答" @click="nextPage" />
@@ -22,7 +22,6 @@ export default {
 			question: {},
 			questionName: "",
       // グラフ描画用のデータ群(仮)
-
       dataObj: {
         questionStr: "Q1. 現行フォレスター、この１年でだいたい何台売った？",
         answerList: ["①0台","②1～5台","③6～9台","④10台以上"],
@@ -34,33 +33,6 @@ export default {
 //      dataObj: {},
 		}
 	},
-  computed: {
-    chartData: function(){
-      return {
-        labels: this.dataObj.answerList,
-        datasets: [
-          {
-            label: 'あなたの回答',
-            data: this.dataObj.valueList.map((v,i)=>(i!==this.dataObj.selected-1)?0:v),
-            sum: this.dataObj.sumList,
-            backgroundColor: 'rgba(86, 206, 255, 0.2)',
-            borderColor: 'rgba(86, 206, 255, 1)',
-            borderWidth: 2,
-            stack: 'Stack 1'
-          },{
-            label: 'この会場',
-            data: this.dataObj.valueList.map((v,i)=>(i===this.dataObj.selected-1)?0:v),
-            sum: this.dataObj.sumList,
-            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-            borderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 2,
-            stack: 'Stack 1'
-          }
-        ],
-        selectedId: this.dataObj.selected-1 // 「あなたの回答」判別のために加えた独自のプロパティ
-      }
-    }
-  },
 	// 初回処理（createdではDOM操作をしない）
 	created: function () {
 		console.log('-- '+this.pageType+'_a');
