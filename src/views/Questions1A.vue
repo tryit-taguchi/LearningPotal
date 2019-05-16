@@ -1,13 +1,15 @@
 <template>
   <div>
-    <page-title :before-text="questionName">
-      <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
-      {{question.QUESTION_STR}}
-    </page-title>
-    <bar-chart-answer v-if="chartViewFlg" :width="824" :height="400" :chart-data="dataObj"></bar-chart-answer>
-    <div style="text-align:right;">
-      <base-button text="前へ" @click="prevPage" />
-      <base-button text="回答" @click="nextPage" />
+    <div v-for="question in questionList" key="question1">
+      <page-title :before-text="questionName">
+        <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
+        {{question.QUESTION_STR}}
+      </page-title>
+      <bar-chart-answer v-if="chartViewFlg" :width="824" :height="400" :chart-data="question"></bar-chart-answer>
+      <div style="text-align:right;">
+        <base-button text="前へ" @click="prevPage" />
+        <base-button text="回答" @click="nextPage" />
+      </div>
     </div>
   </div>
 </template>
@@ -19,19 +21,9 @@ export default {
 		return {
 			pageType: 'questions_1',
 			questionNo: 1,
-			question: {},
+			questionList: [],
 			questionName: "",
 			chartViewFlg: false, // データセット後に描画を行う
-      // グラフ描画用のデータ群(仮)
-      dataObj: {
-        questionStr: "Q1. 現行フォレスター、この１年でだいたい何台売った？",
-        answerList: ["①0台","②1～5台","③6～9台","④10台以上"],
-        valueList: [25,75,0,0],
-        sumList:[1,3,0,0],
-        selected: 1
-      }
-
-//      dataObj: {},
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
@@ -40,6 +32,7 @@ export default {
 		// セッション情報の取得等
 		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
 		this.startSession(this.callback_getSession);
+//questionList
 	},
 	// メソッド群
 	methods: {
@@ -62,29 +55,23 @@ export default {
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
 			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
+			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '_a/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
-			this.question = response.data;
-
-			this.dataObj.questionStr = "Q11. 現行フォレスター、この１年でだいたい何台売った？";
-			this.dataObj.answerList = ["①100台","②1～5台","③6～9台","④10台以上"];
-			this.dataObj.valueList = [75,75,0,0];
-			this.dataObj.sumList = [3,3,0,0];
-			this.dataObj.selected = 1;
+			this.questionList = response.data;
+			for( var no in this.questionList ) {
+				var question = this.questionList[no];
+				// グラフ用のタイトル
+				question.questionStr = 'Q' + this.questionList[no].QUESTION_NO + '. ' + this.questionList[no].QUESTION_STR;
+				//question.answerList = ["①100台","②1～5台","③6～9台","④10台以上"];
+				//question.valueList = [75,75,0,0];
+				//question.sumList = [3,3,0,0];
+				//question.selectedNo = null;
+			}
 
 			this.chartViewFlg = true;
-/*
-			this.dataObj.title
-        title: "Q1. 現行フォレスター、この１年でだいたい何台売った？",
-        label: ["①0台","②1～5台","③6～9台","④10台以上"],
-        data: [25,75,0,0],
-        sum:[1,3,0,0],
-        selected: 1
-      }
-*/
 			this.$forceUpdate();
 		},
 	}

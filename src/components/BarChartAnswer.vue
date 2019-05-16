@@ -58,13 +58,13 @@ export default {
   },
   computed: {
     processedData: function(){
-      console.log(this.chartData)
+      //console.log(this.chartData)
       return {
         labels: this.chartData.answerList,
         datasets: [
           {
             label: 'あなたの回答',
-            data: this.chartData.valueList.map((v,i)=>(i!==this.chartData.selected-1)?0:v),
+            data: this.chartData.valueList.map((v,i)=>(i!==this.chartData.selectedNo)?0:v),
             sum: this.chartData.sumList,
             backgroundColor: 'rgba(86, 206, 255, 0.2)',
             borderColor: 'rgba(86, 206, 255, 1)',
@@ -72,7 +72,7 @@ export default {
             stack: 'Stack 1'
           },{
             label: 'この会場',
-            data: this.chartData.valueList.map((v,i)=>(i===this.chartData.selected-1)?0:v),
+            data: this.chartData.valueList.map((v,i)=>(i===this.chartData.selectedNo)?0:v),
             sum: this.chartData.sumList,
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
@@ -80,7 +80,7 @@ export default {
             stack: 'Stack 1'
           }
         ],
-        selectedId: this.chartData.selected-1 // 「あなたの回答」判別のために加えた独自のプロパティ
+        selectedId: this.chartData.selectedNo // 「あなたの回答」判別のために加えた独自のプロパティ
       }
     },
   }
@@ -100,8 +100,8 @@ chartData: {
   answerList: ["選択肢1","選択肢2","選択肢3","選択肢4"],
   valueList: [25,75,0,0], // 票数 (棒の長さに反映)
   sumList:[1,3,0,0], // 合計 (棒の右に表示する数。票数とは独立)
-  selected: 1 // (単一選択) 「あなたの回答」この選択肢の棒は色が変わる
-  selectedList: [1,2]  // (複数選択) 「あなたの回答」この選択肢の棒は色が変わる
+  selectedNo: 1 // (単一選択) 「あなたの回答」この選択肢の棒は色が変わる
+  selectedNoList: [1,2]  // (複数選択) 「あなたの回答」この選択肢の棒は色が変わる
 }
 
 TODO：複数選択の場合の処理はまだ未実装

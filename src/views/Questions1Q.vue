@@ -81,24 +81,12 @@ export default {
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
 			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-console.log("読み込む問題："+this.questionNo);
-			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
+			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '_q/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
 			this.questionList = response.data;
-//			this.question.$forceUpdate();
-			/* 
-//console.log(this.$refs);
-//console.log(this.$refs.radiobox_1.value);
-//console.log(this.$refs.radiobox_1.vModel);
-//console.log(this.$refs.radio-block-list.vModel);
-			this.$nextTick(() => {
-				this.question.selectedNo = 2;
-				console.log(response.data);
-			});
-			*/
 		},
 		// 回答データ送信後
 		collback_postData: function(response) {
