@@ -83,46 +83,5 @@ export default {
 </script>
 
 <style lang="scss">
-.radio-block-list {
-  font-size: 3rem;
-}
-.radio-block-list input[type="radio"] {
-  display: none;
-}
-.radio-block-list label {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  cursor: pointer;
-  vertical-align: middle;
-  margin-bottom: 5px;
-}
-.radio-block-list label span:nth-child(1) {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 1 calc(1024px - 720px);
-          flex: 0 1 calc(1024px - 720px);
-  background-color: #666;
-  margin-left: auto;
-  text-align: center;
-  color: #fff;
-  padding: 5px;
-}
-.radio-block-list label span:nth-child(2) {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 720px;
-          flex: 0 0 720px;
-  background-color: #EFEFEF;
-  color: #333;
-  padding: 5px;
-}
-.radio-block-list input[type="radio"]:checked + label {
-  color: #EB4D4B;
-}
-.radio-block-list input[type="radio"]:checked + label span:nth-child(1) {
-  background-color: #f07a79;
-}
-.radio-block-list input[type="radio"]:checked + label span:nth-child(2) {
-  background-color: #EB4D4B;
-  color: #fff;
-}
+
 </style>
