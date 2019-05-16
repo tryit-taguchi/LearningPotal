@@ -6,7 +6,7 @@
     </page-title>
     <div style="padding-left:200px;">
       <p class="bulb">あなたの回答を選択してください</p>
-      <radio-block-list :labels="question.answers" :name="'Q_'+questionNo" v-model="question.selectedNo" :key="'radiobox'+questionNo" />
+      <radio-block-list :labels="question.answerList" :name="'Q_'+questionNo" v-model="question.selectedNo" :key="'radiobox'+questionNo" />
     </div>
     <div style="text-align:right;">
       <base-button text="前へ" @click="prevPage" v-if="questionNo>1" />
