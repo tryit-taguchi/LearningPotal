@@ -1,16 +1,18 @@
 <template>
   <div>
-    <page-title :before-text="questionName">
-      <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
-      {{question.QUESTION_STR}}
-    </page-title>
-    <div style="padding-left:200px;">
-      <p class="bulb">あなたの回答を選択してください</p>
-      <radio-block-list :labels="question.answers" :name="'Q_'+questionNo" v-model="question.selectedNo" :key="'radiobox'+questionNo" />
-    </div>
-    <div style="text-align:right;">
-      <base-button text="前へ" @click="prevPage" v-if="questionNo>1" />
-      <base-button text="回答" @click="nextPage" />
+    <div v-for="question in questionList" key="question1">
+      <page-title :before-text="questionName">
+        <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
+        {{question.QUESTION_STR}}
+      </page-title>
+      <div style="padding-left:200px;">
+        <p class="bulb">あなたの回答を選択してください</p>
+        <radio-block-list :labels="question.answerList" :name="'Q_'+questionNo" v-model="question.selectedNo" :key="'radiobox'+questionNo" />
+      </div>
+      <div style="text-align:right;">
+        <base-button text="前へ" @click="prevPage" v-if="questionNo>1" />
+        <base-button text="回答" @click="nextPage" />
+      </div>
     </div>
   </div>
 </template>
@@ -22,7 +24,7 @@ export default {
 		return {
 			pageType: 'questions_1',
 			questionNo: 1,
-			question: {},
+			questionList: [],
 			questionName: "",
 		}
 	},
@@ -49,9 +51,11 @@ export default {
 	methods: {
 		// バリデーション
 		validation: function () {
-			if( this.question.selectedNo == null ) {
-				alert("回答を選択して下さい。");
-				return false;
+			for( var no in this.questionList ) {
+				if( this.questionList[no].selectedNo == null ) {
+					alert("回答を選択して下さい。");
+					return false;
+				}
 			}
 			return true;
 		},
@@ -64,9 +68,10 @@ export default {
 		// 回答
 		nextPage: function(e){
 			if( this.validation() ) {
-				var form = {
-						"selectedNo" : this.question.selectedNo,
-					};
+				var form = [];
+				for( var no in this.questionList ) {
+					form.push(this.questionList[no]);
+				}
 				console.log("memberId : "+this.getMemberId());
 				this.submit(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,form,this.collback_postData);
 			}
@@ -82,7 +87,7 @@ console.log("読み込む問題："+this.questionNo);
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
-			this.question = response.data;
+			this.questionList = response.data;
 //			this.question.$forceUpdate();
 			/* 
 //console.log(this.$refs);
