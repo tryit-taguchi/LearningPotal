@@ -6,7 +6,7 @@
     </page-title>
     <bar-chart :width="824" :height="400" :props="dataObj" style="backgroundColor:#fff;width:824px;margin:0 auto;"></bar-chart>
     <div style="text-align:right;">
-      <base-button text="前へ" @click="prevPage" v-if="questionNo>1" />
+      <base-button text="前へ" @click="prevPage" />
       <base-button text="回答" @click="nextPage" />
     </div>
   </div>
@@ -17,10 +17,10 @@ export default {
 	// データ定義
 	data: function(){
 		return {
-			session: {},
 			pageType: 'questions_1',
 			questionNo: 1,
 			question: {},
+			questionName: "",
       // グラフ描画用のデータ群(仮)
 
       dataObj: {
@@ -54,14 +54,14 @@ export default {
 		},
 		// 回答
 		nextPage: function(e){
-			this.session.question_atr[this.pageType].currentQuestionNo++;
+			this.$parent.session.question_atr[this.pageType].currentQuestionNo++;
 			this.jump({ name: this.pageType+'_q' });
 		},
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
-			this.$parent.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
+			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
 			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 		},
