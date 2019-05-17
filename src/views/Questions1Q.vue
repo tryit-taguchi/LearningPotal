@@ -35,18 +35,6 @@ export default {
 		this.isLogin();
 		this.startSession(this.callback_getSession);
 	},
-	/*
-	watch: {
-		question: function () {
-			console.log("テスト：この関数は question が変わるごとに実行されます。");
-		}
-	},
-	*/
-	/*
-	components: {
-		RadioBlockList: require('./RadioBlockList'),
-	},
-	*/
 	// メソッド群
 	methods: {
 		// バリデーション

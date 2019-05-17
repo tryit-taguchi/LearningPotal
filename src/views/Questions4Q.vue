@@ -1,62 +1,96 @@
 <template>
-  <div>
-    <page-title before-text="まとめ② 質問（複数選択）">
-      <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{10}}</span></template>
-      質問文
-    </page-title>
-    <div style="padding-left:200px;">
-      <p class="bulb">あなたの回答を選択してください{{userSelects}}</p>
-      <checkbox-block-list :labels="answerList" :name="'cQ_'+questionNo" v-model="userSelects" :key="'checkbox'+questionNo" />
-    </div>
-    <div style="text-align:right;">
-      <base-button text="前へ" @click="prevQuestion" v-if="current>0" />
-      <base-button text="回答" @click="nextQuestion" />
+  <div v-if="questionViewFlg">
+    <div v-for="question in questionList" key="question1">
+      <page-title :before-text="questionName">
+        <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
+        {{question.QUESTION_STR}}
+      </page-title>
+      <div style="padding-left:200px;">
+        <p class="bulb">次の中から{{answerSelectCnt}}つ選んでください。</p>
+        <checkbox-block-list :labels="question.answerList" :name="'cQ_'+questionNo" v-model="question.selectedNoList" :key="'checkbox'+questionNo" />
+      </div>
+      <div style="text-align:right;">
+        <base-button text="前へ" @click="prevPage" v-if="questionNo>1" />
+        <base-button text="回答" @click="nextPage" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data: function () {
-    return {
-      current: 0,
-      questions: [{}],
-      questionNo: 10,
-      userSelects: [1, 2],
-      answerList: ['選択肢1','選択肢2','選択肢3','選択肢4','選択肢5','選択肢6','選択肢7','選択肢8','選択肢9','選択肢10']
-    }
-  },
+	// データ定義
+	data: function () {
+		return {
+			pageType: 'questions_4',
+			current: 0,
+			questionNo: 1,
+			questionList: [{}],
+			questionName: "",
+			questionViewFlg: false, // データセット後に描画を行う
+		}
+	},
+	// 初回処理（createdではDOM操作をしない）
+	created: function () {
+		console.log('-- '+this.pageType+'_q');
+		// セッション情報の取得等
+		this.isLogin();
+		this.startSession(this.callback_getSession);
+	},
+	// メソッド群
   methods: {
-    prevQuestion: function(e){
-      this.current--;
-    },
-    nextQuestion: function(e){
-      if(this.userSelects[this.current]!==null){
-        if(this.current>=3){
-          this.$router.push('sensebefore1result');
-        }else{
-          this.current++;
-        }
-      }else{
-        alert('回答を選択してください');
-      }
-    },
-    collback_QuestionsLoad: function(response) {
-			this.questions = response.data;
-    },
-    collback_AnswerPost: function(response) {
-			console.log(response.data);
-    }
-  },
-	mounted: function () {
-		//this.$cookies.set('loginId', '124');
-		console.log(this.$cookies.get('loginId'));
-		console.log(this.$cookies.get('PHPSESSID'));
-		console.log(this.$cookies.get('LOGIN_DATE'));
-		//Cookies.set('name','value', { expires: 0.5 });
-		this.getJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_QuestionsLoad);
-		this.postJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_AnswerPost);
-	}
+		// バリデーション
+		validation: function () {
+			for( var no in this.questionList ) {
+				if( this.questionList[no].selectedNoList.length != this.answerSelectCnt ) {
+					alert("回答を"+this.answerSelectCnt+"つ選択して下さい。");
+					return false;
+				}
+			}
+			return true;
+		},
+		// 前ページへ
+		prevPage: function(e){
+			this.questionNo--;
+			this.$parent.session.question_atr[this.pageType].currentQuestionNo--;
+			this.jump({ name: this.pageType+'_a' });
+		},
+		// 回答
+		nextPage: function(e){
+			if( this.validation() ) {
+				var form = [];
+				for( var no in this.questionList ) {
+					form.push(this.questionList[no]);
+				}
+				console.log("memberId : "+this.getMemberId());
+				this.submit(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,form,this.collback_postData);
+			}
+		},
+		// -- サーバサイドからのコールバック
+		// セッション読み込み後
+		callback_getSession: function() {
+			// セッションを読み込み終わって状態を取得したら問題データを読み込む
+			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
+			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '_q/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
+			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+			this.answerSelectCnt = this.$parent.session.question_atr[this.pageType].ANSWER_SELECT_CNT;
+		},
+		// 問題データ取得後
+		collback_getData: function(response) {
+			this.questionList = response.data;
+			this.questionViewFlg = true;
+			this.$forceUpdate();
+		},
+		// 回答データ送信後
+		collback_postData: function(response) {
+			this.result = response.data;
+			if( this.result != null ) {
+				this.jump({ name: this.pageType+'_a' });
+			} else {
+				alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
+			}
+		}
+  }
 }
 </script>
 
