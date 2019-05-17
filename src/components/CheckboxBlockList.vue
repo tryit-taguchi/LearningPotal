@@ -63,10 +63,10 @@ export default {
   input[type="checkbox"]:checked + label{
     color: #EB4D4B;
     span:nth-child(1){
-      background-color: #f07a79;
+      background-color: #620017;
     }
     span:nth-child(2){
-      background-color: #EB4D4B;
+      background-color: #c3002f;
       color: #fff;
     }
   }
