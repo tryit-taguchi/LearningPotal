@@ -56,22 +56,29 @@ export default {
       },
       afterDatasetsDraw: (chart)=>{
         var ctx = chart.ctx;
-        chart.data.datasets.forEach((dataset, i)=>{
+        chart.data.datasets.forEach(function(dataset, i) {
+          // 非表示にするラベルはスキップ
+          // if(_hideLabel&&_hideLabel.includes(i)){
+          //   return false;
+          // }
+          // 「この会場」はスキップ
+          if(i===0){
+            return false;
+          }
           var meta = chart.getDatasetMeta(i);
           if (!meta.hidden) {
-            meta.data.forEach((element, index)=>{
+            meta.data.forEach(function(element, index) {
               ctx.font = Chart.helpers.fontString(12, 'normal', 'Helvetica Neue');
               ctx.fillStyle = '#666';
-              ctx.textAlign = 'center';
+              ctx.textAlign = 'right';
               ctx.textBaseline = 'middle';
-              var selectedId = chart.data.selectedId; // 選んだ選択肢
-              if(
-                ( i === 0 && index === selectedId ) ||
-                ( i === 1 && index !== selectedId )
-              ){
-                var dataString = dataset.sum[index].toString()+'人';
-                var position = element.tooltipPosition();
-                ctx.fillText(dataString, position.x+16, position.y);
+              console.log(dataset)
+              var dataString = dataset.data[index].toString()+'%';
+              var position = element.tooltipPosition();
+              if( position.x < 700 ) {
+                ctx.fillText(dataString, position.x+30, position.y);
+              } else {
+                ctx.fillText(dataString, position.x-30, position.y);
               }
             });
           }
@@ -86,21 +93,23 @@ export default {
         labels: this.chartData.answerList,
         datasets: [
           {
-            label: 'あなたの回答',
-            data: this.chartData.siteValueList.map((v,i)=>(i!==this.chartData.selectedNo)?0:v),
-            sum: this.chartData.siteSumList,
-            backgroundColor: 'rgba(86, 206, 255, 0.2)',
-            borderColor: 'rgba(86, 206, 255, 1)',
-            borderWidth: 2,
-            stack: 'Stack 1'
-          },{
             label: 'この会場',
-            data: this.chartData.siteValueList.map((v,i)=>(i===this.chartData.selectedNo)?0:v),
-            sum: this.chartData.siteSumList,
+            // data: this.chartData.siteValueList.map((v,i)=>(i!==this.chartData.selectedNo)?0:v),
+            data: this.chartData.siteValueList,
+            // sum: this.chartData.siteSumList,
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 2,
             stack: 'Stack 1'
+          },{
+            label: '全国平均',
+            // data: this.chartData.totalValueList.map((v,i)=>(i===this.chartData.selectedNo)?0:v),
+            data: this.chartData.totalValueList,
+            // sum: this.chartData.totalSumList,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255,99,132,1)',
+            borderWidth: 2,
+            stack: 'Stack 0'
           }
         ],
         selectedId: this.chartData.selectedNo // 「あなたの回答」判別のために加えた独自のプロパティ
