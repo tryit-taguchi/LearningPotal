@@ -1,12 +1,12 @@
 <template>
   <div>
     <page-title before-text="まとめ② 質問（複数選択）">
-      <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{current+1}}</span></template>
-      {{questions[current].text}}
+      <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{10}}</span></template>
+      質問文
     </page-title>
     <div style="padding-left:200px;">
-      <p class="bulb">あなたの回答を選択してください</p>
-      <radio-block-list :labels="questions[current].answers" :name="'Q_'+current" v-model="userSelects[current]" :key="'radiobox'+current" />
+      <p class="bulb">あなたの回答を選択してください{{userSelects}}</p>
+      <checkbox-block-list :labels="answerList" :name="'cQ_'+questionNo" v-model="userSelects" :key="'checkbox'+questionNo" />
     </div>
     <div style="text-align:right;">
       <base-button text="前へ" @click="prevQuestion" v-if="current>0" />
@@ -21,7 +21,9 @@ export default {
     return {
       current: 0,
       questions: [{}],
-      userSelects: [null, null, null, null]
+      questionNo: 10,
+      userSelects: [1, 2],
+      answerList: ['選択肢1','選択肢2','選択肢3','選択肢4','選択肢5','選択肢6','選択肢7','選択肢8','選択肢9','選択肢10']
     }
   },
   methods: {
