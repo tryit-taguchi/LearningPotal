@@ -47,8 +47,12 @@ export default {
 		},
 		// 回答
 		nextPage: function(e){
-			this.$parent.session.question_atr[this.pageType].currentQuestionNo++;
-			this.jump({ name: this.pageType+'_q' });
+			if( this.$parent.session.question_atr[this.pageType].currentQuestionNo < this.$parent.session.question_atr[this.pageType].QUESTION_CNT ) {
+				this.$parent.session.question_atr[this.pageType].currentQuestionNo++;
+				this.jump({ name: this.pageType+'_q' });
+			} else {
+				this.jump({ name: this.pageType+'_r' });
+			}
 		},
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
