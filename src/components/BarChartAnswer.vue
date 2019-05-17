@@ -64,16 +64,16 @@ export default {
         datasets: [
           {
             label: 'あなたの回答',
-            data: this.chartData.valueList.map((v,i)=>(i!==this.chartData.selectedNo)?0:v),
-            sum: this.chartData.sumList,
+            data: this.chartData.siteValueList.map((v,i)=>(i!==this.chartData.selectedNo)?0:v),
+            sum: this.chartData.siteSumList,
             backgroundColor: 'rgba(86, 206, 255, 0.2)',
             borderColor: 'rgba(86, 206, 255, 1)',
             borderWidth: 2,
             stack: 'Stack 1'
           },{
             label: 'この会場',
-            data: this.chartData.valueList.map((v,i)=>(i===this.chartData.selectedNo)?0:v),
-            sum: this.chartData.sumList,
+            data: this.chartData.siteValueList.map((v,i)=>(i===this.chartData.selectedNo)?0:v),
+            sum: this.chartData.siteSumList,
             backgroundColor: 'rgba(255, 206, 86, 0.2)',
             borderColor: 'rgba(255, 206, 86, 1)',
             borderWidth: 2,
@@ -98,8 +98,10 @@ export default {
 chartData: {
   questionStr: "設問のタイトル",
   answerList: ["選択肢1","選択肢2","選択肢3","選択肢4"],
-  valueList: [25,75,0,0], // 票数 (棒の長さに反映)
-  sumList:[1,3,0,0], // 合計 (棒の右に表示する数。票数とは独立)
+  siteValueList: [25,75,0,0], // 会場 ％ (棒の長さに反映)
+  siteSumList:[1,3,0,0], // 会場 合計 (棒の右に表示する数。票数とは独立)
+  totalValueList: [25,75,0,0], // 全体 ％ (棒の長さに反映)
+  totalSumList:[1,3,0,0], // 全体 合計 (棒の右に表示する数。票数とは独立)
   selectedNo: 1 // (単一選択) 「あなたの回答」この選択肢の棒は色が変わる
   selectedNoList: [1,2]  // (複数選択) 「あなたの回答」この選択肢の棒は色が変わる
 }
