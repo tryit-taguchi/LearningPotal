@@ -7,7 +7,7 @@
         :id="name+'_'+index"
         :value="index"
         :checked="reValue.includes(index)"
-        @change="this.$emit('input', this.reValue)"
+        @change="onChange"
         v-model="reValue"
       >
       <label :for="name+'_'+index">
@@ -30,6 +30,11 @@ export default {
     labels: Array,
     name: String,
     value: Array
+  },
+  methods: {
+    onChange(e){
+      this.$emit('input', this.reValue)
+    }
   }
 }
 </script>
