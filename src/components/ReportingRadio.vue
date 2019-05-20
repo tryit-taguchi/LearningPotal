@@ -19,7 +19,7 @@
 <script>
 export default {
   props: {
-    label: Array,
+    label: String,
     name: String,
     value: String
   },
