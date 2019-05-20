@@ -7,8 +7,8 @@
       </page-title>
       <bar-chart-answer v-if="chartViewFlg" :width="824" :height="400" :chart-data="question"></bar-chart-answer>
       <div style="text-align:right;">
-        <base-button text="前へ" @click="prevPage" />
-        <base-button text="回答" @click="nextPage" />
+        <!--<base-button text="前へ" @click="prevPage" />-->
+        <base-button text="次の質問へ" @click="nextPage" />
       </div>
     </div>
   </div>

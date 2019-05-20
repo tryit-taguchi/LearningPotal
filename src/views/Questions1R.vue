@@ -7,7 +7,7 @@
       </page-title>
       <bar-chart-result v-if="chartViewFlg" :width="824" :height="400" :chart-data="question"></bar-chart-result>
       <div style="text-align:right;">
-        <base-button text="次へ" @click="prevPage" />
+        <base-button text="次へ" @click="prevPage" v-if="question.QUESTION_NO<questionCnt" />
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@ export default {
 	data: function(){
 		return {
 			pageType: 'questions_1',
-			questionNo: 1,
+			questionCnt: 1,
 			questionList: [],
 			questionName: "",
 			chartViewFlg: false, // データセット後に描画を行う
@@ -31,7 +31,6 @@ export default {
 		// セッション情報の取得等
 		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
 		this.startSession(this.callback_getSession);
-//questionList
 	},
 	// メソッド群
 	methods: {
@@ -41,25 +40,19 @@ export default {
 		},
 		// 前ページへ
 		prevPage: function(e){
-			this.questionNo--;
 			this.jump({ name: this.pageType+'_a' });
 		},
 		// 回答
 		nextPage: function(e){
-			if( this.$parent.session.question_atr[this.pageType].currentQuestionNo < this.$parent.session.question_atr[this.pageType].QUESTION_CNT ) {
-				this.$parent.session.question_atr[this.pageType].currentQuestionNo++;
-				this.jump({ name: this.pageType+'_q' });
-			} else {
-				this.jump({ name: this.pageType+'_r' });
-			}
+		
 		},
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
-			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '_r/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
+			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '_r/' + this.getMemberId(),this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+			this.questionCnt  = this.$parent.session.question_atr[this.pageType].QUESTION_CNT;
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
@@ -68,10 +61,6 @@ export default {
 				var question = this.questionList[no];
 				// グラフ用のタイトル
 				question.questionStr = 'Q' + this.questionList[no].QUESTION_NO + '. ' + this.questionList[no].QUESTION_STR;
-				//question.answerList = ["①100台","②1～5台","③6～9台","④10台以上"];
-				//question.valueList = [75,75,0,0];
-				//question.sumList = [3,3,0,0];
-				//question.selectedNo = null;
 			}
 
 			this.chartViewFlg = true;

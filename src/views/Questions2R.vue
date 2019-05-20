@@ -1,59 +1,71 @@
 <template>
   <div>
-    <page-title before-text="座学 回答一覧（みんなの声にも流用）">
-      <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{current+1}}</span></template>
-      {{questions[current].text}}
-    </page-title>
-    <div style="padding-left:200px;">
-      <p class="bulb">あなたの回答を選択してください</p>
-      <radio-block-list :labels="questions[current].answers" :name="'Q_'+current" v-model="userSelects[current]" :key="'radiobox'+current" />
-    </div>
-    <div style="text-align:right;">
-      <base-button text="前へ" @click="prevQuestion" v-if="current>0" />
-      <base-button text="回答" @click="nextQuestion" />
+    <div v-for="question in questionList" :key="question.QUESTION_NO">
+      <page-title :before-text="questionName">
+        <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
+        {{question.QUESTION_STR}}
+      </page-title>
+      <bar-chart-result v-if="chartViewFlg" :width="824" :height="400" :chart-data="question"></bar-chart-result>
+      <div style="text-align:right;">
+        <base-button text="次へ" @click="prevPage" v-if="question.QUESTION_NO<questionCnt" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data: function () {
-    return {
-      current: 0,
-      questions: [{}],
-      userSelects: [null, null, null, null]
-    }
-  },
-  methods: {
-    prevQuestion: function(e){
-      this.current--;
-    },
-    nextQuestion: function(e){
-      if(this.userSelects[this.current]!==null){
-        if(this.current>=3){
-          this.$router.push('sensebefore1result');
-        }else{
-          this.current++;
-        }
-      }else{
-        alert('回答を選択してください');
-      }
-    },
-    collback_QuestionsLoad: function(response) {
-			this.questions = response.data;
-    },
-    collback_AnswerPost: function(response) {
-			console.log(response.data);
-    }
-  },
-	mounted: function () {
-		//this.$cookies.set('loginId', '124');
-		console.log(this.$cookies.get('loginId'));
-		console.log(this.$cookies.get('PHPSESSID'));
-		console.log(this.$cookies.get('LOGIN_DATE'));
-		//Cookies.set('name','value', { expires: 0.5 });
-		this.getJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_QuestionsLoad);
-		this.postJson(process.env.VUE_APP_API_URL_BASE+'/questions_1',this.collback_AnswerPost);
+	// データ定義
+	data: function(){
+		return {
+			pageType: 'questions_2',
+			questionCnt: 1,
+			questionList: [],
+			questionName: "",
+			chartViewFlg: false, // データセット後に描画を行う
+		}
+	},
+	// 初回処理（createdではDOM操作をしない）
+	created: function () {
+		console.log('-- '+this.pageType+'_r');
+		// セッション情報の取得等
+		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
+		this.startSession(this.callback_getSession);
+	},
+	// メソッド群
+	methods: {
+		// バリデーション
+		validation: function () {
+			return true;
+		},
+		// 前ページへ
+		prevPage: function(e){
+			this.jump({ name: this.pageType+'_a' });
+		},
+		// 回答
+		nextPage: function(e){
+		
+		},
+		// -- サーバサイドからのコールバック
+		// セッション読み込み後
+		callback_getSession: function() {
+			// セッションを読み込み終わって状態を取得したら問題データを読み込む
+			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '_r/' + this.getMemberId(),this.collback_getData);
+			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+			this.questionCnt  = this.$parent.session.question_atr[this.pageType].QUESTION_CNT;
+		},
+		// 問題データ取得後
+		collback_getData: function(response) {
+			this.questionList = response.data;
+			for( var no in this.questionList ) {
+				var question = this.questionList[no];
+				// グラフ用のタイトル
+				question.questionStr = 'Q' + this.questionList[no].QUESTION_NO + '. ' + this.questionList[no].QUESTION_STR;
+			}
+
+			this.chartViewFlg = true;
+			this.$forceUpdate();
+		},
 	}
 }
 </script>

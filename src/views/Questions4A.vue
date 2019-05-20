@@ -45,7 +45,7 @@ export default {
 			this.questionNo--;
 			this.jump({ name: this.pageType+'_q' });
 		},
-		// 回答
+		// 次の質問へ
 		nextPage: function(e){
 			if( this.$parent.session.question_atr[this.pageType].currentQuestionNo < this.$parent.session.question_atr[this.pageType].QUESTION_CNT ) {
 				this.$parent.session.question_atr[this.pageType].currentQuestionNo++;

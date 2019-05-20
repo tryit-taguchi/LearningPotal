@@ -10,7 +10,7 @@
         <radio-block-list :labels="question.answerList" :name="'Q_'+questionNo" v-model="question.selectedNo" :key="'radiobox'+questionNo" />
       </div>
       <div style="text-align:right;">
-        <base-button text="前へ" @click="prevPage" v-if="questionNo>1" />
+        <!--<base-button text="前へ" @click="prevPage" v-if="questionNo>1" />-->
         <base-button text="回答" @click="nextPage" />
       </div>
     </div>
