@@ -9,10 +9,10 @@
         <p class="bulb">あなたの回答を選択してください</p>
         <radio-block-list :labels="question.answerList" :name="'Q_'+questionNo" v-model="question.selectedNo" :key="'radiobox'+questionNo" />
       </div>
-      <div style="text-align:right;">
+      <button-area>
         <!--<base-button text="前へ" @click="prevPage" v-if="questionNo>1" />-->
         <base-button text="回答" @click="nextPage" />
-      </div>
+      </button-area>
     </div>
   </div>
 </template>

@@ -6,9 +6,9 @@
         {{question.QUESTION_STR}}
       </page-title>
       <bar-chart-result v-if="chartViewFlg" :width="824" :height="400" :chart-data="question"></bar-chart-result>
-      <div style="text-align:right;">
+      <button-area>
         <base-button text="次へ" @click="prevPage" v-if="question.QUESTION_NO<questionCnt" />
-      </div>
+      </button-area>
     </div>
   </div>
 </template>

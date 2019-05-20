@@ -14,9 +14,9 @@
       <input type="checkbox" name="C[]" id="C_277" value="277">
       <label for="C_277">qqq</label>
     </div>
-    <div class="button-area">
+    <button-area>
       <base-button text="いいね" @click="nextPage" />
-    </div>
+    </button-area>
   </div>
 </template>
 

@@ -189,7 +189,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 select {
   font-size: 2.0rem;
   border: none;
@@ -200,7 +200,6 @@ select {
   background-image: linear-gradient(#666, #fff 25%, #fff 75%, #666);
   border-radius: 5px;
 }
-
 
 //*****************************/
 // Answers Page Layout

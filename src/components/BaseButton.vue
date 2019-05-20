@@ -15,24 +15,23 @@ export default {
 <style lang="scss">
 button{
   display: inline-block;
+
   appearance: none;
-  padding: .2em;
+  padding: 0 1em;
   border: none;
   border-radius: 5px;
   font-size: 2.0rem;
   line-height: 1.2;
   color: #fff;
-  background-color: #666;
+  background-color: #4472c4;
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  // &.primary{
-  //   background-color: $primary;
-  // }
-  // &.large{
-  //   font-size: 2.0rem;
-  //   line-height: 1;
-  //   padding: .5em 1em;
-  // }
+
+  align-self: center;
+  height: 50px;
+
+  flex: 0 0 200px;
+
 }
 </style>

@@ -6,10 +6,10 @@
         {{question.QUESTION_STR}}
       </page-title>
       <bar-chart-answer v-if="chartViewFlg" :width="824" :height="400" :chart-data="question"></bar-chart-answer>
-      <div style="text-align:right;">
+      <button-area>
         <base-button text="前へ" @click="prevPage" />
         <base-button text="次へ" @click="nextPage" v-if="questionNo<question.QUESTION_CNT" />
-      </div>
+      </button-area>
     </div>
   </div>
 </template>

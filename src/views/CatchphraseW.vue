@@ -10,10 +10,10 @@
     <div style="text-align:center;margin:20px auto;">
       <img src="@/assets/catchphrase_wait.png" style="width:824px;height:auto;" alt="">
     </div>
-    <div class="button-area">
-      <p class="button-area-balloon">講師の指示があるまでは<br>「進む」を押さないでください</p>
+    <button-area>
+      <text-before-button>講師の指示があるまでは<br>「進む」を押さないでください</text-before-button>
       <base-button text="進む" @click="nextPage" />
-    </div>
+    </button-area>
   </div>
 </template>
 

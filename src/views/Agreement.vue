@@ -50,7 +50,7 @@
       <label for="chkAgree" style="font-size:16pt">私は上記の制約事項に同意いたします</label><br>
       <p>{{errorMessage}}</p>
       <div class="question-button">
-        <input type="submit" value="始める">
+        <base-button text="始める" />
       </div>
     </form>
     <br>
