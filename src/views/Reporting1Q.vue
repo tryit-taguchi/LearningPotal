@@ -12,7 +12,7 @@
           {{question.QUESTION_STR}}
         </question-title>
         <reporting-radio-header />
-        <reporting-radio v-for="answer in question.answerList" :name="'Q_'+question.QUESTION_NO+'_0'" :label="answer" :max-value="7" />
+        <reporting-radio v-for="answer in question.answerList" :name="'Q_'+question.QUESTION_NO+'_0'" :label="answer" :max-value="5" />
       </div>
 
     </div>
