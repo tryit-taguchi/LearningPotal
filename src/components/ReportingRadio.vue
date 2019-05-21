@@ -2,16 +2,17 @@
   <div class="reporting-radio">
     <span class="lt">{{label}}</span>
     <div class="rt">
-      <input type="radio" :name="name" :id="name+'_5'" value="5">
-      <label :for="name+'_5'">5</label>
-      <input type="radio" :name="name" :id="name+'_4'" value="4">
-      <label :for="name+'_4'">4</label>
-      <input type="radio" :name="name" :id="name+'_3'" value="3">
-      <label :for="name+'_3'">3</label>
-      <input type="radio" :name="name" :id="name+'_2'" value="2">
-      <label :for="name+'_2'">2</label>
-      <input type="radio" :name="name" :id="name+'_1'" value="1">
-      <label :for="name+'_1'">1</label>
+      <template v-for="index in 5">
+        <input
+          type="radio"
+          :name="name"
+          :id="name+'_'+(6-index)"
+          :value="(6-index)"
+          :checked="(6-index)===value"
+          @change="$emit('input', Number($event.target.value))"
+        >
+        <label :for="name+'_'+(6-index)">{{(6-index)}}</label>
+      </template>
     </div>
   </div>
 </template>
