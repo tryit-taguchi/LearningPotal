@@ -1,6 +1,6 @@
 <template>
   <div class="question-title">
-    <span class="simple" v-if="type=='simple'"><slot></slot></span>
+    <span class="simple" v-if="type=='simple'" :style="style"><slot></slot></span>
     <template v-else>
       <span class="lt"><slot name="left"></slot></span>
       <span class="rt"><slot></slot></span>
@@ -11,13 +11,18 @@
 <script>
 export default {
   props: {
-    type: String
+    type: String,
+    color: String,
+    theme: Object
   },
-  // computed: {
-  //   hasSlotLeft() {
-  //     return !!this.$slots.left
-  //   }
-  // }
+  computed: {
+    style: function() {
+      return {
+        '--color': this.theme.color,
+        '--background-color': this.theme.backgroundColor
+      }
+    }
+  }
 }
 </script>
 
@@ -55,8 +60,10 @@ export default {
     padding: 0 1em;
   }
   .simple{
-    color: #fff;
-    background-color: #c3002f;
+    --color: #fff;
+    --background-color: #c3002f;
+    color: var(--color);
+    background-color: var(--background-color);
     display: flex;
     justify-content: center;
     align-items: center;
