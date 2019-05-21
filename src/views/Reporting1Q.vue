@@ -12,8 +12,7 @@
           {{question.QUESTION_STR}}
         </question-title>
         <reporting-radio-header />
-        <reporting-radio :name="'Q_'+question.QUESTION_NO+'_0'" label="現行" />
-        <reporting-radio :name="'Q_'+question.QUESTION_NO+'_1'" label="新型" />
+        <reporting-radio v-for="answer in question.answerList" :name="'Q_'+question.QUESTION_NO+'_0'" :label="answer" :max-value="7" />
       </div>
 
     </div>

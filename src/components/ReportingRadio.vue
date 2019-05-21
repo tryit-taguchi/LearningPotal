@@ -2,16 +2,16 @@
   <div class="reporting-radio">
     <span class="lt">{{label}}</span>
     <div class="rt">
-      <template v-for="index in 5">
+      <template v-for="index in maxValue">
         <input
           type="radio"
           :name="name"
-          :id="name+'_'+(6-index)"
-          :value="(6-index)"
-          :checked="(6-index)===value"
+          :id="name+'_'+(maxValue+1-index)"
+          :value="(maxValue+1-index)"
+          :checked="(maxValue+1-index)===value"
           @change="$emit('input', Number($event.target.value))"
         >
-        <label :for="name+'_'+(6-index)">{{(6-index)}}</label>
+        <label :for="name+'_'+(maxValue+1-index)">{{(maxValue+1-index)}}</label>
       </template>
     </div>
   </div>
@@ -22,7 +22,11 @@ export default {
   props: {
     label: String,
     name: String,
-    value: String
+    value: String,
+    maxValue: {
+      type: Number,
+      default: 5
+    }
   },
   data() {
     return { vModel: this.value }
