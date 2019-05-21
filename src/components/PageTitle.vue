@@ -19,7 +19,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .page-title {
   position: relative;
@@ -49,7 +48,7 @@ export default {
 .right {
   flex: 1 0 720px;
   color: #fff;
-  background-color: #EB4D4B;
+  background-color: #c3002f;
   display: flex;
   align-items: center;
   line-height: 1;
