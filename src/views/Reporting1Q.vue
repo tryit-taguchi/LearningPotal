@@ -12,7 +12,7 @@
           {{question.QUESTION_STR}}
         </question-title>
         <reporting-radio-header />
-        <reporting-radio v-for="answer in question.answerList" :name="'Q_'+question.QUESTION_NO+'_0'" :label="answer" :max-value="5" />
+        <reporting-radio v-for="answer in question.answerList" :name="'Q_'+question.QUESTION_NO+'_0'" :label="answer" :max-value="questionMaxValue" />
       </div>
 
     </div>
@@ -35,6 +35,8 @@ export default {
 			questionList: [],
 			questionName: "",
 			questionHtml: "",
+			questionExplanation : "",
+			questionMaxValue : 0,
 			questionViewFlg: false, // データセット後に描画を行う
 		}
 	},
@@ -51,7 +53,8 @@ export default {
 		validation: function () {
 			for( var no in this.questionList ) {
 				if( this.questionList[no].selectedNo == null ) {
-					alert("回答を選択して下さい。");
+					var qNo = parseInt(no)+1;
+					alert("Question"+qNo+"に未回答があります。\nご回答のご確認をお願いします。");
 					return false;
 				}
 			}
@@ -83,6 +86,7 @@ export default {
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 			this.questionHtml = this.$parent.session.question_atr[this.pageType].QUESTION_HTML;
 			this.questionExplanation = this.$parent.session.question_atr[this.pageType].QUESTION_EXPLANATION;
+			this.questionMaxValue = this.$parent.session.question_atr[this.pageType].ANSWER_SELECT_CNT;
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
