@@ -6,7 +6,7 @@
     </page-title>
     <div style="padding-left:100px;">
       <bulb-text>あなたの回答を選択してください</bulb-text>
-      <div v-for="question in questionList" :key="'reporting_1'+question.QUESTION_NO">
+      <div v-for="question in questionList" :key="question.QUESTION_NO">
         <question-title>
           <template v-slot:left>Question<span style="font-size:2em">{{question.QUESTION_NO}}</span></template>
           {{question.QUESTION_STR}}
