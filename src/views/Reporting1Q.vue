@@ -51,12 +51,13 @@ export default {
 	methods: {
 		// バリデーション
 		validation: function () {
-			for( var no in this.questionList ) {
-				if( this.questionList[no].selectedNo == null ) {
-//console.log();
-					var qNo = parseInt(no)+1;
-					alert("Question"+qNo+"に未回答があります。\nご回答のご確認をお願いします。");
-					return false;
+			for( var qno in this.questionList ) {
+				for( var ano = 0; ano < this.questionList[qno].ANSWER_CNT; ano++ ) {
+					if( this.questionList[qno].selectedNoList[ano] == 0 ) {
+						var questionNo = parseInt(qno)+1;
+						alert("Question"+questionNo+"に未回答があります。\nご回答のご確認をお願いします。");
+						return false;
+					}
 				}
 			}
 			return true;
