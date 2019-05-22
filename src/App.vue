@@ -26,15 +26,30 @@ export default {
 			userCompany: '',
 			userName: '',
 			session: '',
+			serverInfo : {},
 		}
 	},
 	created: function () {
 		console.log("------- App.vue");
+		// -- ローディング時はじめの処理
+		// サーバの共通情報を読む
+		//console.log(process.env.VUE_APP_API_URL_BASE+'/serverInfo');
+		console.log("サーバの共通情報読み込み");
+		this.getJson(process.env.VUE_APP_API_URL_BASE+'/serverInfo',this.collback_ServerInfo);
 		/*
 		console.log("------- App.vue");
 		console.log(this.userCompany);
 		console.log(this.userName);
 		*/
+	},
+	methods: {
+		collback_ServerInfo: async function(response) {
+			// this.serverInfo 変数に共通サーバ情報を収納
+			this.serverInfo = response.data;
+			console.log("サーバの共通情報読み込み完了");
+			console.log("アップファイルフォルダ : "+process.env.VUE_APP_UPFILES_URL_BASE);
+			console.log(this.serverInfo);
+		}
 	}
 }
 </script>

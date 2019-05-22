@@ -46,6 +46,14 @@ export default {
 				this.postJson(url,params,callback);
 			}
 		},
+		// スリープ
+		sleep: function(msec) {
+			return new Promise((resolve, reject) => {
+				setTimeout(() => {
+						resolve();
+					}, msec);
+			});
+		},
 		// セッションのスタート
 		startSession : function(callback) {
 			var obj = this;

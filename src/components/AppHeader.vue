@@ -1,12 +1,14 @@
 <template>
-  <header class="page-header">
+  <header class="page-header" v-if="pageViewFlg">
     <div class="inner">
       <router-link to="/">
-        <img class="logo" src="../assets/logo.png" alt="">
+        <!--<img class="logo" src="../assets/logo.png" alt="">-->
+        <img class="logo" :src="imgLogo" alt="">
       </router-link>
       <div class="title">
         <!-- <img src="../assets/title.svg" width="640" alt="CMC GROUP Learning Portal"> -->
-        Learning Portal
+        <img :src="imgTitle" width="50%" alt="Learning Portal">
+        <!--Learning Portal-->
       </div>
       <span class="username" v-if="userName != ''">ようこそ！ {{userCompany}} {{userName}}さん</span>
     </div>
@@ -17,15 +19,29 @@
 export default {
 	props: {
 		userName: String,
-		userCompany: String
+		userCompany: String,
 	},
-	mounted: function () {
+	// データ定義
+	data: function(){
+		return {
+			imgLogo: "",
+			imgTitle: "",
+			pageViewFlg: false, // データセット後に描画を行う
+		}
+	},
+	// 初回処理（createdではDOM操作をしない）
+	created: async function () {
+		await this.sleep(300);
+		console.log("ヘッダ処理開始");
+		this.imgLogo = process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgLogo;
+		this.imgTitle = process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgTitle;
+		this.pageViewFlg = true; // 表示を開始する
 		/*
 		console.log("------- AppHeader.vue");
 		console.log(this.userCompany);
 		console.log(this.userName);
 		*/
-	}
+	},
 }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="top-layout">
+  <div class="top-layout" v-if="pageViewFlg">
     <div class="top-visual">
       <!--<span class="top-visual-text">研修をよりスマートに</span>-->
     </div>
@@ -369,21 +369,34 @@ export default {
 	// データ定義
 	data: function(){
 		return {
+			pageViewFlg: false, // データセット後に描画を行う
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
 	created: function () {
-		this.isLogin(); // ログインチェック
 		// セッション情報の取得等
+		console.log("Home処理開始");
 		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
 		this.startSession(this.callback_getSession);
+
+		console.log("画像パス");
+//		console.log(this.serverInfo.imgTopVisual);
+//		console.log(this.$parent.serverInfo.imgTopVisual);
+// :style="{ backgroundImage: 'url(' + image_src.url + ')' }"
 	},
 	// メソッド群
 	methods: {
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態
+			console.log(process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgLogo);
+			console.log(process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgTitle);
+			console.log(process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgTopVisual);
+			this.pageViewFlg = true; // 表示を開始する
 		},
-	}
+	},
+	computed: {
+//		image_src(){ return process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgTopVisual }
+	},
 }
 </script>
