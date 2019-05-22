@@ -12,7 +12,7 @@
           {{question.QUESTION_STR}}
         </question-title>
         <reporting-radio-header />
-        <reporting-radio v-for="(answer, index) in question.answerList" :name="'Q_'+question.QUESTION_NO+'_'+index" :label="answer" :max-value="5" />
+        <reporting-radio v-for="(answer, index) in question.answerList" :name="'Q_'+question.QUESTION_NO+'_'+index" :label="answer" :max-value="5" v-model="question.selectedNoList[index]" />
       </div>
 
     </div>
@@ -53,7 +53,9 @@ export default {
 		validation: function () {
 			for( var no in this.questionList ) {
 				if( this.questionList[no].selectedNo == null ) {
-					alert("回答を選択して下さい。");
+//console.log();
+					var qNo = parseInt(no)+1;
+					alert("Question"+qNo+"に未回答があります。\nご回答のご確認をお願いします。");
 					return false;
 				}
 			}
