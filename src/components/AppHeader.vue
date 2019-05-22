@@ -1,6 +1,6 @@
 <template>
-  <header class="page-header" v-if="pageViewFlg">
-    <div class="inner">
+  <header class="page-header">
+    <div class="inner" v-if="headerViewFlg">
       <router-link to="/">
         <!--<img class="logo" src="../assets/logo.png" alt="">-->
         <img class="logo" :src="imgLogo" alt="">
@@ -20,23 +20,21 @@ export default {
 	props: {
 		userName: String,
 		userCompany: String,
+		imgLogo: String,
+		imgTitle: String,
+		headerViewFlg: Boolean,
 	},
 	// データ定義
 	data: function(){
 		return {
-			imgLogo: "",
-			imgTitle: "",
 			pageViewFlg: false, // データセット後に描画を行う
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
 	created: async function () {
-		await this.sleep(300);
 		console.log("ヘッダ処理開始");
-		this.imgLogo = process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgLogo;
-		this.imgTitle = process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgTitle;
-		this.pageViewFlg = true; // 表示を開始する
 		/*
+		console.log(this.headerViewFlg);
 		console.log("------- AppHeader.vue");
 		console.log(this.userCompany);
 		console.log(this.userName);

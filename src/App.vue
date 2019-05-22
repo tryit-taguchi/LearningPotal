@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <app-header :user-company="userCompany" :user-name="userName"></app-header>
+    <app-header :user-company="userCompany" :user-name="userName" :img-logo="serverInfo.imgLogo" :img-title="serverInfo.imgTitle" :header-view-flg="headerViewFlg" ></app-header>
     <main>
       <transition name="fade" mode="out-in">
         {{$store.getters.isLoggedIn}}
@@ -27,6 +27,7 @@ export default {
 			userName: '',
 			session: '',
 			serverInfo : {},
+			headerViewFlg : false,
 		}
 	},
 	created: function () {
@@ -46,9 +47,12 @@ export default {
 		collback_ServerInfo: async function(response) {
 			// this.serverInfo 変数に共通サーバ情報を収納
 			this.serverInfo = response.data;
+			this.serverInfo.imgLogo = process.env.VUE_APP_UPFILES_URL_BASE + this.serverInfo.imgLogo;
+			this.serverInfo.imgTitle = process.env.VUE_APP_UPFILES_URL_BASE + this.serverInfo.imgTitle;
+			this.headerViewFlg = true;
 			console.log("サーバの共通情報読み込み完了");
 			console.log("アップファイルフォルダ : "+process.env.VUE_APP_UPFILES_URL_BASE);
-			console.log(this.serverInfo);
+			//console.log(this.serverInfo);
 		}
 	}
 }
