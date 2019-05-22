@@ -22,7 +22,7 @@ export default {
   props: {
     label: String,
     name: String,
-    value: String,
+    value: Number,
     maxValue: {
       type: Number,
       default: 5
