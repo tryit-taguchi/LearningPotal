@@ -6,13 +6,13 @@
     </page-title>
     <div style="padding-left:100px;">
       <bulb-text>あなたの回答を選択してください</bulb-text>
-      <div v-for="question in questionList" :key="'reporting_1'+question.QUESTION_NO">
+      <div v-for="question in questionList" :key="question.QUESTION_NO">
         <question-title>
           <template v-slot:left>Question<span style="font-size:2em">{{question.QUESTION_NO}}</span></template>
           {{question.QUESTION_STR}}
         </question-title>
         <reporting-radio-header />
-        <reporting-radio v-for="answer in question.answerList" :name="'Q_'+question.QUESTION_NO+'_0'" :label="answer" :max-value="questionMaxValue" />
+        <reporting-radio v-for="(answer, index) in question.answerList" :name="'Q_'+question.QUESTION_NO+'_'+index" :label="answer" :max-value="5" />
       </div>
 
     </div>

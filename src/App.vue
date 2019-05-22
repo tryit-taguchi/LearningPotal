@@ -4,7 +4,7 @@
     <main>
       <transition name="fade" mode="out-in">
         {{$store.getters.isLoggedIn}}
-        <router-view/>
+        <router-view :img-top-visual="serverInfo.imgTopVisual" />
       </transition>
     </main>
   </div>
@@ -48,7 +48,8 @@ export default {
 			// this.serverInfo 変数に共通サーバ情報を収納
 			this.serverInfo = response.data;
 			this.serverInfo.imgLogo = process.env.VUE_APP_UPFILES_URL_BASE + this.serverInfo.imgLogo;
-			this.serverInfo.imgTitle = process.env.VUE_APP_UPFILES_URL_BASE + this.serverInfo.imgTitle;
+      this.serverInfo.imgTitle = process.env.VUE_APP_UPFILES_URL_BASE + this.serverInfo.imgTitle;
+      this.serverInfo.imgTopVisual = process.env.VUE_APP_UPFILES_URL_BASE + this.serverInfo.imgTopVisual;
 			this.headerViewFlg = true;
 			console.log("サーバの共通情報読み込み完了");
 			console.log("アップファイルフォルダ : "+process.env.VUE_APP_UPFILES_URL_BASE);
