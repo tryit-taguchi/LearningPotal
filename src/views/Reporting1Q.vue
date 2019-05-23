@@ -21,6 +21,7 @@
       <text-before-button>講師の指示があるまでは<br>「回答」を押さないでください</text-before-button>
       <base-button text="回答" @click="nextPage" />
     </button-area>
+    <v-dialog/>
   </div>
 </template>
 
@@ -55,7 +56,13 @@ export default {
 				for( var ano = 0; ano < this.questionList[qno].ANSWER_CNT; ano++ ) {
 					if( this.questionList[qno].selectedNoList[ano] == 0 ) {
 						var questionNo = parseInt(qno)+1;
-						alert("Question"+questionNo+"に未回答があります。\nご回答のご確認をお願いします。");
+            this.$modal.show('dialog', {
+              text: 'Question'+questionNo+'に未回答があります。<br>ご回答のご確認をお願いします。',
+              buttons: [
+                {title: 'OK'}
+              ]
+            })
+						// alert("Question"+questionNo+"に未回答があります。\nご回答のご確認をお願いします。");
 						return false;
 					}
 				}
@@ -63,12 +70,26 @@ export default {
 			//this.freeComment = "aaaaaaaa";
 			console.log(this.freeComment);
 			if( this.freeComment == "" ) {
-				if( confirm('未入力のフリーコメントがありますが、回答を完了しますか？') ){
-					callback();
-					return true;
-				} else {
-					return false;
-				}
+        this.$modal.show('dialog', {
+          text: '未入力のフリーコメントがありますが、回答を完了しますか？',
+          buttons: [
+            {
+              title: 'OK',
+              handler: () => {callback()} // ボタンが押されたときに実行される
+            },
+            {
+              title: 'キャンセル',
+              default: true // Enterキーを押したときに押されるボタンを指定する
+            }
+          ]
+        })
+
+				// if( confirm('未入力のフリーコメントがありますが、回答を完了しますか？') ){
+				// 	callback();
+				// 	return true;
+				// } else {
+				// 	return false;
+				// }
 			}
 				/*
 				smoke.confirm("未入力のフリーコメントがありますが、回答を完了しますか？", function(e){
@@ -130,7 +151,13 @@ export default {
 			if( this.result != null ) {
 				this.jump({ name: this.pageType+'_a' });
 			} else {
-				alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
+        this.$modal.show('dialog', {
+          text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
+          buttons: [
+            {title: 'OK'}
+          ]
+        })
+				// alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
 			}
 		}
 	}

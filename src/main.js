@@ -42,6 +42,9 @@ require('@/css/style.scss')
 
 Vue.config.productionTip = false
 
+import VModal from 'vue-js-modal'
+Vue.use(VModal, { dialog: true, dynamic: true })
+
 new Vue({
 	router,
 	store,
