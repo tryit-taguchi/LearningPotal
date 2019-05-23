@@ -1,6 +1,6 @@
 <template>
   <div class="balloon">
-    <textarea rows="1" :name="name" :id="id" :value="value"></textarea>
+    <textarea rows="1" :name="name" :id="id" :value="value" @input="$emit('input', $event.target.value)"></textarea>
   </div>
 </template>
 
