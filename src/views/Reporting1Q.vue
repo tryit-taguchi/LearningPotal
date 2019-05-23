@@ -121,6 +121,7 @@ export default {
 		// 問題データ取得後
 		collback_getData: function(response) {
 			this.questionList = response.data.questionList;
+			this.freeComment  = response.data.freeComment;
 			this.questionViewFlg = true;
 		},
 		// 回答データ送信後
