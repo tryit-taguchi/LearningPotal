@@ -1,7 +1,8 @@
 <template>
   <h1 class="page-title">
     <span class="before" v-if="beforeText">{{beforeText}}</span>
-    <span class="left" v-if="hasSlotLeft"><slot name="left"></slot></span>
+    <span class="left" v-if="hasSlotLeft&&!rawHtml"><slot name="left"></slot></span>
+    <span class="left" v-if="hasSlotLeft&&rawHtml" v-else v-html="rawHtml"></span>
     <span class="right"><slot></slot></span>
   </h1>
 </template>
@@ -9,11 +10,16 @@
 <script>
 export default {
   props: {
-    beforeText: String
+    beforeText: String,
+    rawHtml: String
+  },
+  mounted(){
+    // this.$el.getElementsByClassName('left')[0].innerHTML =  !this.rawHtml ? this.$slots.left : this.rawHtml
+
   },
   computed: {
     hasSlotLeft() {
-      return !!this.$slots.left
+      return !!this.$slots.left || !!this.rawHtml
     }
   }
 }

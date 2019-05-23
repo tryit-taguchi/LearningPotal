@@ -1,7 +1,6 @@
 <template>
   <div class="question-layout" v-if="questionViewFlg">
-    <page-title>
-      <template v-slot:left><span v-html="questionHtml"></span></template>
+    <page-title :raw-html="questionHtml">
       {{questionExplanation}}
     </page-title>
     <div style="padding-left:100px;">
