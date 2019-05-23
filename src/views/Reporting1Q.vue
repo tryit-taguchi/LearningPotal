@@ -50,7 +50,7 @@ export default {
 	// メソッド群
 	methods: {
 		// バリデーション
-		validation: function () {
+		validation: function (callback) {
 			for( var qno in this.questionList ) {
 				for( var ano = 0; ano < this.questionList[qno].ANSWER_CNT; ano++ ) {
 					if( this.questionList[qno].selectedNoList[ano] == 0 ) {
@@ -60,10 +60,11 @@ export default {
 					}
 				}
 			}
-			this.freeComment = "aaaaaaaa";
+			//this.freeComment = "aaaaaaaa";
 			console.log(this.freeComment);
 			if( this.freeComment == "" ) {
 				if( confirm('未入力のフリーコメントがありますが、回答を完了しますか？') ){
+					callback();
 					return true;
 				} else {
 					return false;
@@ -96,14 +97,16 @@ export default {
 		},
 		// 回答
 		nextPage: function(e){
-			if( this.validation() ) {
-				var form = [];
-				for( var no in this.questionList ) {
-					form.push(this.questionList[no]);
-				}
-				console.log("memberId : "+this.getMemberId());
-				this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
+			this.validation(this.callback_formSubmit);
+		},
+		// フォームのSubmit
+		callback_formSubmit: function(e) {
+			var form = [];
+			for( var no in this.questionList ) {
+				form.push(this.questionList[no]);
 			}
+			console.log("memberId : "+this.getMemberId());
+			this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
 		},
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後

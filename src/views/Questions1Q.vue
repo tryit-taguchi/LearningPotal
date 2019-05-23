@@ -39,14 +39,14 @@ export default {
 	// メソッド群
 	methods: {
 		// バリデーション
-		validation: function () {
+		validation: function (callback) {
 			for( var no in this.questionList ) {
 				if( this.questionList[no].selectedNo == null ) {
 					alert("回答を選択して下さい。");
 					return false;
 				}
 			}
-			return true;
+			callback();
 		},
 		// 前ページへ
 		prevPage: function(e){
@@ -56,14 +56,16 @@ export default {
 		},
 		// 回答
 		nextPage: function(e){
-			if( this.validation() ) {
-				var form = [];
-				for( var no in this.questionList ) {
-					form.push(this.questionList[no]);
-				}
-				console.log("memberId : "+this.getMemberId());
-				this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,form,this.collback_postData);
+			this.validation(this.callback_formSubmit);
+		},
+		// フォームのSubmit
+		callback_formSubmit: function(e){
+			var form = [];
+			for( var no in this.questionList ) {
+				form.push(this.questionList[no]);
 			}
+			console.log("memberId : "+this.getMemberId());
+			this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,form,this.collback_postData);
 		},
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後

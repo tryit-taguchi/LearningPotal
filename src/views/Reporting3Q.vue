@@ -16,7 +16,7 @@
 
     </div>
     <h2>フリーコメント（120文字まで）</h2>
-    <textarea-balloon name="freeComment" id="freeComment" value=""></textarea-balloon>
+    <textarea-balloon name="freeComment" id="freeComment" value="" v-model="freeComment"></textarea-balloon>
     <button-area>
       <text-before-button>講師の指示があるまでは<br>「回答」を押さないでください</text-before-button>
       <base-button text="回答" @click="nextPage" />
@@ -37,6 +37,7 @@ export default {
 			questionExplanation : "",
 			questionMaxValue : 0,
 			questionViewFlg: false, // データセット後に描画を行う
+			freeComment: "",
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
@@ -49,7 +50,7 @@ export default {
 	// メソッド群
 	methods: {
 		// バリデーション
-		validation: function () {
+		validation: function (callback) {
 			for( var qno in this.questionList ) {
 				for( var ano = 0; ano < this.questionList[qno].ANSWER_CNT; ano++ ) {
 					if( this.questionList[qno].selectedNoList[ano] == 0 ) {
@@ -59,6 +60,33 @@ export default {
 					}
 				}
 			}
+			//this.freeComment = "aaaaaaaa";
+			console.log(this.freeComment);
+			if( this.freeComment == "" ) {
+				if( confirm('未入力のフリーコメントがありますが、回答を完了しますか？') ){
+					callback();
+					return true;
+				} else {
+					return false;
+				}
+			}
+				/*
+				smoke.confirm("未入力のフリーコメントがありますが、回答を完了しますか？", function(e){
+					if (e){
+						save();
+					}
+				}, {
+					ok: "はい",
+					cancel: "いいえ",
+					classname: "custom-class",
+					reverseButtons: true
+				});
+				*/
+/*
+			if(window.confirm('本当にいいんですね？')){
+				location.href = "example_confirm.html"; // example_confirm.html へジャンプ
+			}
+*/
 			return true;
 		},
 		// 前ページへ
@@ -69,14 +97,16 @@ export default {
 		},
 		// 回答
 		nextPage: function(e){
-			if( this.validation() ) {
-				var form = [];
-				for( var no in this.questionList ) {
-					form.push(this.questionList[no]);
-				}
-				console.log("memberId : "+this.getMemberId());
-				this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
+			this.validation(this.callback_formSubmit);
+		},
+		// フォームのSubmit
+		callback_formSubmit: function(e) {
+			var form = [];
+			for( var no in this.questionList ) {
+				form.push(this.questionList[no]);
 			}
+			console.log("memberId : "+this.getMemberId());
+			this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
 		},
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
