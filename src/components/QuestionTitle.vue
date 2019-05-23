@@ -12,14 +12,17 @@
 export default {
   props: {
     type: String,
-    color: String,
     theme: Object
   },
   computed: {
     style: function() {
-      return {
-        '--color': this.theme.color,
-        '--background-color': this.theme.backgroundColor
+      if(this.theme){
+        return {
+          '--color': this.theme.color,
+          '--background-color': this.theme.backgroundColor
+        }
+      }else{
+        return {}
       }
     }
   }

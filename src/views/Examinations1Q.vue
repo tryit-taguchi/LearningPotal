@@ -6,11 +6,11 @@
     <div style="padding-left:50px;">
       <bulb-text>あなたの回答を選択してください</bulb-text>
       <question-title type="simple">Question<span style="font-size: 2em;">1</span></question-title>
-      <radio-block-list style="padding-left:150px;" :labels="testLabels[0]" :name="'Q_XXX'" v-model="testSelected[0]" />
+      <radio-block-list style="padding-left:150px;" :labels="testLabels[0]" :name="'Q_39'" v-model="testSelected[0]" />
       <question-title type="simple">Question<span style="font-size: 2em;">2</span></question-title>
-      <radio-block-list style="padding-left:150px;" :labels="testLabels[1]" :name="'Q_XXX'" v-model="testSelected[0]" />
+      <radio-block-list style="padding-left:150px;" :labels="testLabels[1]" :name="'Q_40'" v-model="testSelected[1]" />
       <question-title type="simple">Question<span style="font-size: 2em;">3</span></question-title>
-      <radio-block-list style="padding-left:150px;" :labels="testLabels[2]" :name="'Q_XXX'" v-model="testSelected[0]" />
+      <radio-block-list style="padding-left:150px;" :labels="testLabels[2]" :name="'Q_41'" v-model="testSelected[2]" />
     </div>
     <button-area>
       <base-button text="回答を確認する" @click="" />
