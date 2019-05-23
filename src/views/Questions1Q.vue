@@ -94,7 +94,13 @@ export default {
 			if( this.result != null ) {
 				this.jump({ name: this.pageType+'_a' });
 			} else {
-				alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
+				// alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
+        this.$modal.show('dialog', {
+          text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
+          buttons: [
+            {title: 'OK'}
+          ]
+        });
 			}
 		}
 	}

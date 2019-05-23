@@ -14,6 +14,7 @@
         <base-button text="回答" @click="nextPage" />
       </button-area>
     </div>
+    <v-dialog/>
   </div>
 </template>
 
@@ -43,7 +44,13 @@ export default {
 		validation: function (callback) {
 			for( var no in this.questionList ) {
 				if( this.questionList[no].selectedNoList.length != this.answerSelectCnt ) {
-					alert("回答を"+this.answerSelectCnt+"つ選択して下さい。");
+					// alert("回答を"+this.answerSelectCnt+"つ選択して下さい。");
+          this.$modal.show('dialog', {
+            text: '回答を'+this.answerSelectCnt+'つ選択して下さい。',
+            buttons: [
+              {title: 'OK'}
+            ]
+          })
 					return false;
 				}
 			}
@@ -92,7 +99,13 @@ export default {
 			if( this.result != null ) {
 				this.jump({ name: this.pageType+'_a' });
 			} else {
-				alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
+				// alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
+        this.$modal.show('dialog', {
+          text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
+          buttons: [
+            {title: 'OK'}
+          ]
+        });
 			}
 		}
   }
