@@ -42,7 +42,7 @@ export default {
 			if( this.validation() ) {
 				let params = new FormData();
 				params.append("SEAT_CD",this.SEAT_CD);
-				this.postJson(process.env.VUE_APP_API_URL_BASE+'/login',params,this.collback);
+				this.postJson(this.getAPIPath()+'/login',params,this.collback);
 			}
 		},
 		// サーバサイドからのコールバック

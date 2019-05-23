@@ -119,14 +119,14 @@ export default {
     // セッション読み込み後
     callback_getSession: function() {
       // セッションを読み込み終わって状態
-//      console.log(process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgLogo);
-//    console.log(process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgTitle);
-      console.log(process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgTopVisual);
+//      console.log(this.getUpfilesPath() + this.$parent.serverInfo.imgLogo);
+//    console.log(this.getUpfilesPath() + this.$parent.serverInfo.imgTitle);
+      console.log(this.getUpfilesPath() + this.$parent.serverInfo.imgTopVisual);
       this.pageViewFlg = true; // 表示を開始する
     },
   },
   computed: {
-//    image_src(){ return process.env.VUE_APP_UPFILES_URL_BASE + this.$parent.serverInfo.imgTopVisual }
+//    image_src(){ return this.getUpfilesPath() + this.$parent.serverInfo.imgTopVisual }
   },
 }
 </script>

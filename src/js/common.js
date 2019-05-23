@@ -11,6 +11,14 @@ export default {
 	created: function () {
 	},
 	methods: {
+		// APIパス取得
+		getAPIPath : function() {
+			return process.env.VUE_APP_API_URL_BASE;
+		},
+		// サーバにアップロードしたファイルパス取得
+		getUpfilesPath : function() {
+			return process.env.VUE_APP_UPFILES_URL_BASE;
+		},
 		// ページジャンプ
 		jump : function(url) {
 			console.log("ページジャンプ");
@@ -27,7 +35,7 @@ export default {
 			if( !this.isEmpty(memberId) ) {
 				console.log("セッションをサーバに書き込み memberId:"+memberId);
 				console.log(this.$parent.session);
-				this.postJson(process.env.VUE_APP_API_URL_BASE+'/session/'+memberId,params,this.toTransfer(url));
+				this.postJson(this.getAPIPath()+'/session/'+memberId,params,this.toTransfer(url));
 			}
 		},
 		toTransfer : function(url) {
@@ -77,7 +85,7 @@ export default {
 				// セッションの読み込み
 				console.log("セッションの読み込み memberId:"+memberId);
 				//var session = this.$parent.session;
-				this.getJson(process.env.VUE_APP_API_URL_BASE+'/session/'+memberId,function(response) {
+				this.getJson(this.getAPIPath()+'/session/'+memberId,function(response) {
 					//console.log("--------------- collback_startSession");
 					try {
 						if( response.data != null ) {

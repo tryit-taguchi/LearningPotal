@@ -17,7 +17,7 @@
 
     </div>
     <h2>フリーコメント（120文字まで）</h2>
-    <textarea-balloon name="freeComment" id="freeComment" value=""></textarea-balloon>
+    <textarea-balloon name="freeComment" id="freeComment" value="" v-model="freeComment"></textarea-balloon>
     <button-area>
       <text-before-button>講師の指示があるまでは<br>「回答」を押さないでください</text-before-button>
       <base-button text="回答" @click="nextPage" />
@@ -38,6 +38,7 @@ export default {
 			questionExplanation : "",
 			questionMaxValue : 0,
 			questionViewFlg: false, // データセット後に描画を行う
+			freeComment: "",
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
@@ -60,6 +61,32 @@ export default {
 					}
 				}
 			}
+			this.freeComment = "aaaaaaaa";
+			console.log(this.freeComment);
+			if( this.freeComment == "" ) {
+				if( confirm('未入力のフリーコメントがありますが、回答を完了しますか？') ){
+					return true;
+				} else {
+					return false;
+				}
+			}
+				/*
+				smoke.confirm("未入力のフリーコメントがありますが、回答を完了しますか？", function(e){
+					if (e){
+						save();
+					}
+				}, {
+					ok: "はい",
+					cancel: "いいえ",
+					classname: "custom-class",
+					reverseButtons: true
+				});
+				*/
+/*
+			if(window.confirm('本当にいいんですね？')){
+				location.href = "example_confirm.html"; // example_confirm.html へジャンプ
+			}
+*/
 			return true;
 		},
 		// 前ページへ
@@ -76,7 +103,7 @@ export default {
 					form.push(this.questionList[no]);
 				}
 				console.log("memberId : "+this.getMemberId());
-				this.submit(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
+				this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
 			}
 		},
 		// -- サーバサイドからのコールバック
@@ -84,7 +111,7 @@ export default {
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
 			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '_q/' + this.getMemberId(),this.collback_getData);
+			this.getJson(this.getAPIPath()+'/'+this.pageType + '_q/' + this.getMemberId(),this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 			this.questionHtml = this.$parent.session.question_atr[this.pageType].QUESTION_HTML;
 			this.questionExplanation = this.$parent.session.question_atr[this.pageType].QUESTION_EXPLANATION;

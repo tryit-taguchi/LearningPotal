@@ -34,9 +34,9 @@ export default {
 		console.log("------- App.vue");
 		// -- ローディング時はじめの処理
 		// サーバの共通情報を読む
-		//console.log(process.env.VUE_APP_API_URL_BASE+'/serverInfo');
+		//console.log(this.getAPIPath()+'/serverInfo');
 		console.log("サーバの共通情報読み込み");
-		this.getJson(process.env.VUE_APP_API_URL_BASE+'/serverInfo',this.collback_ServerInfo);
+		this.getJson(this.getAPIPath()+'/serverInfo',this.collback_ServerInfo);
 		/*
 		console.log("------- App.vue");
 		console.log(this.userCompany);
@@ -47,12 +47,12 @@ export default {
 		collback_ServerInfo: async function(response) {
 			// this.serverInfo 変数に共通サーバ情報を収納
 			this.serverInfo = response.data;
-			this.serverInfo.imgLogo = process.env.VUE_APP_UPFILES_URL_BASE + this.serverInfo.imgLogo;
-      this.serverInfo.imgTitle = process.env.VUE_APP_UPFILES_URL_BASE + this.serverInfo.imgTitle;
-      this.serverInfo.imgTopVisual = process.env.VUE_APP_UPFILES_URL_BASE + this.serverInfo.imgTopVisual;
+			this.serverInfo.imgLogo = this.getUpfilesPath() + this.serverInfo.imgLogo;
+      this.serverInfo.imgTitle = this.getUpfilesPath() + this.serverInfo.imgTitle;
+      this.serverInfo.imgTopVisual = this.getUpfilesPath() + this.serverInfo.imgTopVisual;
 			this.headerViewFlg = true;
 			console.log("サーバの共通情報読み込み完了");
-			console.log("アップファイルフォルダ : "+process.env.VUE_APP_UPFILES_URL_BASE);
+			console.log("アップファイルフォルダ : "+this.getUpfilesPath());
 			//console.log(this.serverInfo);
 		}
 	}

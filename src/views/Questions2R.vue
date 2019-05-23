@@ -50,7 +50,7 @@ export default {
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
-			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '_r/' + this.getMemberId(),this.collback_getData);
+			this.getJson(this.getAPIPath()+'/'+this.pageType + '_r/' + this.getMemberId(),this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 			this.questionCnt  = this.$parent.session.question_atr[this.pageType].QUESTION_CNT;
 		},

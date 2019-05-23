@@ -63,7 +63,7 @@ export default {
 					form.push(this.questionList[no]);
 				}
 				console.log("memberId : "+this.getMemberId());
-				this.submit(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,form,this.collback_postData);
+				this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,form,this.collback_postData);
 			}
 		},
 		// -- サーバサイドからのコールバック
@@ -71,7 +71,7 @@ export default {
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
 			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-			this.getJson(process.env.VUE_APP_API_URL_BASE+'/'+this.pageType + '_q/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
+			this.getJson(this.getAPIPath()+'/'+this.pageType + '_q/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 			this.answerSelectCnt = this.$parent.session.question_atr[this.pageType].ANSWER_SELECT_CNT;
 		},
