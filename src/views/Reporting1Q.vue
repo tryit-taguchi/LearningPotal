@@ -98,8 +98,8 @@ export default {
 		// フォームのSubmit
 		callback_formSubmit: function(e) {
 			var answerList = [];
-			for( var qno in this.questionList ) {
-				answerList.push(this.questionList[qno].selectedNoList);
+			for( var no in this.questionList ) {
+				answerList.push(this.questionList[no]);
 			}
 			var form = {};
 			form.answerList = answerList;
@@ -120,7 +120,7 @@ export default {
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
-			this.questionList = response.data;
+			this.questionList = response.data.questionList;
 			this.questionViewFlg = true;
 		},
 		// 回答データ送信後

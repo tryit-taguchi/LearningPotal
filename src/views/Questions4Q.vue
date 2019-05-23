@@ -82,7 +82,7 @@ export default {
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
-			this.questionList = response.data;
+			this.questionList = response.data.questionList;
 			this.questionViewFlg = true;
 			this.$forceUpdate();
 		},

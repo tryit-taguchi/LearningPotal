@@ -56,7 +56,7 @@ export default {
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
-			this.questionList = response.data;
+			this.questionList = response.data.questionList;
 			for( var no in this.questionList ) {
 				var question = this.questionList[no];
 				// グラフ用のタイトル

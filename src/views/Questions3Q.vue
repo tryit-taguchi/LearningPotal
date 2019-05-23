@@ -79,7 +79,7 @@ export default {
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
-			this.questionList = response.data;
+			this.questionList = response.data.questionList;
 		},
 		// 回答データ送信後
 		collback_postData: function(response) {
