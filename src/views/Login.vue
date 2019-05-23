@@ -47,8 +47,10 @@ export default {
 		},
 		// サーバサイドからのコールバック
 		collback: function(response) {
-			this.login = response.data.member;
-			this.$parent.session = response.data.session;
+			if( response.data != null ) {
+				this.login = response.data.member;
+				this.$parent.session = response.data.session;
+			}
 			if( this.login != null ) {
 				// ログイン情報をクッキーに保存
 				this.toLogin(this.login);
