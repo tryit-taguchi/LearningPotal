@@ -2,7 +2,7 @@
   <h1 class="page-title">
     <span class="before" v-if="beforeText">{{beforeText}}</span>
     <span class="left" v-if="hasSlotLeft&&!rawHtml"><slot name="left"></slot></span>
-    <span class="left" v-if="hasSlotLeft&&rawHtml" v-else v-html="rawHtml"></span>
+    <span class="left" v-if="hasSlotLeft&&rawHtml" v-html="rawHtml"></span>
     <span class="right"><slot></slot></span>
   </h1>
 </template>
