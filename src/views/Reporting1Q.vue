@@ -56,58 +56,33 @@ export default {
 				for( var ano = 0; ano < this.questionList[qno].ANSWER_CNT; ano++ ) {
 					if( this.questionList[qno].selectedNoList[ano] == 0 ) {
 						var questionNo = parseInt(qno)+1;
-            this.$modal.show('dialog', {
-              text: 'Question'+questionNo+'に未回答があります。<br>ご回答のご確認をお願いします。',
-              buttons: [
-                {title: 'OK'}
-              ]
-            })
-						// alert("Question"+questionNo+"に未回答があります。\nご回答のご確認をお願いします。");
+						this.$modal.show('dialog', {
+						  text: 'Question'+questionNo+'に未回答があります。<br>ご回答のご確認をお願いします。',
+						  buttons: [
+						    {title: 'OK'}
+						  ]
+						})
 						return false;
 					}
 				}
 			}
-			//this.freeComment = "aaaaaaaa";
-			console.log(this.freeComment);
 			if( this.freeComment == "" ) {
-        this.$modal.show('dialog', {
-          text: '未入力のフリーコメントがありますが、回答を完了しますか？',
-          buttons: [
-            {
-              title: 'OK',
-              handler: () => {callback()} // ボタンが押されたときに実行される
-            },
-            {
-              title: 'キャンセル',
-              default: true // Enterキーを押したときに押されるボタンを指定する
-            }
-          ]
-        })
-
-				// if( confirm('未入力のフリーコメントがありますが、回答を完了しますか？') ){
-				// 	callback();
-				// 	return true;
-				// } else {
-				// 	return false;
-				// }
-			}
-				/*
-				smoke.confirm("未入力のフリーコメントがありますが、回答を完了しますか？", function(e){
-					if (e){
-						save();
-					}
-				}, {
-					ok: "はい",
-					cancel: "いいえ",
-					classname: "custom-class",
-					reverseButtons: true
+				this.$modal.show('dialog', {
+					text: '未入力のフリーコメントがありますが、回答を完了しますか？',
+					buttons: [
+						{
+						  title: 'OK',
+						  handler: () => {callback()} // ボタンが押されたときに実行される
+						},
+						{
+						  title: 'キャンセル',
+						  default: true // Enterキーを押したときに押されるボタンを指定する
+						}
+					]
 				});
-				*/
-/*
-			if(window.confirm('本当にいいんですね？')){
-				location.href = "example_confirm.html"; // example_confirm.html へジャンプ
+			} else {
+				callback();
 			}
-*/
 			return true;
 		},
 		// 前ページへ
@@ -122,10 +97,13 @@ export default {
 		},
 		// フォームのSubmit
 		callback_formSubmit: function(e) {
-			var form = [];
-			for( var no in this.questionList ) {
-				form.push(this.questionList[no]);
+			var answerList = [];
+			for( var qno in this.questionList ) {
+				answerList.push(this.questionList[qno].selectedNoList);
 			}
+			var form = {};
+			form.answerList = answerList;
+			form.freeComment = this.freeComment;
 			console.log("memberId : "+this.getMemberId());
 			this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
 		},
@@ -151,13 +129,12 @@ export default {
 			if( this.result != null ) {
 				this.jump({ name: this.pageType+'_a' });
 			} else {
-        this.$modal.show('dialog', {
-          text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
-          buttons: [
-            {title: 'OK'}
-          ]
-        })
-				// alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
+				this.$modal.show('dialog', {
+					text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
+					buttons: [
+						{title: 'OK'}
+					]
+				});
 			}
 		}
 	}

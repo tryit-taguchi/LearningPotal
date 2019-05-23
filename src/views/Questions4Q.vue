@@ -61,15 +61,16 @@ export default {
 			this.validation(this.callback_formSubmit);
 		},
 		// フォームのSubmit
-		callback_formSubmit: function(e) {
-			var form = [];
+		callback_formSubmit: function(e){
+			var answerList = [];
 			for( var no in this.questionList ) {
-				form.push(this.questionList[no]);
+				answerList.push(this.questionList[no]);
 			}
+			var form = {};
+			form.answerList = answerList;
 			console.log("memberId : "+this.getMemberId());
 			this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,form,this.collback_postData);
 		},
-
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
 		callback_getSession: function() {
