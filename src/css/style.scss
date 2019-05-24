@@ -23,6 +23,16 @@ body{
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
+.img-in-text{
+  height: 1em;
+  width: auto;
+  vertical-align: middle;
+}
+
+b {
+    font-weight: normal;
+    border-bottom: .1em solid #c3002f;
+}
 
 // vue-js-modal
 

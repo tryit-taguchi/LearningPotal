@@ -3,19 +3,21 @@
     <page-title>
       キャッチフレーズ 選出
     </page-title>
-    <p style="font-size:2.8rem;">
-      <img src="img/icon_crown_gold.png" class="img-in-text" alt="">
-      本日のベストを選出します！<br>
-      すばらしいと思うものを<b>3つ選択</b>して、「いいね」を押してください。
-    </p>
-    <div class="checkbox-inline-list col1" style="font-size:2.0rem;margin:0 60px;">
-      <input type="checkbox" name="C[]" id="C_276" value="276">
-      <label for="C_276">なんちゃって！</label>
-      <input type="checkbox" name="C[]" id="C_277" value="277">
-      <label for="C_277">qqq</label>
+    <div style="margin-left: 50px;">
+      <p style="font-size:2.8rem;">
+        <img src="../assets/icon_crown_gold.png" class="img-in-text" alt="">
+        本日のベストを選出します！<br>
+        すばらしいと思うものを<b>3つ選択</b>して、「いいね」を押してください。
+      </p>
+      <div class="checkbox-inline-list col1" style="font-size:2.0rem;margin:0 60px;">
+        <input type="checkbox" name="C[]" id="C_276" value="276">
+        <label for="C_276">なんちゃって！</label>
+        <input type="checkbox" name="C[]" id="C_277" value="277">
+        <label for="C_277">qqq</label>
+      </div>
     </div>
     <button-area>
-      <base-button text="いいね" @click="nextPage" />
+      <base-button text="いいね" @click="" />
     </button-area>
   </div>
 </template>
