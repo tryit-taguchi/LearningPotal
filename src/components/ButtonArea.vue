@@ -17,5 +17,8 @@ export default {
   align-items: center;
   justify-content: flex-end;
   margin-top: 20px;
+  :not(:last-child){
+    margin-right: 10px;
+  }
 }
 </style>

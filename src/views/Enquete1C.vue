@@ -13,7 +13,7 @@
       <radio-block-list style="padding-left:150px;" :labels="testLabels[2]" :name="'Q_XXX'" v-model="testSelected[0]" />
     </div>
     <button-area>
-      <base-button text="回答し直す" background-color="#aaa" @click="" />
+      <base-button text="回答し直す" background-color="#c3002f" @click="" />
       <base-button text="上記で回答する" @click="" />
     </button-area>
   </div>
