@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="questionViewFlg">
     <page-title>
       理解度確認テスト 質問（選択）
     </page-title>
@@ -26,6 +26,7 @@ export default {
       questionNo: 1,
       questionList: [],
       questionName: "",
+      questionViewFlg: false, // データセット後に描画を行う
       freeComment: ""
     }
   },
@@ -85,6 +86,7 @@ export default {
     // 問題データ取得後
     collback_getData: function(response) {
       this.questionList = response.data.questionList;
+      this.questionViewFlg = true;
     },
     // 回答データ送信後
     collback_postData: function(response) {
