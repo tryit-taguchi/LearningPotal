@@ -7,7 +7,7 @@
       <bulb-text>あなたの回答を選択してください</bulb-text>
       <template v-for="question in questionList">
         <question-title type="simple">Question<span style="font-size: 2em;">{{question.QUESTION_NO}}</span></question-title>
-        <radio-block-list style="padding-left:150px;" :labels="question.answerList" :name="'Q_'+question.QUESTION_NO" v-model="question.QUESTION_NO" />
+        <radio-block-list style="padding-left:150px;" :labels="question.answerList" :name="'Q_'+question.QUESTION_NO" v-model="question.selectedNo" />
       </template>
     </div>
     <h2>フリーコメント（120文字まで）</h2>
