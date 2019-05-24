@@ -3,7 +3,6 @@
     <app-header :user-company="userCompany" :user-name="userName" :img-logo="serverInfo.imgLogo" :img-title="serverInfo.imgTitle" :header-view-flg="headerViewFlg" ></app-header>
     <main>
       <transition name="fade" mode="out-in">
-        {{$store.getters.isLoggedIn}}
         <router-view :img-top-visual="serverInfo.imgTopVisual" />
       </transition>
     </main>
