@@ -4,24 +4,24 @@
       <template v-slot:left>勉強会Q&A</template>
       カテゴリーごとに見る
       &ensp;
-      <select name="" id="" onchange="changeCategory(this.value);">
+      <select v-model="currentCat">
         <option value="">選択して下さい</option>
-        <option v-for="cat in categories" value="cat">{{cat}}</option>
+        <option v-for="cat in catList" :value="cat">{{cat}}</option>
       </select>
     </page-title>
     <p style="padding-left:40px;font-size:11pt">質問をタップで回答を表示します。</p>
     <h2>よくある質問と答え</h2>
-    <template v-for="faqCat in faqData">
-      <h2 key="faqList.categoryName">{{faqCat.categoryName}}</h2>
-      <div v-for="(faq, index) in faqCat.faqList" key="faqId">
+    <template v-for="(faqCat, catName) in displayFaqList">
+      <h2 key="faqList.categoryName" :key="catName">{{catName}}</h2>
+      <div v-for="(faq, faqId, index) in faqCat" :key="faqId">
         <dl class="faq">
           <dt class="faq-q">
             <span class="faq-q-label">質問{{index+1}}</span>
-            <span class="faq-q-text">{{faq.q}}</span>
+            <span class="faq-q-text">{{faq.Q_STR}}</span>
           </dt>
           <dd class="faq-a">
             <span class="faq-a-label">回答</span>
-            <span class="faq-a-text">{{faq.a}}</span>
+            <span class="faq-a-text">{{faq.A_STR}}</span>
           </dd>
         </dl>
         <!-- 追加質問の回答があったら表示？必要なのかわからない -->
@@ -50,7 +50,7 @@
       <div class="faq-new-form-cat-select">
         <select name="FAQ_CAT" id="faqCat">
           <option value="">選択して下さい</option>
-          <option v-for="cat in categories" value="cat">{{cat}}</option>
+          <option v-for="cat in catList" value="cat">{{cat}}</option>
         </select>
       </div>
     </div>
@@ -66,113 +66,9 @@
 export default {
   data: function () {
     return {
-      categories: [
-        'ｴﾝｼﾞﾝ・ﾄﾗﾝｽﾐｯｼｮﾝ',
-        '先進安全装備',
-        '寒冷地',
-        'その他',
-        'その他装備',
-        'バッテリー',
-        'AJ',
-        'D-OPT'
-      ],
-      faqData: [
-        {
-          categoryName: "ｴﾝｼﾞﾝ・ﾄﾗﾝｽﾐｯｼｮﾝ",
-          faqList: [
-            {
-              faqId: 787,
-              q: "S-HYBRIDはセレナと同じですか？",
-              a: "新型デイズのS-HYBRIDは電池をリチウムイオンバッテリーに変更することで、アシスト時間が１０倍以上に進化しています。"
-            },
-            {
-              faqId: 788,
-              q: "ハイブリッド車の保証は？",
-              a: "メインのハイブリッドシステム構成部品については（鉛酸バッテリーを除く）、特別保証部品とし5年/10万キロの保証が適用となります。その他の部品については、当社ガソリン車と同等の保証が適用となります（一般保証部品：3年/6万キロ、特別保証部品：5年/10万キロ）。"
-            }
-          ]
-        },
-        {
-          categoryName: "先進安全装備",
-          faqList: [
-            {
-              faqId: 789,
-              q: "プロパイロットはリーフやセレナと同じですか？",
-              a: "リーフ・セレナ・エクストレイルに搭載済みのプロパイロットと同様のシステムで、使い方も同じです。"
-            },
-            {
-              faqId: 804,
-              q: "SOSコールが使えるようになるために、必要なことを教えてください。",
-              a: "利用条件：①ナビ取付パッケージ(ﾒｰｶｰｵﾌﾟｼｮﾝ)+9インチナビ(ﾃﾞｨｰﾗｰｵﾌﾟｼｮﾝ) + ②NissanConnectサービスの登録 + ③SOSコールサービスの申込み"
-            },
-            {
-              faqId: 812,
-              q: "SOSコールはエアバッグが展開しない事故でも自動で通報されるのでしょうか？",
-              a: "Gの大きさにより、エアバッグが展開しなくても自動で通報されます。"
-            },
-            {
-              faqId: 813,
-              q: "SOSコールは運転手の返答が無い場合も自動的に通報してくれるのでしょうか？",
-              a: "はい。自動で通報されます。"
-            },
-            {
-              faqId: 814,
-              q: "SOSコールが繋がらない所はあるのでしょうか？",
-              a: "ドコモの通信を使っているのでドコモの電波がある場所なら繋がります。"
-            }
-          ]
-        },
-        {
-          categoryName: "寒冷地",
-          faqList: [
-          ]
-        },
-        {
-          categoryName: "その他",
-          faqList: [
-            {
-              faqId: 799,
-              q: "三菱の水島工場製ということは、OEMなのでしょうか？",
-              a: "新型デイズの開発は日産がしました。生産は三菱の水島工場に委託しています。"
-            },
-          ]
-        },
-        {
-          categoryName: "その他装備",
-          faqList: [
-          ]
-        },
-        {
-          categoryName: "バッテリー",
-          faqList: [
-          ]
-        },
-        {
-          categoryName: "AJ",
-          faqList: [
-            {
-              faqId: 809,
-              q: "LV車の設定はありますか？",
-              a: "設定はありません。"
-            },
-            {
-              faqId: 810,
-              q: "ライダーやAUTECHの設定はありますか？",
-              a: "設定はありません。"
-            }
-          ]
-        },
-        {
-          categoryName: "D-OPT",
-          faqList: [
-            {
-              faqId: 815,
-              q: "ナビゲーションの選択肢は何種類ですか？",
-              a: "9インチナビ(MM318D-L)と7インチナビ(MJ118D-W)の2機種設定しております。"
-            },
-          ]
-        },
-      ]
+      pageType: 'faq',
+      faqList: [],
+      currentCat: ""
     }
   },
   mounted() {
@@ -185,6 +81,38 @@ export default {
         }, 0);
       });
     }
+  },
+  computed: {
+    catList: function(){
+      return Object.entries(this.faqList).map((v)=>v[0])
+    },
+    displayFaqList: function(){
+      if(this.currentCat===""){
+        return this.faqList
+      }else{
+        return {[this.currentCat]:this.faqList[this.currentCat]}
+      }
+    },
+  },
+  // 初回処理（createdではDOM操作をしない）
+  created: function () {
+    console.log('-- '+this.pageType+'_q');
+    // セッション情報の取得等
+    this.isLogin();
+    this.startSession(this.callback_getSession);
+  },
+  // メソッド群
+  methods: {
+    // -- サーバサイドからのコールバック
+    // セッション読み込み後
+    callback_getSession: function() {
+      // セッションを読み込み終わって状態を取得したら問題データを読み込む
+      this.getJson(this.getAPIPath()+'/'+this.pageType ,this.collback_getData);
+    },
+    // 問題データ取得後
+    collback_getData: function(response) {
+      this.faqList = response.data.faqList;
+    },
   }
 }
 </script>
