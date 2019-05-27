@@ -1,97 +1,53 @@
 <template>
-  <div v-if="faqViewFlg">
-    <page-title>
-      <template v-slot:left>勉強会Q&A</template>
-      カテゴリーごとに見る
-      &ensp;
-      <select v-model="currentCat">
-        <option value="">選択して下さい</option>
-        <option v-for="cat in catList" :value="cat">{{cat}}</option>
-      </select>
-    </page-title>
-    <p style="padding-left:40px;font-size:11pt">質問をタップで回答を表示します。</p>
-    <h2>よくある質問と答え</h2>
-    <transition name="fade" mode="out-in">
-      <div :key="currentCat">
-        <template v-for="(faqCat, catName) in displayFaqList">
-          <h2>{{catName}}</h2>
-          <faq-panel v-for="(faq, faqId, index) in faqCat" :data="faq" :faq-id="faqId" :index="index" />
-        </template>
+  <div>
+    <dl class="faq">
+      <dt class="faq-q" @click="isOpened=!isOpened">
+        <span class="faq-q-label">質問{{index+1}}</span>
+        <span class="faq-q-text">{{data.Q_STR}}</span>
+      </dt>
+      <transition name="fade">
+        <dd class="faq-a" v-show="isOpened">
+          <span class="faq-a-label">回答</span>
+          <span class="faq-a-text">{{data.A_STR}}</span>
+        </dd>
+      </transition>
+    </dl>
+    <!-- 追加質問の回答があったら表示？必要なのかわからない -->
+    <transition name="fade">
+      <dl class="faq-add" v-if="false" v-show="isOpened">
+        <dt class="faq-add-q">
+          <span class="faq-add-q-label">追加質問</span>
+          <span class="faq-add-q-text">追加質問あああああ</span>
+        </dt>
+        <dd class="faq-add-a">
+          <span class="faq-add-a-label">回答</span>
+          <span class="faq-add-a-text">追加質問の回答いいいいい</span>
+        </dd>
+      </dl>
+    </transition>
+    <transition name="fade">
+      <div class="faq-add-form" v-show="isOpened">
+        <label for="">追加質問</label>
+        <textarea class="autoheight" name="Q_STR" id="Q_STR_<?= $prec['FAQ_ID'] ?>" cols="30" rows="1"></textarea>
+        <input type="button" value="送信" onClick="answerSendAdd('form_<?= $prec['FAQ_ID'] ?>')">
       </div>
     </transition>
-    <hr>
-    <h2>新しい質問をする</h2>
-    <div class="faq-new-form-cat">
-      <label for="">対象カテゴリ</label>
-      <div class="faq-new-form-cat-select">
-        <select name="FAQ_CAT" id="faqCat">
-          <option value="">選択して下さい</option>
-          <option v-for="cat in catList" value="cat">{{cat}}</option>
-        </select>
-      </div>
-    </div>
-    <div class="faq-new-form-q">
-      <label for="">追加質問</label>
-      <textarea class="autoheight" name="Q_STR" id="Q_STR" cols="30" rows="1"></textarea>
-      <input type="button" value="送信" id="BTN_MAIN" onClick="answerSendMain('form_main')">
-    </div>
   </div>
 </template>
 
 <script>
 export default {
-  data: function () {
-    return {
-      pageType: 'faq',
-      faqList: [],
-      currentCat: "",
-      faqViewFlg: false, // データセット後に描画を行う
-    }
-  },
-  mounted() {
-    const autoheight = document.querySelectorAll('.autoheight');
-    for(const el of autoheight){
-      el.addEventListener('keydown', () => {
-        setTimeout(() => {
-          el.style.cssText = 'height:auto;';
-          el.style.cssText = 'height:' + el.scrollHeight + 'px';
-        }, 0);
-      });
-    }
-  },
-  computed: {
-    catList: function(){
-      return Object.entries(this.faqList).map((v)=>v[0])
-    },
-    displayFaqList: function(){
-      if(this.currentCat===""){
-        return this.faqList
-      }else{
-        return {[this.currentCat]:this.faqList[this.currentCat]}
-      }
-    },
-  },
-  // 初回処理（createdではDOM操作をしない）
-  created: function () {
-    console.log('-- '+this.pageType+'_q');
-    // セッション情報の取得等
-    this.isLogin();
-    this.startSession(this.callback_getSession);
-  },
-  // メソッド群
-  methods: {
-    // -- サーバサイドからのコールバック
-    // セッション読み込み後
-    callback_getSession: function() {
-      // セッションを読み込み終わって状態を取得したら問題データを読み込む
-      this.getJson(this.getAPIPath()+'/'+this.pageType ,this.collback_getData);
-    },
-    // 問題データ取得後
-    collback_getData: function(response) {
-      this.faqList = response.data.faqList;
-      this.faqViewFlg = true;
-    },
-  }
+	props: {
+		data: Object,
+    faqId: {},
+    index: {}
+	},
+	// データ定義
+	data: function(){
+		return {
+			isOpened: false
+		}
+	},
 }
 </script>
 
@@ -142,6 +98,7 @@ select {
     display: flex;
     vertical-align: middle;
     margin: 0 0 5px;
+    overflow: hidden;
     &-label{
       flex: 0 1 calc(1024px - 720px);
       background-color: rgba(98,0,23,1);
@@ -162,6 +119,7 @@ select {
   &-add{
     margin: 0 0 0 100px;
     font-size: 3.0rem;
+    overflow: hidden;
     &-q{
       display: flex;
       vertical-align: middle;
@@ -208,6 +166,7 @@ select {
       margin: 0 0 30px 0;
       display: flex;
       align-items: flex-start;
+      overflow: hidden;
       label{
         font-size: 3.0rem;
         border: none;
@@ -303,5 +262,4 @@ select {
     }
   }
 }
-
 </style>
