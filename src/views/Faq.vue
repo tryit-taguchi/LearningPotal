@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="faqViewFlg">
     <page-title>
       <template v-slot:left>勉強会Q&A</template>
       カテゴリーごとに見る
@@ -11,38 +11,41 @@
     </page-title>
     <p style="padding-left:40px;font-size:11pt">質問をタップで回答を表示します。</p>
     <h2>よくある質問と答え</h2>
-    <template v-for="(faqCat, catName) in displayFaqList">
-      <h2 key="faqList.categoryName" :key="catName">{{catName}}</h2>
-      <div v-for="(faq, faqId, index) in faqCat" :key="faqId">
-        <dl class="faq">
-          <dt class="faq-q">
-            <span class="faq-q-label">質問{{index+1}}</span>
-            <span class="faq-q-text">{{faq.Q_STR}}</span>
-          </dt>
-          <dd class="faq-a">
-            <span class="faq-a-label">回答</span>
-            <span class="faq-a-text">{{faq.A_STR}}</span>
-          </dd>
-        </dl>
-        <!-- 追加質問の回答があったら表示？必要なのかわからない -->
-        <dl class="faq-add" v-if="false">
-          <dt class="faq-add-q">
-            <span class="faq-add-q-label">追加質問</span>
-            <span class="faq-add-q-text">追加質問あああああ</span>
-          </dt>
-          <dd class="faq-add-a">
-            <span class="faq-add-a-label">回答</span>
-            <span class="faq-add-a-text">追加質問の回答いいいいい</span>
-          </dd>
-        </dl>
-        <div class="faq-add-form">
-          <label for="">追加質問</label>
-          <textarea class="autoheight" name="Q_STR" id="Q_STR_<?= $prec['FAQ_ID'] ?>" cols="30" rows="1"></textarea>
-          <input type="button" value="送信" onClick="answerSendAdd('form_<?= $prec['FAQ_ID'] ?>')">
-        </div>
-
+    <transition name="fade" mode="out-in">
+      <div :key="currentCat">
+        <template v-for="(faqCat, catName) in displayFaqList">
+          <h2>{{catName}}</h2>
+          <div v-for="(faq, faqId, index) in faqCat">
+            <dl class="faq">
+              <dt class="faq-q">
+                <span class="faq-q-label">質問{{index+1}}</span>
+                <span class="faq-q-text">{{faq.Q_STR}}</span>
+              </dt>
+              <dd class="faq-a">
+                <span class="faq-a-label">回答</span>
+                <span class="faq-a-text">{{faq.A_STR}}</span>
+              </dd>
+            </dl>
+            <!-- 追加質問の回答があったら表示？必要なのかわからない -->
+            <dl class="faq-add" v-if="false">
+              <dt class="faq-add-q">
+                <span class="faq-add-q-label">追加質問</span>
+                <span class="faq-add-q-text">追加質問あああああ</span>
+              </dt>
+              <dd class="faq-add-a">
+                <span class="faq-add-a-label">回答</span>
+                <span class="faq-add-a-text">追加質問の回答いいいいい</span>
+              </dd>
+            </dl>
+            <div class="faq-add-form">
+              <label for="">追加質問</label>
+              <textarea class="autoheight" name="Q_STR" id="Q_STR_<?= $prec['FAQ_ID'] ?>" cols="30" rows="1"></textarea>
+              <input type="button" value="送信" onClick="answerSendAdd('form_<?= $prec['FAQ_ID'] ?>')">
+            </div>
+          </div>
+        </template>
       </div>
-    </template>
+    </transition>
     <hr>
     <h2>新しい質問をする</h2>
     <div class="faq-new-form-cat">
@@ -68,7 +71,8 @@ export default {
     return {
       pageType: 'faq',
       faqList: [],
-      currentCat: ""
+      currentCat: "",
+      faqViewFlg: false, // データセット後に描画を行う
     }
   },
   mounted() {
@@ -112,6 +116,7 @@ export default {
     // 問題データ取得後
     collback_getData: function(response) {
       this.faqList = response.data.faqList;
+      this.faqViewFlg = true;
     },
   }
 }
@@ -124,71 +129,8 @@ select {
   padding: .2em;
   line-height: 1.2;
   color: #000;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#666), color-stop(25%, #fff), color-stop(75%, #fff), to(#666));
   background-image: linear-gradient(#666, #fff 25%, #fff 75%, #666);
   border-radius: 5px;
-}
-
-//*****************************/
-// Answers Page Layout
-//*****************************/
-.faq{
-  &-list{
-    &-layout{
-      width: 100%;
-      max-width: 1024px;
-    }
-    &-form{
-      display: flex;
-      align-items: flex-start;
-      label{
-        font-size: 2.0rem;
-        border: none;
-        padding: .2em;
-        line-height: 1.2;
-        margin-right: 5px;
-        white-space: nowrap;
-      }
-      select{
-        margin-right: 5px;
-      }
-      textarea{
-        width: auto;
-        flex: 1 0 auto;
-        margin-right: 5px;
-
-        border: none;
-        padding: .2em;
-        line-height: 1.2;
-        font-family: "Nissan Brand font", "新ゴ";
-        color: #000;
-        background-color: #fff;
-        border-radius: 5px;
-      }
-      input[type="button"],
-      input[type="submit"],
-      button{
-        align-self: flex-end;
-      }
-    }
-  }
-  &-item{
-    color: #000;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #fff;
-    dt{
-      padding: 10px;
-      border-bottom: 1px solid #000;
-    }
-    dd{
-      margin-left: 0;
-      padding: 10px;
-    }
-  }
-  &-additional{
-    margin-left: 10%;
-  }
 }
 
 .faq{
