@@ -45,7 +45,7 @@ export default {
 				xsrfHeaderName: 'X-CSRF-Token',
 				withCredentials: true
 			}).then(await function (response) {
-				//console.log("GET サーバからロード : " + url);
+				console.log("GET サーバからロード : " + url);
 				/*
 				if( collback.name != "" ) {
 					console.log("関数名 : " + collback.name);
@@ -58,16 +58,14 @@ export default {
 					collback(response.data);
 				}
 			}).catch(function (e) {
-				console.log("コールバック中にキャッチされた？");
+				console.log("コールバック中にキャッチかタイムアウト等");
 				console.log(e);
-/*
 				console.log("GET ストレージからロード : " + url);
 				var storage = localStorage.getItem(url);
 				cacheJson = JSON.parse(storage);
 				if( collback != null ) {
 					collback(cacheJson);
 				}
-*/
 			});
 		},
 		postJson: async function(url,params,collback) {
