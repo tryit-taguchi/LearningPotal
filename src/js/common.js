@@ -76,7 +76,7 @@ export default {
 			var obj = this;
 
 			console.log("セッションスタート");
-			console.log(this.$parent.session);
+			//console.log(this.$parent.session);
 			if( !this.isEmpty(this.$parent.session) ) {
 				if( !this.isEmpty(localStorage.getItem('session')) ) {
 					console.log("セッションをストレージから読み込み");

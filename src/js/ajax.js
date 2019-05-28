@@ -11,7 +11,7 @@ export default {
 	},
 	methods: {
 		getJson: async function(url,collback) {
-			console.log("HTTPメソッド「GET」実行 : " + url);
+			//console.log("HTTPメソッド「GET」実行 : " + url);
 			var $this = this;
 			var cacheJson = null;
 			// axiosでキャッシュされないようにする
@@ -45,7 +45,7 @@ export default {
 				xsrfHeaderName: 'X-CSRF-Token',
 				withCredentials: true
 			}).then(await function (response) {
-				console.log("GET サーバからロード : " + url);
+				//console.log("GET サーバからロード : " + url);
 				/*
 				if( collback.name != "" ) {
 					console.log("関数名 : " + collback.name);
@@ -69,7 +69,7 @@ export default {
 			});
 		},
 		postJson: async function(url,params,collback) {
-			console.log("HTTPメソッド「POST」実行");
+			//console.log("HTTPメソッド「POST」実行");
 
 			var $this = this;
 			//var storage = localStorage.getItem(url);
@@ -146,7 +146,7 @@ export default {
 					}
 			}).then(function (response) {
 				localStorage.setItem(url,JSON.stringify(response.data));
-				console.log("POST サーバからロード");
+				console.log("DELETE サーバからロード");
 				if( collback != null ) {
 					collback(response.data);
 				}

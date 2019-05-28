@@ -95,39 +95,40 @@
 
 <script>
 export default {
-  props: ['imgTopVisual'],
-  // データ定義
-  data: function(){
-    return {
-      pageViewFlg: false, // データセット後に描画を行う
-    }
-  },
-  // 初回処理（createdではDOM操作をしない）
-  created: function () {
-    // セッション情報の取得等
-    console.log("Home処理開始");
-    this.isLogin(); // ログインチェック・ログインしていたらセッション取得
-    this.startSession(this.callback_getSession);
-
-    console.log("画像パス");
-//    console.log(this.serverInfo.imgTopVisual);
-//    console.log(this.$parent.serverInfo.imgTopVisual);
-// :style="{ backgroundImage: 'url(' + image_src.url + ')' }"
-  },
-  // メソッド群
-  methods: {
-    // セッション読み込み後
-    callback_getSession: function() {
-      // セッションを読み込み終わって状態
-//      console.log(this.getUpfilesPath() + this.$parent.serverInfo.imgLogo);
-//    console.log(this.getUpfilesPath() + this.$parent.serverInfo.imgTitle);
-      console.log(this.getUpfilesPath() + this.$parent.serverInfo.imgTopVisual);
-      this.pageViewFlg = true; // 表示を開始する
-    },
-  },
-  computed: {
-//    image_src(){ return this.getUpfilesPath() + this.$parent.serverInfo.imgTopVisual }
-  },
+	props: ['imgTopVisual'],
+	// データ定義
+	data: function(){
+		return {
+			pageViewFlg: false, // データセット後に描画を行う
+			intervalId: undefined, // 画面切り替え時にポーリングを停止させるために保存するID
+		}
+	},
+	// 初回処理（createdではDOM操作をしない）
+	created: function () {
+		// セッション情報の取得等
+		console.log("Home処理開始");
+		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
+		this.startSession(this.callback_getSession);
+	},
+	// メソッド群
+	methods: {
+		// セッション読み込み後
+		callback_getSession: function() {
+			// セッションを読み込み終わって状態
+			this.intervalId = setInterval(function() {
+				this.getJson(this.getAPIPath()+'/json/config.json',function(responce) {
+					console.log(responce.data.statusHome.enableList);
+				}.bind(this));
+			}.bind(this), 3000);
+			this.pageViewFlg = true; // 表示を開始する
+		},
+	},
+	computed: {
+	},
+	beforeDestroy: function () {
+		console.log('clearInterval');
+		clearInterval(this.intervalId); // 画面が変わったらインターバルを外す
+	},
 }
 </script>
 

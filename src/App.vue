@@ -52,7 +52,7 @@ export default {
       this.serverInfo.imgTopVisual = this.getUpfilesPath() + this.serverInfo.imgTopVisual;
 			this.headerViewFlg = true;
 			console.log("サーバの共通情報読み込み完了");
-			console.log("アップファイルフォルダ : "+this.getUpfilesPath());
+			//console.log("アップファイルフォルダ : "+this.getUpfilesPath());
 			//console.log(this.serverInfo);
 		}
 	}
