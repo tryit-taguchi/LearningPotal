@@ -54,6 +54,15 @@ export default {
 				this.postJson(url,params,callback);
 			}
 		},
+		// データポスト（簡易POST）
+		post : function(url,form,callback) {
+			// ジャンプ前にセッションをDBに吐き出す
+			let params = new FormData();
+			params.append("form",JSON.stringify(form));
+			this.postJson(url,params,callback);
+		},
+
+
 		// スリープ
 		sleep: function(msec) {
 			return new Promise((resolve, reject) => {

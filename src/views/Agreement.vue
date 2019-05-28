@@ -50,7 +50,7 @@
       <label for="chkAgree" style="font-size:16pt">私は上記の制約事項に同意いたします</label><br>
       <p>{{errorMessage}}</p>
       <div class="question-button">
-        <base-button text="始める" @click="submit" />
+        <base-button text="始める" @click="save" />
       </div>
     </form>
     <br>
@@ -84,11 +84,9 @@ export default {
 			}
 			return true;
 		},
-		// Submit
-		submit: function () {
-console.log("test");
+		// 保存
+		save: function () {
 			if( this.validation() ) {
-console.log("test2");
 				this.$router.push("/"); // ホームに遷移
 			}
 		},

@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submit">
+  <form @submit.prevent="save">
     <div>
       ログイン画面（席番号入力）
       <input type="text" v-model="SEAT_CD" placeholder="座席番号">
@@ -37,8 +37,8 @@ export default {
 			}
 			return true;
 		},
-		// Submit
-		submit: function () {
+		// 保存
+		save: function () {
 			if( this.validation() ) {
 				let params = new FormData();
 				params.append("SEAT_CD",this.SEAT_CD);

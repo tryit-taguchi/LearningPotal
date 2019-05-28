@@ -7,22 +7,14 @@
       <br>
       <form @submit.prevent="submit">
         <h2>有効設定</h2>
-<!--
-        {{statusHome.enableList['questions_1'].name}}
-        <input type="radio" id="questions_1_on" value="1" v-model="statusHome.enableList['questions_1'].value">
-        <label for="questions_1_on">ON</label>
-        <input type="radio" id="questions_1_off" value="0" v-model="statusHome.enableList['questions_1'].value">
-        <label for="questions_1_off">OFF</label>
-        <br>
--->
+        <!-- ON/OFF のラジオボタン -->
         <div v-for="questionType in questionList">
           <config-radio :name="questionType" :type="questionType" :title="statusHome.enableList[questionType].name"  v-model="statusHome.enableList[questionType].value" />
         </div>
-
-
+        <p>{{infoMessage}}</p>
         <p>{{errorMessage}}</p>
         <div class="question-button">
-          <base-button text="保　存" @click="submit" />
+          <base-button text="保　存" @click="save" />
         </div>
       </form>
       <br>
@@ -39,6 +31,7 @@ export default {
 	// データ定義
 	data: function(){
 		return {
+			infoMessage: '',
 			errorMessage: '',
 			configData: {},
 			statusHome: {},
@@ -72,8 +65,8 @@ export default {
 			callback();
 			return true;
 		},
-		// Submit
-		submit: function () {
+		// 保存
+		save: function () {
 			this.validation(this.callback_formSubmit);
 		},
 		// -- サーバサイドからのコールバック
@@ -92,6 +85,8 @@ export default {
 		},
 		// フォームのSubmit
 		callback_formSubmit: function(e) {
+			console.log("callback_formSubmit");
+
 			var enableList = {};
 			for( var no in this.questionList ) {
 				var questionType = this.questionList[no];
@@ -100,7 +95,12 @@ export default {
 			var form = {};
 			form.enableList = enableList;
 			console.log(form.enableList);
-			//this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
+			this.post(this.getAPIPath()+'/config',form,this.collback_postData);
+		},
+		// 設定データ送信後
+		collback_postData: function(response) {
+			this.result = response.data;
+			this.infoMessage = "保存しました。";
 		},
 	}
 }
