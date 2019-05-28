@@ -111,8 +111,8 @@ export default {
 		},
 		// ログインチェック
 		isLogin : async function() {
-			var seatCd    = this.$cookies.set('SEAT_CD');
-			var lectureDt = this.$cookies.set('LECTURE_DT');
+			var seatCd    = this.$cookies.get('SEAT_CD');
+			var lectureDt = this.$cookies.get('LECTURE_DT');
 			var nowYMD    = this.dateToFormatString(new Date(), '%YYYY%-%MM%-%DD%');
 			var toLogin   = false;
 			if( seatCd == null || seatCd == "" ) {
@@ -132,6 +132,11 @@ export default {
 			} else {
 				this.$parent.userCompany = this.$cookies.get('COMPANY_NAME');
 				this.$parent.userName    = this.$cookies.get('MEMBER_NAME');
+				if( this.$cookies.get('ADMIN_FLG') == "true" ) {
+					this.$parent.adminFlg    = true;
+				} else {
+					this.$parent.adminFlg    = false;
+				}
 			}
 			return;
 		},
@@ -143,6 +148,7 @@ export default {
 			this.$cookies.set('MEMBER_NAME',login.MEMBER_NAME);
 			this.$cookies.set('COMPANY_NAME',login.COMPANY_NAME);
 			this.$cookies.set('LECTURE_DT',login.LECTURE_DT);
+			this.$cookies.set('ADMIN_FLG',login.ADMIN_FLG);
 			this.$parent.userCompany = login.COMPANY_NAME;
 			this.$parent.userName    = login.MEMBER_NAME;
 		},
@@ -156,6 +162,7 @@ export default {
 			this.$cookies.set('MEMBER_NAME','');
 			this.$cookies.set('COMPANY_NAME','');
 			this.$cookies.set('LECTURE_DT','');
+			this.$cookies.set('ADMIN_FLG','');
 			this.$parent.userCompany = '';
 			this.$parent.userName    = '';
 		},

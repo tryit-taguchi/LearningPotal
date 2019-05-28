@@ -5,7 +5,16 @@
         <!--<img class="logo" src="../assets/logo.png" alt="">-->
         <img class="logo" :src="imgLogo" alt="">
       </router-link>
-      <div class="title">
+      <!-- adminFlgが立っている場合は、タイトルタップでコンフィグモードに -->
+      <div class="title" v-if="adminFlg">
+        <!-- <img src="../assets/title.svg" width="640" alt="CMC GROUP Learning Portal"> -->
+        <router-link to="/config">
+          <img :src="imgTitle" width="50%" alt="Learning Portal">
+        </router-link>
+        <!--Learning Portal-->
+      </div>
+      <!-- 通常はタイトルタップは無反応 -->
+      <div class="title" v-else>
         <!-- <img src="../assets/title.svg" width="640" alt="CMC GROUP Learning Portal"> -->
         <img :src="imgTitle" width="50%" alt="Learning Portal">
         <!--Learning Portal-->
@@ -23,6 +32,7 @@ export default {
 		imgLogo: String,
 		imgTitle: String,
 		headerViewFlg: Boolean,
+		adminFlg: Boolean,
 	},
 	// データ定義
 	data: function(){
@@ -33,6 +43,7 @@ export default {
 	// 初回処理（createdではDOM操作をしない）
 	created: async function () {
 		console.log("ヘッダ処理開始");
+//		this.adminFlg = "";
 		/*
 		console.log(this.headerViewFlg);
 		console.log("------- AppHeader.vue");

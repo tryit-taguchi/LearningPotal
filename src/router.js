@@ -205,6 +205,12 @@ export default new Router({
       name: 'enquetes_1_f',
       component: () => import('./views/Enquete1F.vue')
     },
+    // 設定
+    {
+      path: '/config',
+      name: 'config',
+      component: () => import('./views/Config.vue')
+    },
     {
       path: '*',
       component: () => import('./views/Error404.vue')

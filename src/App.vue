@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <app-header :user-company="userCompany" :user-name="userName" :img-logo="serverInfo.imgLogo" :img-title="serverInfo.imgTitle" :header-view-flg="headerViewFlg" ></app-header>
+    <app-header :user-company="userCompany" :user-name="userName" :img-logo="serverInfo.imgLogo" :img-title="serverInfo.imgTitle" :header-view-flg="headerViewFlg" :admin-flg="adminFlg" ></app-header>
     <main>
       <transition name="fade" mode="out-in">
         <router-view :img-top-visual="serverInfo.imgTopVisual" />
@@ -27,6 +27,7 @@ export default {
 			session: '',
 			serverInfo : {},
 			headerViewFlg : false,
+			adminFlg: false,
 		}
 	},
 	created: function () {
