@@ -6,6 +6,8 @@
       </div>
       <br>
       <form @submit.prevent="submit">
+
+
         <p>{{errorMessage}}</p>
         <div class="question-button">
           <base-button text="保　存" @click="submit" />
@@ -26,12 +28,12 @@ export default {
 	data: function(){
 		return {
 			errorMessage: '',
+			configData: {},
 			pageViewFlg: false, // データセット後に描画を行う
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
 	created: function () {
-		console.log('-- '+this.pageType+'_q');
 		// セッション情報の取得等
 		this.isLogin();
 		this.startSession(this.callback_getSession);
@@ -52,10 +54,13 @@ export default {
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
-			this.getJson(this.getAPIPath()+'/'+this.pageType + '_q/' + this.getMemberId(),this.collback_getData);
+			//console.log(this.getAPIPath()+'/json/config.json');
+			this.getJson(this.getAPIPath()+'/json/config.json',this.collback_getData);
 		},
-		// 問題データ取得後
+		// Configデータ取得後
 		collback_getData: function(response) {
+			this.configData = response.data;
+			console.log(this.configData);
 			this.pageViewFlg = true;
 		},
 	}

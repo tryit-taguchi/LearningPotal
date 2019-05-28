@@ -19,10 +19,6 @@ export default {
 		getUpfilesPath : function() {
 			return process.env.VUE_APP_UPFILES_URL_BASE;
 		},
-		// 生成済みJSONのファイルパス取得
-		getJsonPath : function() {
-			return process.env.VUE_APP_JSON_URL_BASE;
-		},
 		// ページジャンプ
 		jump : function(url) {
 			console.log("ページジャンプ");
