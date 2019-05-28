@@ -11,10 +11,12 @@
         <div v-for="questionType in questionList">
           <config-radio :name="questionType" :type="questionType" :title="statusHome.enableList[questionType].name"  v-model="statusHome.enableList[questionType].value" />
         </div>
-        <p>{{infoMessage}}</p>
         <p>{{errorMessage}}</p>
         <div class="question-button">
           <base-button text="保　存" @click="save" />
+        </div>
+        <div v-if="infoMessageViewFlg">
+          <p>{{infoMessage}}</p>
         </div>
       </form>
       <br>
@@ -22,16 +24,13 @@
   </div>
 </template>
 
-<style lang="scss">
-  
-</style>
-
 <script>
 export default {
 	// データ定義
 	data: function(){
 		return {
 			infoMessage: '',
+			infoMessageViewFlg: false,
 			errorMessage: '',
 			configData: {},
 			statusHome: {},
@@ -74,7 +73,8 @@ export default {
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
 			//console.log(this.getAPIPath()+'/json/config.json');
-			this.getJson(this.getAPIPath()+'/json/config.json',this.collback_getData);
+			//this.getJson(this.getAPIPath()+'/json/config.json',this.collback_getData);
+			this.getJson(this.getAPIPath()+'/config',this.collback_getData);
 		},
 		// Configデータ取得後
 		collback_getData: function(response) {
@@ -101,6 +101,10 @@ export default {
 		collback_postData: function(response) {
 			this.result = response.data;
 			this.infoMessage = "保存しました。";
+			this.infoMessageViewFlg = true;
+			setTimeout(function() {
+				this.infoMessageViewFlg = false;
+			}.bind(this), 2000);
 		},
 	}
 }
