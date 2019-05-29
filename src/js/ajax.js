@@ -46,16 +46,19 @@ export default {
 				withCredentials: true
 			}).then(await function (response) {
 				//console.log("GET サーバからロード : " + url);
-				/*
-				if( collback.name != "" ) {
-					console.log("関数名 : " + collback.name);
+				if( response.data.status == 'success' ) {
+					if( collback != null ) {
+						localStorage.setItem(url,JSON.stringify(response.data));
+						collback(response.data);
+					}
 				} else {
-					console.log("関数名 : 無名関数");
-				}
-				*/
-				if( collback != null ) {
-					localStorage.setItem(url,JSON.stringify(response.data));
-					collback(response.data);
+					console.log("APIがエラーコードを返しています。");
+					console.log("URL : " + url);
+					if( collback.name != "" ) {
+						console.log("関数名 : " + collback.name);
+					} else {
+						console.log("関数名 : 無名関数");
+					}
 				}
 			}).catch(function (e) {
 				console.log("コールバック中にキャッチかタイムアウト等");

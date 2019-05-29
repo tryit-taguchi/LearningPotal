@@ -99,7 +99,7 @@ export default {
 		},
 		// 設定データ送信後
 		collback_postData: function(response) {
-			this.result = response.data;
+			this.$parent.serverInfo.config = response.data;
 			this.infoMessage = "保存しました。";
 			this.infoMessageViewFlg = true;
 			setTimeout(function() {

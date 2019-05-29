@@ -22,71 +22,49 @@
             <span class="top-navi-title">オリエンテ<span class="cho">ー</span>ション</span>
         </li>
 -->
-        <li id="js-navi-questions_1">
-          <router-link to="/questions_1_q">
-            <img src="../assets/icon_navi_01.png" alt="">
-            <span class="top-navi-title">オリエンテ<span class="cho">ー</span>ション</span>
-          </router-link>
+        <li id="js-navi-questions_1" v-bind:class="{disabled:enableList['questions_1'].value === 0}" @click="naviClick('questions_1')">
+          <img src="../assets/icon_navi_01.png" alt="">
+          <span class="top-navi-title">オリエンテ<span class="cho">ー</span>ション</span>
         </li>
-        <li id="js-navi-reporting_1">
-          <router-link to="/reporting_1_q">
-            <img src="../assets/icon_navi_02.png" alt="">
-            <span class="top-navi-title">試乗１</span>
-          </router-link>
+        <li id="js-navi-reporting_1" v-bind:class="{disabled:enableList['reporting_1'].value === 0}" @click="naviClick('reporting_1')">
+          <img src="../assets/icon_navi_02.png" alt="">
+          <span class="top-navi-title">試乗１</span>
         </li>
-        <li id="js-navi-questions_2">
-          <router-link to="/questions_2_q">
-            <img src="../assets/icon_navi_03.png" alt="">
-            <span class="top-navi-title">座学</span>
-          </router-link>
+        <li id="js-navi-questions_2" v-bind:class="{disabled:enableList['questions_2'].value === 0}" @click="naviClick('questions_2')">
+          <img src="../assets/icon_navi_03.png" alt="">
+          <span class="top-navi-title">座学</span>
         </li>
-        <li id="js-navi-reporting_2">
-          <router-link to="/reporting_2_q">
-            <img src="../assets/icon_navi_02.png" alt="">
-            <span class="top-navi-title">試乗２</span>
-          </router-link>
+        <li id="js-navi-reporting_2" v-bind:class="{disabled:enableList['reporting_2'].value === 0}" @click="naviClick('reporting_2')">
+          <img src="../assets/icon_navi_02.png" alt="">
+          <span class="top-navi-title">試乗２</span>
         </li>
-        <li id="js-navi-reporting_3">
-          <router-link to="/reporting_3_q">
-            <img src="../assets/icon_navi_02.png" alt="">
-            <span class="top-navi-title">現車・競合車確認</span>
-          </router-link>
+        <li id="js-navi-reporting_3" v-bind:class="{disabled:enableList['reporting_3'].value === 0}" @click="naviClick('reporting_3')">
+          <img src="../assets/icon_navi_02.png" alt="">
+          <span class="top-navi-title">現車・競合車確認</span>
         </li>
-        <li id="js-navi-questions_3">
-          <router-link to="/questions_3_q">
-            <img src="../assets/icon_navi_03.png" alt="">
-            <span class="top-navi-title">まとめ１</span>
-          </router-link>
+        <li id="js-navi-questions_3" v-bind:class="{disabled:enableList['questions_3'].value === 0}" @click="naviClick('questions_3')">
+          <img src="../assets/icon_navi_03.png" alt="">
+          <span class="top-navi-title">まとめ１</span>
         </li>
-        <li id="js-navi-questions_4">
-          <router-link to="/questions_4_q">
-            <img src="../assets/icon_navi_03.png" alt="">
-            <span class="top-navi-title">まとめ２</span>
-          </router-link>
+        <li id="js-navi-questions_4" v-bind:class="{disabled:enableList['questions_4'].value === 0}" @click="naviClick('questions_4')">
+          <img src="../assets/icon_navi_03.png" alt="">
+          <span class="top-navi-title">まとめ２</span>
         </li>
-        <li id="js-navi-catchphrase">
-          <router-link to="/catchphrase_i">
-            <img src="../assets/icon_navi_04.png" alt="">
-            <span class="top-navi-title">キャッチフレ<span class="cho">ー</span>ズ</span>
-          </router-link>
+        <li id="js-navi-catchphrase" v-bind:class="{disabled:enableList['catchphrase'].value === 0}" @click="naviClick('catchphrase')">
+          <img src="../assets/icon_navi_04.png" alt="">
+          <span class="top-navi-title">キャッチフレ<span class="cho">ー</span>ズ</span>
         </li>
-        <li>
-          <router-link to="/faq">
-            <img src="../assets/icon_navi_05.png" alt="">
-            <span class="top-navi-title">Ｑ＆Ａ</span>
-          </router-link>
+        <li id="js-navi-faq"         v-bind:class="{disabled:enableList['examinations_1'].value === 0}" @click="naviClick('faq')">
+          <img src="../assets/icon_navi_05.png" alt="">
+          <span class="top-navi-title">Ｑ＆Ａ</span>
         </li>
-        <li id="js-navi-examinations_1">
-          <router-link to="/examinations_1_q">
-            <img src="../assets/icon_navi_07.png" alt="">
-            <span class="top-navi-title">理解度確認テスト</span>
-          </router-link>
+        <li id="js-navi-examinations_1" v-bind:class="{disabled:enableList['examinations_1'].value === 0}" @click="naviClick('examinations_1')">
+          <img src="../assets/icon_navi_07.png" alt="">
+          <span class="top-navi-title">理解度確認テスト</span>
         </li>
-        <li id="js-navi-enquetes_1">
-          <router-link to="/enquetes_1_q">
-            <img src="../assets/icon_navi_06.png" alt="">
-            <span class="top-navi-title">アンケ<span class="cho">ー</span>ト</span>
-          </router-link>
+        <li id="js-navi-enquetes_1"   v-bind:class="{disabled:enableList['enquetes_1'].value === 0}" @click="naviClick('enquetes_1')">
+          <img src="../assets/icon_navi_06.png" alt="">
+          <span class="top-navi-title">アンケ<span class="cho">ー</span>ト</span>
         </li>
       </ul>
     </nav>
@@ -102,6 +80,7 @@ export default {
 			pageViewFlg: false, // データセット後に描画を行う
 			intervalId: undefined, // 画面切り替え時にポーリングを停止させるために保存するID
 			config: {},         // コンフィグデータ（変動的な画面の設定等）
+			enableList: {},     // ボタンの有効無効フラグ
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
@@ -115,16 +94,59 @@ export default {
 	methods: {
 		// セッション読み込み後
 		callback_getSession: function() {
+			console.log("セッション読み込み後");
 			this.config = this.$parent.serverInfo.config; // ローディング直後のコンフィグの初期状態をセット
-			// セッションを読み込み終わって状態
+			this.enableList = this.config.statusHome.enableList;
+			// コンフィグ定期読み込み処理
 			this.intervalId = setInterval(function() {
 				this.getJson(this.getAPIPath()+'/json/config.json',function(responce) { // 生成済みのjsonからコンフィグデータを読み込む
 					this.config = responce.data; // 3秒おきにコンフィグデータをロード
-					//console.log(this.config.statusHome.enableList); // ボタンの有効・無効状態
+					this.$parent.serverInfo.config = this.config;
+					this.enableList = this.config.statusHome.enableList;
+					//console.log(this.enableList); // ボタンの有効・無効状態
 				}.bind(this));
 			}.bind(this), 3000);
 			this.pageViewFlg = true; // 表示を開始する
 		},
+		// ボタンを押した時の挙動
+		naviClick: function(questionType) { // オリエンテーション
+			switch(questionType) {
+				case 'questions_1':      // オリエンテーション
+				case 'reporting_1':      // 試乗①
+				case 'questions_2':      // 座学
+				case 'reporting_2':      // 試乗②
+				case 'reporting_3':      // 現車・競合車確認
+				case 'questions_3':      // まとめ①
+				case 'questions_4':      // まとめ②
+				case 'examinations_1':   // 理解度確認テスト
+				case 'enquetes_1':       // アンケート
+					if( this.enableList[questionType].value == 1 ) {
+						this.jump("/"+questionType+"_q");
+					}
+					break;
+				case 'catchphrase':      // キャッチフレーズ
+				case 'faq':              // 勉強会Q&A
+					if( this.enableList[questionType].value == 1 ) {
+						this.jump("/"+questionType);
+					}
+					break;
+			}
+//			console.log(questionType);
+		},
+/*
+		questions_1: function() { // 試乗①
+			this.jump("/questions_1_q");
+		},
+				'questions_1',      // オリエンテーション
+				'reporting_1',      // 試乗①
+				'questions_2',      // 座学
+				'reporting_2',      // 試乗②
+				'reporting_3',      // 現車・競合車確認
+				'questions_3',      // まとめ①
+				'questions_4',      // まとめ②
+				'examinations_1',   // 理解度確認テスト
+				'enquetes_1',       // アンケート
+*/
 	},
 	computed: {
 	},
