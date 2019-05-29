@@ -16,55 +16,49 @@
     </section>
     <nav class="top-navi">
       <ul>
-<!-- 完了したフローは"disabled"クラスを付与する
-        <li class="disabled">
-          <img src="../assets/icon_navi_04.png" alt="">
-            <span class="top-navi-title">オリエンテ<span class="cho">ー</span>ション</span>
-        </li>
--->
-        <li id="js-navi-questions_1" v-bind:class="{disabled:enableList['questions_1'].value === 0}" @click="naviClick('questions_1')">
+        <li :class="{disabled:enableList['questions_1'].value === 0}" @click="naviClick('questions_1')">
           <img src="../assets/icon_navi_01.png" alt="">
-          <span class="top-navi-title">オリエンテ<span class="cho">ー</span>ション</span>
+          <span class="top-navi-title">オリエンテーション</span>
         </li>
-        <li id="js-navi-reporting_1" v-bind:class="{disabled:enableList['reporting_1'].value === 0}" @click="naviClick('reporting_1')">
+        <li :class="{disabled:enableList['reporting_1'].value === 0}" @click="naviClick('reporting_1')">
           <img src="../assets/icon_navi_02.png" alt="">
           <span class="top-navi-title">試乗１</span>
         </li>
-        <li id="js-navi-questions_2" v-bind:class="{disabled:enableList['questions_2'].value === 0}" @click="naviClick('questions_2')">
+        <li :class="{disabled:enableList['questions_2'].value === 0}" @click="naviClick('questions_2')">
           <img src="../assets/icon_navi_03.png" alt="">
           <span class="top-navi-title">座学</span>
         </li>
-        <li id="js-navi-reporting_2" v-bind:class="{disabled:enableList['reporting_2'].value === 0}" @click="naviClick('reporting_2')">
+        <li :class="{disabled:enableList['reporting_2'].value === 0}" @click="naviClick('reporting_2')">
           <img src="../assets/icon_navi_02.png" alt="">
           <span class="top-navi-title">試乗２</span>
         </li>
-        <li id="js-navi-reporting_3" v-bind:class="{disabled:enableList['reporting_3'].value === 0}" @click="naviClick('reporting_3')">
+        <li :class="{disabled:enableList['reporting_3'].value === 0}" @click="naviClick('reporting_3')">
           <img src="../assets/icon_navi_02.png" alt="">
           <span class="top-navi-title">現車・競合車確認</span>
         </li>
-        <li id="js-navi-questions_3" v-bind:class="{disabled:enableList['questions_3'].value === 0}" @click="naviClick('questions_3')">
+        <li :class="{disabled:enableList['questions_3'].value === 0}" @click="naviClick('questions_3')">
           <img src="../assets/icon_navi_03.png" alt="">
           <span class="top-navi-title">まとめ１</span>
         </li>
-        <li id="js-navi-questions_4" v-bind:class="{disabled:enableList['questions_4'].value === 0}" @click="naviClick('questions_4')">
+        <li :class="{disabled:enableList['questions_4'].value === 0}" @click="naviClick('questions_4')">
           <img src="../assets/icon_navi_03.png" alt="">
           <span class="top-navi-title">まとめ２</span>
         </li>
-        <li id="js-navi-catchphrase" v-bind:class="{disabled:enableList['catchphrase'].value === 0}" @click="naviClick('catchphrase')">
+        <li :class="{disabled:enableList['catchphrase'].value === 0}" @click="naviClick('catchphrase')">
           <img src="../assets/icon_navi_04.png" alt="">
-          <span class="top-navi-title">キャッチフレ<span class="cho">ー</span>ズ</span>
+          <span class="top-navi-title">キャッチフレーズ</span>
         </li>
-        <li id="js-navi-faq"         v-bind:class="{disabled:enableList['examinations_1'].value === 0}" @click="naviClick('faq')">
+        <li :class="{disabled:enableList['examinations_1'].value === 0}" @click="naviClick('faq')">
           <img src="../assets/icon_navi_05.png" alt="">
           <span class="top-navi-title">Ｑ＆Ａ</span>
         </li>
-        <li id="js-navi-examinations_1" v-bind:class="{disabled:enableList['examinations_1'].value === 0}" @click="naviClick('examinations_1')">
+        <li :class="{disabled:enableList['examinations_1'].value === 0}" @click="naviClick('examinations_1')">
           <img src="../assets/icon_navi_07.png" alt="">
           <span class="top-navi-title">理解度確認テスト</span>
         </li>
-        <li id="js-navi-enquetes_1"   v-bind:class="{disabled:enableList['enquetes_1'].value === 0}" @click="naviClick('enquetes_1')">
+        <li :class="{disabled:enableList['enquetes_1'].value === 0}" @click="naviClick('enquetes_1')">
           <img src="../assets/icon_navi_06.png" alt="">
-          <span class="top-navi-title">アンケ<span class="cho">ー</span>ト</span>
+          <span class="top-navi-title">アンケート</span>
         </li>
       </ul>
     </nav>
@@ -424,10 +418,10 @@ $top-navi-colors: (
     letter-spacing: .2em;
     writing-mode: vertical-rl;
     margin: 1em 0 .5em;
-    .cho{
-      display:inline-block;
-      transform: rotate(90deg) translate(3px,-3px);
-    }
+    // .cho{
+    //   display:inline-block;
+    //   transform: rotate(90deg) translate(3px,-3px);
+    // }
   }
 }
 
