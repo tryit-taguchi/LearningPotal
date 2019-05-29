@@ -101,6 +101,7 @@ export default {
 		return {
 			pageViewFlg: false, // データセット後に描画を行う
 			intervalId: undefined, // 画面切り替え時にポーリングを停止させるために保存するID
+			config: {},         // コンフィグデータ（変動的な画面の設定等）
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
@@ -114,10 +115,12 @@ export default {
 	methods: {
 		// セッション読み込み後
 		callback_getSession: function() {
+			this.config = this.$parent.serverInfo.config; // ローディング直後のコンフィグの初期状態をセット
 			// セッションを読み込み終わって状態
 			this.intervalId = setInterval(function() {
-				this.getJson(this.getAPIPath()+'/json/config.json',function(responce) {
-					console.log(responce.data.statusHome.enableList);
+				this.getJson(this.getAPIPath()+'/json/config.json',function(responce) { // 生成済みのjsonからコンフィグデータを読み込む
+					this.config = responce.data; // 3秒おきにコンフィグデータをロード
+					//console.log(this.config.statusHome.enableList); // ボタンの有効・無効状態
 				}.bind(this));
 			}.bind(this), 3000);
 			this.pageViewFlg = true; // 表示を開始する
