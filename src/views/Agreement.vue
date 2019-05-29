@@ -46,10 +46,10 @@
     </div>
     <br>
     <form @submit.prevent="submit">
-      <input type="checkbox" id="agreeCheck" v-model="agreeCheck" style="width:40px:height40px;-moz-transform: scale(2); -webkit-transform: scale(2); transform: scale(2);">
-      <label for="chkAgree" style="font-size:16pt">私は上記の制約事項に同意いたします</label><br>
-      <p>{{errorMessage}}</p>
-      <div class="question-button">
+      <div style="text-align:center;">
+        <input type="checkbox" id="agreeCheck" v-model="agreeCheck" style="width:40px:height40px;-moz-transform: scale(2); -webkit-transform: scale(2); transform: scale(2);">
+        &ensp;<label for="agreeCheck" style="font-size:16pt">私は上記の制約事項に同意いたします</label><br>
+        <p>{{errorMessage}}</p>
         <base-button text="始める" @click="save" />
       </div>
     </form>
