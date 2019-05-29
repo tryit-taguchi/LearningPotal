@@ -104,7 +104,7 @@ export default {
 			var form = {};
 			form.answerList = answerList;
 			form.freeComment = this.freeComment;
-			console.log("memberId : "+this.getMemberId());
+			this.$parent.session.question_atr[this.pageType].QUESTION_COMPLETE = true;
 			this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
 		},
 		// -- サーバサイドからのコールバック

@@ -106,19 +106,46 @@ export default {
 		naviClick: function(questionType) { // オリエンテーション
 			switch(questionType) {
 				case 'questions_1':      // オリエンテーション
-				case 'reporting_1':      // 試乗①
 				case 'questions_2':      // 座学
-				case 'reporting_2':      // 試乗②
-				case 'reporting_3':      // 現車・競合車確認
 				case 'questions_3':      // まとめ①
 				case 'questions_4':      // まとめ②
+					if( this.enableList[questionType].value == 1 ) {
+						if( this.$parent.session.question_atr[questionType].QUESTION_COMPLETE == true ) {
+							this.jump("/"+questionType+"_r");
+						} else {
+							this.jump("/"+questionType+"_q");
+						}
+					}
+					break;
+				case 'reporting_1':      // 試乗①
+				case 'reporting_2':      // 試乗②
+				case 'reporting_3':      // 現車・競合車確認
+					if( this.enableList[questionType].value == 1 ) {
+						this.jump("/"+questionType+"_q");
+						/*
+						if( this.$parent.session.question_atr[questionType].QUESTION_COMPLETE == true ) {
+							this.jump("/"+questionType+"_q");
+						} else {
+							this.jump("/reporting_all_r");
+						}
+						*/
+					}
+					break;
 				case 'examinations_1':   // 理解度確認テスト
 				case 'enquetes_1':       // アンケート
 					if( this.enableList[questionType].value == 1 ) {
-						this.jump("/"+questionType+"_q");
+						if( this.$parent.session.question_atr[questionType].QUESTION_COMPLETE == true ) {
+							this.jump("/"+questionType+"_f");
+						} else {
+							this.jump("/"+questionType+"_q");
+						}
 					}
 					break;
 				case 'catchphrase':      // キャッチフレーズ
+					if( this.enableList[questionType].value == 1 ) {
+						this.jump("/"+questionType+"_i");
+					}
+					break;
 				case 'faq':              // 勉強会Q&A
 					if( this.enableList[questionType].value == 1 ) {
 						this.jump("/"+questionType);
@@ -320,8 +347,8 @@ $top-navi-colors: (
   7: #2A6B69,
   8: #C766CC,
   9: #7942AD,
-  10: #84817A,
-  11: #595959
+  10: #4ab134,
+  11: #187972
 );
 
 .top-navi{
