@@ -1,7 +1,7 @@
 <template>
   <div v-if="questionViewFlg">
     <page-title>
-      アンケート 質問（選択）
+      {{questionName}}（選択）
     </page-title>
     <div style="padding-left:100px;">
       <bulb-text>あなたの回答を選択してください</bulb-text>
@@ -17,7 +17,7 @@
     <textarea-balloon name="freeComment" id="freeComment" value="" v-model="freeComment"></textarea-balloon>
     <button-area>
       <text-before-button>講師の指示があるまでは<br>「回答」を押さないでください</text-before-button>
-      <base-button text="回答" />
+      <base-button text="回答" @click="nextPage"/>
     </button-area>
     <v-dialog/>
   </div>
@@ -57,13 +57,24 @@ export default {
           return false;
         }
       }
-      callback();
-    },
-    // 前ページへ
-    prevPage: function(e){
-      this.questionNo--;
-      this.$parent.session.question_atr[this.pageType].currentQuestionNo--;
-      this.jump({ name: this.pageType+'_a' });
+			if( this.freeComment == "" ) {
+				this.$modal.show('dialog', {
+					text: '未入力のフリーコメントがありますが、回答を完了しますか？',
+					buttons: [
+						{
+						  title: 'OK',
+						  handler: () => {callback()} // ボタンが押されたときに実行される
+						},
+						{
+						  title: 'キャンセル',
+						  default: true // Enterキーを押したときに押されるボタンを指定する
+						}
+					]
+				});
+			} else {
+				callback();
+			}
+			return true;
     },
     // 回答
     nextPage: function(e){
@@ -78,14 +89,13 @@ export default {
       var form = {};
       form.answerList = answerList;
       console.log("memberId : "+this.getMemberId());
-      this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId() + '/' + this.questionNo,form,this.collback_postData);
+      this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
     },
     // -- サーバサイドからのコールバック
     // セッション読み込み後
     callback_getSession: function() {
       // セッションを読み込み終わって状態を取得したら問題データを読み込む
-      this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-      this.getJson(this.getAPIPath()+'/'+this.pageType + '_q/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
+      this.getJson(this.getAPIPath()+'/'+this.pageType + '_q/' + this.getMemberId(),this.collback_getData);
       this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
     },
     // 問題データ取得後
@@ -97,7 +107,7 @@ export default {
     collback_postData: function(response) {
       this.result = response.data;
       if( this.result != null ) {
-        this.jump({ name: this.pageType+'_a' });
+        this.jump({ name: this.pageType+'_c' });
       } else {
         // alert("通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。");
         this.$modal.show('dialog', {

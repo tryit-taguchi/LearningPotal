@@ -1,20 +1,18 @@
 <template>
-  <div>
+  <div v-if="questionViewFlg">
     <page-title>
-      理解度確認テスト 確認
+      {{questionName}} 確認
     </page-title>
-    <p>アンケート回答はこちらで良いですか？</p>
+    <p>{{questionName}}回答はこちらで良いですか？</p>
     <div style="padding-left:50px;">
-      <question-title type="simple" :theme="questionTitleTheme">Question<span style="font-size: 2em;">1</span></question-title>
-      <radio-block-list style="padding-left:150px;" :labels="testLabels[0]" :name="'Q_XXX'" v-model="testSelected[0]" />
-      <question-title type="simple" :theme="questionTitleTheme">Question<span style="font-size: 2em;">2</span></question-title>
-      <radio-block-list style="padding-left:150px;" :labels="testLabels[1]" :name="'Q_XXX'" v-model="testSelected[0]" />
-      <question-title type="simple" :theme="questionTitleTheme">Question<span style="font-size: 2em;">3</span></question-title>
-      <radio-block-list style="padding-left:150px;" :labels="testLabels[2]" :name="'Q_XXX'" v-model="testSelected[0]" />
+      <template v-for="question in questionList">
+        <question-title type="simple" :theme="questionTitleTheme">Question<span style="font-size: 2em;">{{question.QUESTION_NO}}</span></question-title>
+        <radio-block-list-confirm style="padding-left:150px;" :labels="question.answerList" :name="'Q_'+question.QUESTION_NO" v-model="question.selectedNo"/>
+      </template>
     </div>
     <button-area>
-      <base-button text="回答し直す" background-color="#c3002f" @click="" />
-      <base-button text="上記で回答する" @click="" />
+      <base-button text="回答し直す" background-color="#c3002f" @click="prevPage" />
+      <base-button text="上記で回答する" @click="nextPage" />
     </button-area>
   </div>
 </template>
@@ -23,14 +21,59 @@
 export default {
   data: function(){
     return {
-      testLabels: [['選択肢３'],['選択肢Ａ'],['選択肢は']],
-      testSelected: [null,2,1],
       questionTitleTheme: {
         color: 'black',
         backgroundColor: 'white'
-      }
+      },
+      pageType: 'examinations_1',
+      questionNo: 1,
+      questionList: [],
+      questionName: "",
+      questionViewFlg: false, // データセット後に描画を行う
+      freeComment: ""
     }
-  }
+  },
+  created: function () {
+    console.log('-- '+this.pageType+'_c');
+    // セッション情報の取得等
+    this.isLogin();
+    this.startSession(this.callback_getSession);
+  },
+	// メソッド群
+	methods: {
+		// 前ページへ
+		prevPage: function(e){
+			this.jump({ name: this.pageType+'_q' });
+		},
+		// 次ページへ
+		nextPage: function(e){
+			this.$parent.session.question_atr[this.pageType].QUESTION_COMPLETE = true;
+			this.jump({ name: this.pageType+'_f' });
+		},
+    // -- サーバサイドからのコールバック
+    // セッション読み込み後
+    callback_getSession: function() {
+      // セッションを読み込み終わって状態を取得したら問題データを読み込む
+      this.getJson(this.getAPIPath()+'/'+this.pageType + '_q/' + this.getMemberId(),this.collback_getData);
+      this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+    },
+    // 問題データ取得後
+    collback_getData: function(response) {
+      this.questionList = response.data.questionList;
+      for( var qno in this.questionList ) {
+				var question = this.questionList[qno];
+	      for( var ano in question.answerList ) {
+					if( question.selectedNo != ano ) {
+						this.questionList[qno].answerList[ano] = null;
+					}
+				}
+				this.questionList[qno].selectedNo = -1;
+			}
+
+
+      this.questionViewFlg = true;
+    },
+  },
 }
 </script>
 
