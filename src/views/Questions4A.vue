@@ -32,7 +32,6 @@ export default {
 		// セッション情報の取得等
 		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
 		this.startSession(this.callback_getSession);
-//questionList
 	},
 	// メソッド群
 	methods: {
