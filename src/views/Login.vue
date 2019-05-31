@@ -144,6 +144,8 @@ export default {
 				this.SEAT_CD_2 = val;
 			} else if( this.SEAT_CD_3 == '' ) {
 				this.SEAT_CD_3 = val;
+			} else {
+				this.SEAT_CD_3 = val;
 			}
 			this.softkeyClickColor(event); // 色を変える
 		},
