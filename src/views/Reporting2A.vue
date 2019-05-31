@@ -12,12 +12,8 @@
 		</div>
 
 		<div class="graph" v-if="chartViewFlg">
-			<div style="width:412px;color:#000;background-color:#fff;">
-				<radar-chart-reporting-new :width="412" :height="450" :chart-data="chartData1" />
-			</div>
-			<div style="width:412px;color:#000;background-color:#fff;">
-				<radar-chart-reporting-new :width="412" :height="450" :chart-data="chartData1" />
-			</div>
+			<radar-chart-reporting-new :width="412" :height="450" :chart-data="chartData1" />
+			<radar-chart-reporting-new :width="412" :height="450" :chart-data="chartData2" />
 		</div>
 
 	</div>
@@ -144,5 +140,9 @@ export default {
 .graph{
 	display: flex;
 	justify-content: center;
+	margin-top: 10px;
+	:first-child{
+		margin-right:10px;
+	}
 }
 </style>
