@@ -19,14 +19,16 @@
 
 <script>
 export default {
-  data: function(){
-    return {}
-  },
-  methods: {
-    nextPage: function () {
-      alert("次のページへ")
-    },
-  }
+	data: function(){
+		return {
+			pageType: 'catchphrase',
+		}
+	},
+	methods: {
+		nextPage: function () {
+			this.jump({ name: this.pageType+'_s' });
+		},
+	}
 }
 </script>
 

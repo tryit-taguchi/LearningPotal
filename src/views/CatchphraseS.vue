@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="pageViewFlg">
     <page-title>
       キャッチフレーズ 選出
     </page-title>
@@ -9,18 +9,79 @@
         本日のベストを選出します！<br>
         すばらしいと思うものを<b>3つ選択</b>して、「いいね」を押してください。
       </p>
-      <div class="checkbox-inline-list col1" style="font-size:2.0rem;margin:0 60px;">
-        <input type="checkbox" name="C[]" id="C_276" value="276">
-        <label for="C_276">なんちゃって！</label>
-        <input type="checkbox" name="C[]" id="C_277" value="277">
-        <label for="C_277">qqq</label>
+      <div v-for="catchphrase in catchphraseList">
+        <div class="checkbox-inline-list col1" style="font-size:2.0rem;margin:0 60px;">
+          <input type="checkbox" name="catchphraseSelectList[]" :id="'catchphraseSelect_'+catchphrase.CATCHPHRASE_ID" :value="catchphrase.CATCHPHRASE_ID" v-model="checkedIdList">
+          <label :for="'catchphraseSelect_'+catchphrase.CATCHPHRASE_ID">{{catchphrase.CATCHPHRASE_STR}}</label>
+        </div>
       </div>
     </div>
     <button-area>
-      <base-button text="いいね" @click="" />
+      <base-button text="いいね" @click="nextPage" />
     </button-area>
+    <v-dialog/>
   </div>
 </template>
+
+<script>
+export default {
+	data: function(){
+		return {
+			pageType: 'catchphrase',
+			pageViewFlg: false, // データセット後に描画を行う
+			catchphraseList: [],
+			checkedIdList: [],
+		}
+	},
+	created: function () {
+		console.log('-- '+this.pageType+'_s');
+		// セッション情報の取得等
+		this.isLogin();
+		this.startSession(function () {
+			// セッションを読み込み終わって状態を取得したら問題データを読み込む
+			this.getJson(this.getAPIPath()+'/'+this.pageType + '_s/' + this.getMemberId(),function (response) {
+				this.catchphraseList = response.data.catchphraseList;
+				this.pageViewFlg = true;
+			}.bind(this));
+		}.bind(this));
+	},
+	methods: {
+		// バリデーション
+		validation: function (callback) {
+			if( this.checkedIdList.length < 3 ) {
+				this.$modal.show('dialog', {
+					text: 'フレーズを3つ選択して下さい。',
+					buttons: [
+						{title: 'OK'}
+					]
+				});
+				return false;
+			}
+			callback();
+			return true;
+		},
+		nextPage: function () {
+			this.validation(function() {
+				var form = {};
+				form.checkedIdList = this.checkedIdList;
+				this.submit(this.getAPIPath()+'/'+this.pageType + '_s/' + this.getMemberId(),form, function(response) {
+					this.result = response.data;
+					if( this.result != null ) {
+						this.jump({ name: this.pageType+'_r' });
+					} else {
+						this.$modal.show('dialog', {
+							text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
+							buttons: [
+								{title: 'OK'}
+							]
+						});
+					}
+				}.bind(this));
+			}.bind(this));
+		},
+	}
+}
+</script>
 
 <style lang="scss">
   
