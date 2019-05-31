@@ -1,14 +1,26 @@
 <template>
-  <div>
-    <page-title  :raw-html="questionHtml">
-      {{questionExplanation}}
-    </page-title>
+	<div>
+		<page-title  :raw-html="questionHtml">
+			{{questionExplanation}}
+		</page-title>
 
-    <div class="graph" v-if="chartViewFlg">
-      <radar-chart-reporting :width="412" :height="450" :chart-data="chartData1"></radar-chart-reporting>
-      <radar-chart-reporting :width="412" :height="450" :chart-data="chartData2"></radar-chart-reporting>
-    </div>
-  </div>
+		<!-- ■動作確認が終わったら、新しい RadarChartReportingNew は今までの RadarChartReporting に改名します -->
+
+		<div class="graph" v-if="chartViewFlg&&false">
+			<radar-chart-reporting :width="412" :height="450" :chart-data="chartData1"></radar-chart-reporting>
+			<radar-chart-reporting :width="412" :height="450" :chart-data="chartData2"></radar-chart-reporting>
+		</div>
+
+		<div class="graph" v-if="chartViewFlg">
+			<div style="width:412px;color:#000;background-color:#fff;">
+				<radar-chart-reporting-new :width="412" :height="450" :chart-data="chartData1" />
+			</div>
+			<div style="width:412px;color:#000;background-color:#fff;">
+				<radar-chart-reporting-new :width="412" :height="450" :chart-data="chartData1" />
+			</div>
+		</div>
+
+	</div>
 </template>
 
 <script>
@@ -24,25 +36,25 @@ export default {
 			questionExplanation : "",
 			chartList: {},
 			chartData1: { // グラフ１
-					valueMax: 5,
-					questionStr: "",
-					answerList: [],
-					valueName: [],
-					valueList: [],
-					backgroundColor: [],
-					borderColor: [],
-					borderCount: 0,
-				},
+				valueMax: 5,
+				questionStr: "",
+				answerList: [],
+				valueName: [],
+				valueList: [],
+				backgroundColor: [],
+				borderColor: [],
+				borderCount: 0,
+			},
 			chartData2: { // グラフ２
-					valueMax: 5,
-					questionStr: "",
-					answerList: [],
-					valueName: [],
-					valueList: [],
-					backgroundColor: [],
-					borderColor: [],
-					borderCount: 0,
-				},
+				valueMax: 5,
+				questionStr: "",
+				answerList: [],
+				valueName: [],
+				valueList: [],
+				backgroundColor: [],
+				borderColor: [],
+				borderCount: 0,
+			},
 			chartViewFlg: false, // データセット後に描画を行う
 		}
 	},
@@ -95,42 +107,42 @@ export default {
 
 			this.chartViewFlg = true;
 		},
-  },
+	},
 /*
-  // データ定義
-  data: function(){
-    return {
-      // データの持たせ方は(仮)
-      chartData1: {
-        questionStr: 'あなた',
-        answerList: [
-          [ "全開加速" ],
-          [ "操縦安定性" ],
-          [ "乗り心地" ],
-          [ "静粛性" ]
-        ],
-        currentValueList: [5,4,5,4],
-        newmodelValueList: [4,5,4,5],
-      },
-      chartData2: {
-        questionStr: '会場全体',
-        answerList: [
-          [ "全開加速" ],
-          [ "操縦安定性" ],
-          [ "乗り心地" ],
-          [ "静粛性" ]
-        ],
-        currentValueList: [4,3,4,3],
-        newmodelValueList: [3,4,3,4]
-      }
-    }
+	// データ定義
+	data: function(){
+		return {
+			// データの持たせ方は(仮)
+			chartData1: {
+				questionStr: 'あなた',
+				answerList: [
+					[ "全開加速" ],
+					[ "操縦安定性" ],
+					[ "乗り心地" ],
+					[ "静粛性" ]
+				],
+				currentValueList: [5,4,5,4],
+				newmodelValueList: [4,5,4,5],
+			},
+			chartData2: {
+				questionStr: '会場全体',
+				answerList: [
+					[ "全開加速" ],
+					[ "操縦安定性" ],
+					[ "乗り心地" ],
+					[ "静粛性" ]
+				],
+				currentValueList: [4,3,4,3],
+				newmodelValueList: [3,4,3,4]
+			}
+		}
 */
 }
 </script>
 
 <style scoped lang="scss">
 .graph{
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 </style>

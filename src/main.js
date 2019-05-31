@@ -38,6 +38,10 @@ Object.keys(components).forEach(key => {
   Vue.component(key, components[key]);
 });
 
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
+Vue.component('apexchart', VueApexCharts)
+
 require('@/css/style.scss')
 
 Vue.config.productionTip = false
