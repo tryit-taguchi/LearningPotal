@@ -1,0 +1,116 @@
+<?
+global $editLectureAtr,$memberList;
+$title = "受講者登録";
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<? include("common/template/meta.html"); /* 共通META */ ?>
+	<title><?= $title ?></title>
+</head>
+<body>
+<div class="page-wrap">
+	<? include("common/template/header.html"); /* 共通Header */ ?>
+	<? include("common/template/menu.html"); /* 共通Menu */ ?>
+	<main class="contents">
+		<h1><?= $title ?></h1>
+		<section>
+			<h2>一括登録・出力</h2>
+			<div class="row">
+				<div class="w100p row separate">
+					<div>■EXCELから登録</div>
+					<div class="w50p"><input type="file" name="dataFile" style="width:500px"></div>
+					<div class="w25p"><input type="button" class="w100p" name="dataImport" id="dataImport" value="登録"></div>
+					<div style="width: 70%;"></div>
+					<div style="width: 30%;">最終更新日：<span id="dataImportRes"><?= $form['lastUpdate'] ?></span></div>
+				</div>
+				<div class="w100p row">
+					<div>■EXCELに出力</div>
+
+						<div class="taR"><label for="datefrom">対象日付・会場</label></div>
+						<div>
+						<select name="expLectureAtr" id="expLectureAtr">
+							<option value="">すべて</option>
+							<? foreach($lectureDateList as $rec) { ?>
+								<? if( empty($rec['SITE_NAME']) ) continue; ?>
+								<option value="<?= $rec['LECTURE_DT'] ?>@<?= $rec['SITE_NAME'] ?>" <?= $rec['LECTURE_DT']==date('Y-m-d')?"selected=\"selected\"":"" ?>>
+									<?= $rec['LECTURE_DT'] ?>（<?= $rec['SITE_NAME'] ?><?= $rec['MEMBER_CNT'] ?>名）
+								</option>
+							<? } ?>
+						</select>
+						</div>
+					<div class="w25p"><input type="button" class="w100p" name="dataExport" id="dataExport" value="出力"></div>
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>ブラウザ上で受講者編集</h2>
+			<div class="w100p row">
+				<div>■対象の日付・会場を選択してください</div>
+
+					<div class="taR"><label for="datefrom">対象日付・会場</label></div>
+					<div>
+					<select name="editLectureAtr" id="editLectureAtr" OnChange="dataList()">
+						<option value="">選択してください</option>
+						<? foreach($lectureDateList as $rec) { ?>
+							<? if( empty($rec['SITE_NAME']) ) continue; ?>
+							<option value="<?= $rec['LECTURE_DT'] ?>@<?= $rec['SITE_NAME'] ?>" <?= $rec['LECTURE_DT'].'@'.$rec['SITE_NAME']==$editLectureAtr?"selected=\"selected\"":"" ?>>
+								<?= $rec['LECTURE_DT'] ?>（<?= $rec['SITE_NAME'] ?><?= $rec['MEMBER_CNT'] ?>名）
+							</option>
+						<? } ?>
+					</select>
+					
+					</div>
+
+			</div>
+			<? if( !empty($memberList) ) { ?>
+				<form id="editForm" name="editForm" method="post" action="">
+					<div class="w100p row">
+						<div>■編集内容を保存</div>
+						<div class="w50p"></div>
+						<div class="w25p"><input type="button" class="w100p" name="dataSave" id="dataSave1" value="保存"></div>
+					</div>
+					<div>
+						<table style="width:100%">
+						<tr style="background-color:#eee;"><th style="width:5%">座席</th><th>前後半</th><th>グループ名</th><th>受講者名</th><th>法人名</th><th>拠点名</th><!--<th>部署名</th><th>役職</th>--></tr>
+						<? foreach($memberList as $rec) { ?>
+							<? $no = $rec['MEMBER_ID']; ?>
+							<input type="hidden" name="m[<?= $no ?>][LECTURE_NAME]" value="<?= $rec['LECTURE_NAME'] ?>">
+							<input type="hidden" name="m[<?= $no ?>][LECTURE_DT]" value="<?= $rec['LECTURE_DT'] ?>">
+							<input type="hidden" name="m[<?= $no ?>][SITE_NAME]" value="<?= $rec['SITE_NAME'] ?>">
+							<tr>
+								<td><input style="width:60px" type="text" name="m[<?= $no ?>][SEAT_CD]" value="<?= $rec['SEAT_CD'] ?>"></td>
+								<td>
+									<select name="m[<?= $no ?>][LECTURE_TYPE]">
+										<option value="1" <?= $rec['LECTURE_TYPE']==1?"selected=\"selected\"":"" ?>>前半</option>
+										<option value="2" <?= $rec['LECTURE_TYPE']==2?"selected=\"selected\"":"" ?>>後半</option>
+									</select>
+								</td>
+								<td><input style="width:100px" type="text" name="m[<?= $no ?>][GROUP_CD]" value="<?= $rec['GROUP_CD'] ?>"></td>
+								<td><input style="width:150px" type="text" name="m[<?= $no ?>][MEMBER_NAME]" value="<?= $rec['MEMBER_NAME'] ?>"></td>
+								<td><input style="width:95%" type="text" name="m[<?= $no ?>][COMPANY_NAME]" value="<?= $rec['COMPANY_NAME'] ?>"></td>
+								<td><input style="width:95%" type="text" name="m[<?= $no ?>][PLACE_NAME]" value="<?= $rec['PLACE_NAME'] ?>"></td>
+								<!--
+								<td><input style="width:95%" type="text" name="m[<?= $no ?>][DIV_NAME]" value="<?= $rec['DIV_NAME'] ?>"></td>
+								<td><input style="width:95%" type="text" name="m[<?= $no ?>][POST_NAME]" value="<?= $rec['POST_NAME'] ?>"></td>
+								-->
+							</tr>
+						<? } ?>
+						</table>
+					</div>
+					<div class="w100p row">
+						<div>■編集内容を保存</div>
+						<div class="w50p"></div>
+						<div class="w25p"><input type="button" class="w100p" name="dataSave" id="dataSave2" value="保存"></div>
+					</div>
+				</form>
+			<? } ?>
+		</section>
+
+	</main>
+	<? include("common/template/footer.html"); /* 共通Footer */ ?>
+</div>
+</body>
+<script src="js/member.js?dt=<?= date("YmdHis") ?>"></script>
+</html>

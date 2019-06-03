@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<? include("common/template/meta.html"); /* 共通META */ ?>
+	<title><?= $title ?></title>
+	<link media="print" rel="stylesheet" href="css/print.css">
+	<style>
+body {
+	background-color:#fff;
+}
+	</style>
+</head>
+<body>
+<div id="reportInfo" style="width:100%;height:800px;text-align:center;">
+<br><br><br><br>
+<h1>レポート作成中</h1>
+<br><br>
+<img src="icon_loader.gif">
+<br><br>
+<br><br>
+</div>
+<div style="width:800px;height:800px;">
+	<canvas id="canvasRader" width="800" height="800"></canvas>
+</div>
+<div style="width:800px;height:600px;">
+	<canvas id="canvasSummary1" width="800" height="600"></canvas>
+</div>
+<div style="width:1600px;height:800px;">
+	<canvas id="canvasSummary2" width="1600" height="800"></canvas>
+</div>
+
+</body>
+
+
+<script src="../js/Chart.min.js"></script><!-- グラフモジュール -->
+<script src="js/draw_graph.js"></script><!-- グラフラッパー -->
+<script type="text/javascript">
+window.onload = function() {
+	//$('#resultView',parent.document).val("レポート表示");
+	//$('#resultPrint',parent.document).val("印刷（Chromeで印刷してください）");
+	graphRaderCreate(); // レーダーチャート画像を生成する
+	graphSummary1Create(); // まとめ１画像を生成する
+	//$('#resultPrint',parent.document).val("印刷（Chromeで印刷してください）");
+	// PDF生成
+	url = "report_pdf.php?lectureAtr=<?= $lectureAtr ?>&termCd=<?= $termCd ?>&nameWord=<?= $nameWord ?>";
+	$.get("report_pdf.php",
+		{
+			lectureAtr: "<?= $lectureAtr ?>",
+			termCd: "<?= $termCd ?>",
+			nameWord: "<?= $nameWord ?>",
+		},
+		function(data){
+			<?
+				$lectureTypeStr = $lectureType==1?'前半':'後半';
+				$pdfFileName = "{$lectureDt}_{$siteName}_{$lectureTypeStr}";
+			?>
+			location.href = "pdf/<?= $pdfFileName ?>.pdf";
+			$('#resultView',parent.document).val("レポート表示");
+		}
+	);
+}
+
+// まとめ１画像を生成する
+function graphSummary1Create() {
+	siteId = '<?= $siteId ?>';
+	<?
+	$bangouKigou = array('①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩', );
+	$qstrList = array(
+		2 => "（勉強会前）",
+		7 => "（勉強会後）",
+		3 => "（勉強会前）",
+		8 => "（勉強会後）",
+		4 => "（勉強会前）",
+		9 => "（勉強会後）",
+	);
+	$qno = 1;
+	foreach($questionSenseList as $question) {
+		$totalAnswer  = $totalAnswerSenseList [$question['QUESTION_ID']];
+		$groupAnswer  = $groupAnswerSenseList[$question['QUESTION_ID']];
+		if( $qno == 2
+		 || $qno == 3
+		 || $qno == 4
+		 || $qno == 7
+		 || $qno == 8
+		 || $qno == 9 ) {
+			for( $anoType=-1;$anoType<$question['ANSWER_CNT'];$anoType++ ) {
+				$memberAnswer = $member['memberAnswerSenseList'];
+				?>
+				drawComparisonBar(
+					"canvasSummary1",
+					"Q<?= $qno ?>. <?= $qstrList[$qno] ?>",
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							"<?= $bangouKigou[$ano] ?><?= $question['ANSWER_'.$ano] ?>",
+						<? } ?>
+					],
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							<?= (int)$groupAnswer['PAR_ANSWER_'.$ano] ?>,
+						<? } ?>
+					],
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							<?= (int)$groupAnswer['PAR_ANSWER_'.$ano] ?>,
+						<? } ?>
+					],
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							<?= (int)$totalAnswer['PAR_ANSWER_'.$ano] ?>,
+						<? } ?>
+					],
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							<?= (int)$totalAnswer['PAR_ANSWER_'.$ano] ?>,
+						<? } ?>
+					],
+					<?= $anoType+1; ?>
+				);
+				graphSave($("#canvasSummary1")[0],"Summary1My_<?= $qno ?>_<?= $anoType==-1?'n':$anoType ?>_<?= $siteId ?>"); // canvasの保存
+				<?
+			}
+		}
+		if( $qno == 10 ) {
+			foreach($memberList as $member) {
+				$memberAnswer = $member['memberAnswerSenseList'][$qno];
+				?>
+				drawComparisonBar2(
+					"canvasSummary2",
+					"Q<?= $qno ?>. <?= $question['QUESTION_STR'] ?>　　　　　　　　　　",
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							"<?= $bangouKigou[$ano] ?><?= $question['ANSWER_'.$ano] ?>",
+						<? } ?>
+					],
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							<?= (int)$groupAnswer['PAR_ANSWER_'.$ano] ?>,
+						<? } ?>
+					],
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							<?= (int)$groupAnswer['PAR_ANSWER_'.$ano] ?>,
+						<? } ?>
+					],
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							<?= (int)$totalAnswer['PAR_ANSWER_'.$ano] ?>,
+						<? } ?>
+					],
+					[
+						<? for( $ano=0;$ano<$question['ANSWER_CNT'];$ano++ ) { ?>
+							<?= (int)$totalAnswer['PAR_ANSWER_'.$ano] ?>,
+						<? } ?>
+					],
+					[
+						<?= $memberAnswer['ANSWER_0']==1?'0,':''; ?>
+						<?= $memberAnswer['ANSWER_1']==1?'1,':''; ?>
+						<?= $memberAnswer['ANSWER_2']==1?'2,':''; ?>
+						<?= $memberAnswer['ANSWER_3']==1?'3,':''; ?>
+						<?= $memberAnswer['ANSWER_4']==1?'4,':''; ?>
+						<?= $memberAnswer['ANSWER_5']==1?'5,':''; ?>
+						<?= $memberAnswer['ANSWER_6']==1?'6,':''; ?>
+						<?= $memberAnswer['ANSWER_7']==1?'7,':''; ?>
+						<?= $memberAnswer['ANSWER_8']==1?'8,':''; ?>
+						<?= $memberAnswer['ANSWER_9']==1?'9,':''; ?>
+					],
+				);
+				graphSave($("#canvasSummary2")[0],"Summary2My_<?= $member['MEMBER_ID'] ?>"); // canvasの保存
+				<?
+			}
+		}
+		$qno++;
+	}
+	?>
+
+}
+
+// レーダーチャート画像を生成する
+function graphRaderCreate() {
+	siteId = '<?= $siteId ?>';
+	<?
+	// 塗りつぶしカラー
+	$colorBgList[0] = 'rgba(255, 206, 86, 0.2)';
+	$colorBgList[1] = 'rgba( 86, 206,255, 0.2)';
+	$colorBgList[2] = 'rgba(200, 200,200, 0.2)';
+	$colorBgList[3] = 'rgba(200,  86,200, 0.2)';
+	$colorBgList[4] = 'rgba(200, 200, 86, 0.2)';
+	$colorBgList[5] = 'rgba(200,  86,200, 0.2)';
+	$colorBgList[6] = 'rgba( 86,  86,200, 0.2)';
+	$colorBgList[7] = 'rgba( 86, 200, 86, 0.2)';
+	$colorBgList[8] = 'rgba( 86,  86, 86, 0.2)';
+	$colorBgList[9] = 'rgba( 86, 255,200, 0.2)';
+	// ボーダーカラー
+	$colorBdList[0] = 'rgba(255, 206, 86, 1)';
+	$colorBdList[1] = 'rgba( 86, 206,255, 1)';
+	$colorBdList[2] = 'rgba(200, 200,200, 1)';
+	$colorBdList[3] = 'rgba(200,  86,200, 1)';
+	$colorBdList[4] = 'rgba(200, 200, 86, 1)';
+	$colorBdList[5] = 'rgba(200,  86,200, 1)';
+	$colorBdList[6] = 'rgba( 86,  86,200, 1)';
+	$colorBdList[7] = 'rgba( 86, 200, 86, 1)';
+	$colorBdList[8] = 'rgba( 86,  86, 86, 1)';
+	$colorBdList[9] = 'rgba( 86, 200,200, 1)';
+	?>
+	<?
+	// ---------------------------------------------------------------------------
+	// 試乗レポート①集計
+	$questionNameList = array();
+	$answerNameList   = array();
+	foreach($questionTrial1List as $question) {
+		$questionNameList[$question['QUESTION_ID']] = explode(" ",$question['QUESTION_SHORT_STR']);
+		if( empty($answerNameList) ) {
+			for( $ano = 0; $ano < 10; $ano++ ) {
+				if( !empty($question["ANSWER_{$ano}"]) ) {
+					$answerNameList[$ano] = $question["ANSWER_{$ano}"];
+				}
+			}
+		}
+	}
+	?>
+	<? /* 問題文字列 */ ?>
+	var questionTrial1NameList = [ <? foreach($questionNameList as $nameArr) { ?>[ <?= '"'.join('","',$nameArr).'"' ?> ],<? } ?> ];
+	<?
+	$answerGpNo = array();
+	foreach($questionTrial1List as $question) {
+		for( $ano = 0; $ano < 10; $ano++ ) {
+			if( !empty($groupAnswerTrial1List[$question["QUESTION_ID"]]["AVG_ANSWER_{$ano}"]) ) {
+				$answerGpNo[$ano][] = $groupAnswerTrial1List[$question["QUESTION_ID"]]["AVG_ANSWER_{$ano}"];
+			}
+		}
+	}
+	?>
+	// 試乗レポート①会場全体
+	var datasetsTrial1Gp = [
+		<? $ano = 0; ?>
+		<? foreach($answerNameList as $ano => $answerName ) { ?>
+			{
+				label: '<?= $answerName ?>',
+				data: [<?= join(",",$answerGpNo[$ano]) ?>],
+				backgroundColor: '<?= $colorBgList[$ano] ?>',
+				fill:false,
+				borderColor: '<?= $colorBdList[$ano] ?>',
+				borderWidth: 6,
+				stack: 'Stack 1'
+			},
+			<? $ano++; ?>
+		<? } ?>
+	];
+	// 会場全体のグラフ画像生成
+	drawRadar(datasetsTrial1Gp,"canvasRader","会場全体",questionTrial1NameList);
+	graphSave($("#canvasRader")[0],"Trial1Gp_"+siteId); // canvasの保存
+	// 試乗レポート①メンバー別（基本データ）
+	var datasetsTrial1My = [
+		<? $ano = 0; ?>
+		<? foreach($answerNameList as $ano => $answerName ) { ?>
+			{
+				label: '<?= $answerName ?>',
+				backgroundColor: '<?= $colorBgList[$ano] ?>',
+				fill:false,
+				borderColor: '<?= $colorBdList[$ano] ?>',
+				borderWidth: 6,
+				stack: 'Stack 1'
+			},
+			<? $ano++; ?>
+		<? } ?>
+	];
+	<?
+	foreach($memberList as $member) {
+		$memberAnswerTrial1List = $member['memberAnswerTrial1List'];
+		$memberId = $member['MEMBER_ID'];
+		$answerMyNo = array();
+		foreach($questionTrial1List as $question) {
+			for( $ano = 0; $ano < 10; $ano++ ) {
+				if( !empty($memberAnswerTrial1List[$question["QUESTION_ID"]]["ANSWER_{$ano}"]) ) {
+					$answerMyNo[$ano][] = $memberAnswerTrial1List[$question["QUESTION_ID"]]["ANSWER_{$ano}"];
+				}
+			}
+		}
+		?>
+		// 試乗レポート①描画
+		var datasetsTrial1My_<?= $memberId ?> = datasetsTrial1My;
+		<? foreach($answerNameList as $ano => $answerName ) { ?>
+			datasetsTrial1My_<?= $memberId ?>[<?= $ano ?>].data = [<?= join(",",$answerMyNo[$ano]) ?>];
+		<? } ?>
+		drawRadar(datasetsTrial1My_<?= $memberId ?>,"canvasRader","あなた",questionTrial1NameList);
+		graphSave($("#canvasRader")[0],"Trial1My_<?= $memberId ?>"); // canvasの保存
+	<?
+	}
+	?>
+	<?
+	// ---------------------------------------------------------------------------
+	// 試乗レポート②集計
+	$questionNameList = array();
+	$answerNameList   = array();
+	foreach($questionTrial2List as $question) {
+		$questionNameList[$question['QUESTION_ID']] = explode(" ",$question['QUESTION_SHORT_STR']);
+		if( empty($answerNameList) ) {
+			for( $ano = 0; $ano < 10; $ano++ ) {
+				if( !empty($question["ANSWER_{$ano}"]) ) {
+					$answerNameList[$ano] = $question["ANSWER_{$ano}"];
+				}
+			}
+		}
+	}
+	?>
+	<? /* 問題文字列 */ ?>
+	var questionTrial2NameList = [ <? foreach($questionNameList as $nameArr) { ?>[ <?= '"'.join('","',$nameArr).'"' ?> ],<? } ?> ];
+	<?
+	$answerGpNo = array();
+	foreach($questionTrial2List as $question) {
+		for( $ano = 0; $ano < 10; $ano++ ) {
+			if( !empty($groupAnswerTrial2List[$question["QUESTION_ID"]]["AVG_ANSWER_{$ano}"]) ) {
+				$answerGpNo[$ano][] = $groupAnswerTrial2List[$question["QUESTION_ID"]]["AVG_ANSWER_{$ano}"];
+			}
+		}
+	}
+	?>
+	// 試乗レポート②会場全体
+	var datasetsTrial2Gp = [
+		<? $ano = 0; ?>
+		<? foreach($answerNameList as $ano => $answerName ) { ?>
+			{
+				label: '<?= $answerName ?>',
+				data: [<?= join(",",$answerGpNo[$ano]) ?>],
+				backgroundColor: '<?= $colorBgList[$ano] ?>',
+				fill:false,
+				borderColor: '<?= $colorBdList[$ano] ?>',
+				borderWidth: 6,
+				stack: 'Stack 1'
+			},
+			<? $ano++; ?>
+		<? } ?>
+	];
+	// 会場全体のグラフ画像生成
+	drawRadar(datasetsTrial2Gp,"canvasRader","会場全体",questionTrial2NameList);
+	graphSave($("#canvasRader")[0],"Trial2Gp_"+siteId); // canvasの保存
+	// 試乗レポート②メンバー別（基本データ）
+	var datasetsTrial2My = [
+		<? $ano = 0; ?>
+		<? foreach($answerNameList as $ano => $answerName ) { ?>
+			{
+				label: '<?= $answerName ?>',
+				backgroundColor: '<?= $colorBgList[$ano] ?>',
+				fill:false,
+				borderColor: '<?= $colorBdList[$ano] ?>',
+				borderWidth: 6,
+				stack: 'Stack 1'
+			},
+			<? $ano++; ?>
+		<? } ?>
+	];
+	<?
+	foreach($memberList as $member) {
+		$memberAnswerTrial2List = $member['memberAnswerTrial2List'];
+		$memberId = $member['MEMBER_ID'];
+		$answerMyNo = array();
+		foreach($questionTrial2List as $question) {
+			for( $ano = 0; $ano < 10; $ano++ ) {
+				if( !empty($memberAnswerTrial2List[$question["QUESTION_ID"]]["ANSWER_{$ano}"]) ) {
+					$answerMyNo[$ano][] = $memberAnswerTrial2List[$question["QUESTION_ID"]]["ANSWER_{$ano}"];
+				}
+			}
+		}
+		?>
+		// 試乗レポート②描画
+		var datasetsTrial2My_<?= $memberId ?> = datasetsTrial2My;
+		<? foreach($answerNameList as $ano => $answerName ) { ?>
+			datasetsTrial2My_<?= $memberId ?>[<?= $ano ?>].data = [<?= join(",",$answerMyNo[$ano]) ?>];
+		<? } ?>
+		drawRadar(datasetsTrial2My_<?= $memberId ?>,"canvasRader","あなた",questionTrial2NameList);
+		graphSave($("#canvasRader")[0],"Trial2My_<?= $memberId ?>"); // canvasの保存
+	<?
+	}
+	?>
+	<?
+	// ---------------------------------------------------------------------------
+	// 現車・競合車確認集計
+	$questionNameList = array();
+	$answerNameList   = array();
+	foreach($questionRealList as $question) {
+		$questionNameList[$question['QUESTION_ID']] = explode(" ",$question['QUESTION_SHORT_STR']);
+		if( empty($answerNameList) ) {
+			for( $ano = 0; $ano < 10; $ano++ ) {
+				if( !empty($question["ANSWER_{$ano}"]) ) {
+					$answerNameList[$ano] = $question["ANSWER_{$ano}"];
+				}
+			}
+		}
+	}
+	?>
+	<? /* 問題文字列 */ ?>
+	var questionRealNameList = [ <? foreach($questionNameList as $nameArr) { ?>[ <?= '"'.join('","',$nameArr).'"' ?> ],<? } ?> ];
+	<?
+	$answerGpNo = array();
+	foreach($questionRealList as $question) {
+		for( $ano = 0; $ano < 10; $ano++ ) {
+			if( !empty($groupAnswerRealList[$question["QUESTION_ID"]]["AVG_ANSWER_{$ano}"]) ) {
+				$answerGpNo[$ano][] = $groupAnswerRealList[$question["QUESTION_ID"]]["AVG_ANSWER_{$ano}"];
+			}
+		}
+	}
+	?>
+	// 現車・競合車確認会場全体
+	var datasetsRealGp = [
+		<? $ano = 0; ?>
+		<? foreach($answerNameList as $ano => $answerName ) { ?>
+			{
+				label: '<?= $answerName ?>',
+				data: [<?= join(",",$answerGpNo[$ano]) ?>],
+				backgroundColor: '<?= $colorBgList[$ano] ?>',
+				fill:false,
+				borderColor: '<?= $colorBdList[$ano] ?>',
+				borderWidth: 6,
+				stack: 'Stack 1'
+			},
+			<? $ano++; ?>
+		<? } ?>
+	];
+	// 会場全体のグラフ画像生成
+	drawRadar(datasetsRealGp,"canvasRader","会場全体",questionRealNameList);
+	graphSave($("#canvasRader")[0],"RealGp_"+siteId); // canvasの保存
+	// 現車・競合車確認メンバー別（基本データ）
+	var datasetsRealMy = [
+		<? $ano = 0; ?>
+		<? foreach($answerNameList as $ano => $answerName ) { ?>
+			{
+				label: '<?= $answerName ?>',
+				backgroundColor: '<?= $colorBgList[$ano] ?>',
+				fill:false,
+				borderColor: '<?= $colorBdList[$ano] ?>',
+				borderWidth: 6,
+				stack: 'Stack 1'
+			},
+			<? $ano++; ?>
+		<? } ?>
+	];
+	<?
+	foreach($memberList as $member) {
+		$memberAnswerRealList = $member['memberAnswerRealList'];
+		$memberId = $member['MEMBER_ID'];
+		$answerMyNo = array();
+		foreach($questionRealList as $question) {
+			for( $ano = 0; $ano < 10; $ano++ ) {
+				if( !empty($memberAnswerRealList[$question["QUESTION_ID"]]["ANSWER_{$ano}"]) ) {
+					$answerMyNo[$ano][] = $memberAnswerRealList[$question["QUESTION_ID"]]["ANSWER_{$ano}"];
+				}
+			}
+		}
+		?>
+		// 現車・競合車確認描画
+		var datasetsRealMy_<?= $memberId ?> = datasetsRealMy;
+		<? foreach($answerNameList as $ano => $answerName ) { ?>
+			datasetsRealMy_<?= $memberId ?>[<?= $ano ?>].data = [<?= join(",",$answerMyNo[$ano]) ?>];
+		<? } ?>
+		drawRadar(datasetsRealMy_<?= $memberId ?>,"canvasRader","あなた",questionRealNameList);
+		graphSave($("#canvasRader")[0],"RealMy_<?= $memberId ?>"); // canvasの保存
+	<?
+	}
+	?>
+}
+
+// グラフを保存する
+function graphSave(canvasTmp,fileName) {
+	//console.log("Trial1My_<?= $memberId ?>");
+	//console.log(canvasTmp.toDataURL("image/png"));
+	img_url = canvasTmp.toDataURL("image/png").replace(new RegExp("data:image/png;base64,"),"");
+	//console.log(img_url);
+	$.ajax({
+	    type: 'POST',
+	    url: 'graph_save.php',
+	    data: {"upload_data":img_url,"file_name":fileName},
+	    async : false,   // ← asyncをfalseに設定する
+	    success: function(data) {
+	        if(data != null) {
+				//console.log("save: " + fileName + "png Ok.");
+	            // Do somothing.
+	        }
+	    }
+	});
+}
+
+</script>
+</html>
+
+
+
+

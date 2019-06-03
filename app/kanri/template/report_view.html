@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<? include("common/template/meta.html"); /* 共通META */ ?>
+	<title><?= $title ?></title>
+	<style>
+body {
+	background-color:#fff;
+	margin: 0px;
+	padding: 0px;
+	font-size: 16pt;
+	letter-spacing: -0.2em;
+	line-height: 1em;
+}
+/*A4横*/
+.print_pages{
+	width: 410mm;
+	height: 292mm;
+	page-break-after: always;
+}
+/*最後のページは改ページを入れない*/
+.print_pages:last-child{
+	page-break-after: auto;
+}
+table,th,td{
+	border: none;
+	font-size: 16pt;
+}
+td .catchphrase{
+	font-size:24pt;
+	line-height: 1.1em;
+}
+
+	</style>
+<!--
+/*A4横*/
+.print_pages{
+	width: 251mm;
+	height: 172mm;
+	page-break-after: always;
+}
+/*最後のページは改ページを入れない*/
+.print_pages:last-child{
+	page-break-after: auto;
+}
+-->
+</head>
+<body>
+<article>
+<? foreach($memberList as $member) { ?>
+	<section class="print_pages">
+		<table noborder border="0" cellpadding="2" cellspacing="0">
+			<tr>
+				<td colspan="2" style="padding-top:16px"><span style="font-size:36pt">試乗付き勉強会レポート</span></td>
+				<td rowspan="3" class="taR"><img src="../img/logo.png" width="90" height="108" ></td>
+			</tr>
+			<tr>
+				<td colspan="2"><?= $member['COMPANY_NAME'] ?>　<?= $member['MEMBER_NAME'] ?></td>
+			</tr>
+			<tr>
+				<td colspan="2"><span style="font-size:8pt">　</span></td>
+			</tr>
+			<tr>
+				<td nowrap width="33%">
+					試乗①
+				</td>
+				<td nowrap width="33%">
+					試乗②
+				</td>
+				<td nowrap width="33%">
+					現車・競合車確認
+				</td>
+			</tr>
+			<tr>
+				<td nowrap>
+					<div style="border: solid 1px #888">
+						<img src="./temp/Trial1My_<?= $member['MEMBER_ID'] ?>.png" width="240" height="240">
+						<img src="./temp/Trial1Gp_<?= $siteId ?>.png" width="240" height="240">
+					</div>
+				</td>
+				<td nowrap>
+					<div style="border: solid 1px #888">
+						<img src="./temp/Trial2My_<?= $member['MEMBER_ID'] ?>.png" width="240" height="240">
+						<img src="./temp/Trial2Gp_<?= $siteId ?>.png" width="240" height="240">
+					</div>
+				</td>
+				<td nowrap>
+					<div style="border: solid 1px #888">
+						<img src="./temp/RealMy_<?= $member['MEMBER_ID'] ?>.png" width="240" height="240">
+						<img src="./temp/RealGp_<?= $siteId ?>.png" width="240" height="240">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div style="border: solid 2px #ccc;color:#444;width:100%;height:35pt;font-size:10pt;line-height: 1.1em;">
+						<?= empty($member['freeComment'][4])?'　':mb_convert_kana($member['freeComment'][4], "AKV", "UTF-8") ?>
+					</div>
+				</td>
+				<td>
+					<div style="border: solid 2px #ccc;color:#444;width:100%;height:35pt;font-size:10pt;line-height: 1.1em;">
+						<?= empty($member['freeComment'][5])?'　':mb_convert_kana($member['freeComment'][5], "AKV", "UTF-8") ?>
+					</div>
+				</td>
+				<td>
+					<div style="border: solid 2px #ccc;color:#444;width:100%;height:35pt;font-size:10pt;line-height: 1.1em;">
+						<?= empty($member['freeComment'][3])?'　':mb_convert_kana($member['freeComment'][3], "AKV", "UTF-8") ?>
+					</div>
+				</td>
+			</tr>
+			<? $answer = $member['memberAnswerSenseList']; ?>
+			<tr>
+				<td nowrap width="33%" colspan="3">
+					まとめ①
+				</td>
+			</tr>
+			<tr>
+				<td nowrap>
+					<div style="border: solid 1px #888" style="text-align:center;">
+						　新型デイズが出たら、年間何台売る自信がある？<br>
+						<img src="./temp/Summary1My_2_<?= isset($answer[2]['ANSWER_NO'])?$answer[2]['ANSWER_NO']:'n' ?>_<?= $siteId ?>.png" width="240" height="210">
+						<img src="./temp/Summary1My_7_<?= isset($answer[7]['ANSWER_NO'])?$answer[7]['ANSWER_NO']:'n' ?>_<?= $siteId ?>.png" width="240" height="210">
+					</div>
+				</td>
+				<td nowrap>
+					<div style="border: solid 1px #888" style="text-align:center;">
+						　ワゴンＲと競合したらどう思う？<br>
+						<img src="./temp/Summary1My_3_<?= isset($answer[3]['ANSWER_NO'])?$answer[3]['ANSWER_NO']:'n' ?>_<?= $siteId ?>.png" width="240" height="210">
+						<img src="./temp/Summary1My_8_<?= isset($answer[8]['ANSWER_NO'])?$answer[8]['ANSWER_NO']:'n' ?>_<?= $siteId ?>.png" width="240" height="210">
+					</div>
+				</td>
+				<td nowrap>
+					<div style="border: solid 1px #888" style="text-align:center;">
+						　Ｎ−ＷＧＮと競合したらどう思う？<br>
+						<img src="./temp/Summary1My_4_<?= isset($answer[4]['ANSWER_NO'])?$answer[4]['ANSWER_NO']:'n' ?>_<?= $siteId ?>.png" width="240" height="210">
+						<img src="./temp/Summary1My_9_<?= isset($answer[9]['ANSWER_NO'])?$answer[9]['ANSWER_NO']:'n' ?>_<?= $siteId ?>.png" width="240" height="210">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td nowrap width="33%" colspan="3">
+					まとめ②
+				</td>
+			</tr>
+			<tr>
+				<td nowrap>
+					<div style="border: solid 1px #888">
+						<img src="./temp/Summary2My_<?= $member['MEMBER_ID'] ?>.png" width="560" height="300">
+					</div>
+				</td>
+				<td colspan="2" valign="top" style="padding-left:30px">
+					<table cellpadding="4">
+						<tr><td class="catchphrase" colspan="2">キャッチフレーズ</td></tr>
+						<tr><td class="catchphrase" nowrap><img src="../img/icon_crown_gold.png"   height="28pt"> Best１</td><td class="catchphrase"><?= mb_convert_kana($catchphraseList[0]['CATCHWORD_STR'], "AKV", "UTF-8") ?></td></tr>
+						<tr><td class="catchphrase" nowrap><img src="../img/icon_crown_silver.png" height="28pt"> Best２</td><td class="catchphrase"><?= mb_convert_kana($catchphraseList[1]['CATCHWORD_STR'], "AKV", "UTF-8") ?></td></tr>
+						<tr><td class="catchphrase" nowrap><img src="../img/icon_crown_bronze.png" height="28pt"> Best３</td><td class="catchphrase"><?= mb_convert_kana($catchphraseList[2]['CATCHWORD_STR'], "AKV", "UTF-8") ?></td></tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" valign="bottom" align="right" style="letter-spacing: 0.2em;">
+					<?= $member['SEAT_CD'] ?>
+				</td>
+			</tr>
+		</table>
+	</section>
+	<section class="print_pages">
+		<table noborder border="1" cellpadding="2" cellspacing="0" width="1545">
+			<tr>
+				<td colspan="2"><span style="font-size:36pt">過去のキャッチフレーズ</span></td>
+				<td rowspan="3" class="taR"><img src="../img/logo.png" width="90" height="108" ></td>
+			</tr>
+			<tr>
+				<td colspan="2">　</td>
+			</tr>
+			<tr>
+				<td colspan="2"><span style="font-size:8pt">　</span></td>
+			</tr>
+			<tr>
+				<td colspan="2"><span style="font-size:8pt">　</span></td>
+			</tr>
+			<? for( $i=0; $i<9; $i++ ) { ?>
+				<tr>
+					<? $list = $catchphraseOldList[$i]; ?>
+					<? foreach($list as $key => $catchphrase) { ?>
+						<td style="border: solid 1px #000;">
+							<table width="100%">
+								<tr>
+									<td style="font-size:12pt" rowspan="2" width="180"><?= siteStr($key) ?></td>
+									<td style="font-size:9pt;border-bottom:dotted 1px #888" width="37">前半</td>
+									<td style="font-size:11pt;border-bottom:dotted 1px #888;letter-spacing: -0.1em;line-height: 1em;" width="295" height="45pt"><?= mb_convert_kana($catchphrase['前半'], "AKV", "UTF-8") ?></td>
+								</tr>
+								<tr>
+									<td style="font-size:9pt" width="37">後半</td>
+									<td style="font-size:11pt;letter-spacing: -0.1em;line-height: 1em;" width="295" height="45pt"><?= mb_convert_kana($catchphrase['後半'], "AKV", "UTF-8") ?></td>
+								</tr>
+							</table>
+						</td>
+					<? } ?>
+				</tr>
+			<? } ?>
+
+		</table>
+	</section>
+<? } ?>
+</article>
+</body>
+</html>
+<?
+	function siteStr($key) {
+		if( strpos('@',$key) !== false ) return '';
+		$tmp = explode('@',$key);
+		$dt = explode('-',$tmp[0]);
+		$m = (int)$dt[1];
+		$d = (int)$dt[2];
+		$sitename = $tmp[1];
+		if( $dt[1] == 0 ) return '';
+		return "<span style='letter-spacing: 0.2em;'>{$m}月{$d}日</span><br><span style='letter-spacing: -0.2em;'>{$sitename}</span>";
+	}
+?>

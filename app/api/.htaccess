@@ -1,0 +1,44 @@
+#Header set Access-Control-Allow-Origin  "http://localhost:8081"
+#Header set Access-Control-Allow-Headers "Content-Type"
+RewriteEngine On
+
+#RewriteCond %{HTTP:Origin} (.+)
+#RewriteRule . - [E=CORS_ORIGIN:%1]
+#Header set Access-Control-Allow-Origin %{CORS_ORIGIN}e env=CORS_ORIGIN
+#Header set Access-Control-Allow-Credentials true
+
+# CORS対応
+
+## Originの許可（オウム返し）
+RewriteCond %{HTTP:Origin} (.+)
+RewriteRule . - [E=CORS_ORIGIN:%1]
+Header set Access-Control-Allow-Origin %{CORS_ORIGIN}e env=CORS_ORIGIN
+# ドメイン制限
+#RewriteCond %{HTTP:Origin} (https?://([a-z0-9\-\.]+\.)?example\.com)$
+#RewriteRule . - [E=CORS_ORIGIN:%1]
+#Header set Access-Control-Allow-Origin %{CORS_ORIGIN}e env=CORS_ORIGIN
+
+## リクエストメソッドの利用許可（オウム返し）
+RewriteCond %{ENV:CORS_ORIGIN} ^http
+RewriteCond %{HTTP:Access-Control-Request-Method} ^([A-Z]+)$
+RewriteRule . - [E=CORS_METHOD:%1,E=CORS_PREFLIGHT:1]
+Header set Access-Control-Allow-Methods "GET, POST, HEAD, OPTIONS, %{CORS_METHOD}e" env=CORS_METHOD
+
+## リクエストヘッダの利用許可（オウム返し）
+RewriteCond %{ENV:CORS_ORIGIN} ^http
+RewriteCond %{HTTP:Access-Control-Request-Headers} "^([a-zA-Z0-9-]+(, ?[a-zA-Z0-9-]+)*)$"
+RewriteRule . - [E=CORS_HEADERS:%1,E=CORS_PREFLIGHT:1]
+Header set Access-Control-Allow-Headers "%{CORS_HEADERS}e" env=CORS_HEADERS
+
+## レスポンスヘッダの利用許可
+Header set Access-Control-Expose-Headers "* or X-Hoge, X-Fuga" env=CORS_ORIGIN
+
+## クレデンシャルの送信許可（クッキー,Authorizationヘッダ）
+Header set Access-Control-Allow-Credentials true env=CORS_ORIGIN
+
+## CORS許可のキャッシュ（プリフライトリクエストを暫く投げない許可）
+Header set Access-Control-Max-Age "3600" env=CORS_PREFLIGHT
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]

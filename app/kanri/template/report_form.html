@@ -1,0 +1,57 @@
+<?
+$title = "レポート出力";
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<? include("common/template/meta.html"); /* 共通META */ ?>
+	<title><?= $title ?></title>
+</head>
+<body>
+<div class="page-wrap">
+	<? include("common/template/header.html"); /* 共通Header */ ?>
+	<? include("common/template/menu.html"); /* 共通Menu */ ?>
+	<main class="contents">
+		<h1><?= $title ?></h1>
+		<section>
+			<h2>出力条件</h2>
+			<form id="form" action="report_output.php" method="POST" target="result">
+				<div class="row">
+					<div class="row w100p">
+						<div class="taR"><label for="datefrom">対象日付</label></div>
+						<div>
+						<select name="lectureAtr" id="lectureAtr">
+							<? foreach($lectureDateList as $rec) { ?>
+								<option value="<?= $rec['LECTURE_DT'] ?>@<?= $rec['SITE_NAME'] ?>@<?= $rec['LECTURE_TYPE'] ?>" <?= $rec['LECTURE_DT']==date('Y-m-d')?"selected=\"selected\"":"" ?>>
+									<?= $rec['LECTURE_DT'] ?>
+									（
+									<?= !empty($rec['SITE_NAME'])?$rec['SITE_NAME']:"会場名未定" ?>
+									<?= $rec['LECTURE_TYPE']==1?"前半":"後半" ?>
+									<?= $rec['MEMBER_CNT'] ?>名
+									）
+								</option>
+							<? } ?>
+						</select>
+						</div>
+					</div>
+					<div class="row w50p">
+						<div class="taR"><label for="group">iPad管理番号で絞り込み(部分一致)</label></div>
+						<div><input type="text" style="width:200px" name="termCd" id="termCd" value=""></div>
+					</div>
+					<div class="row w50p">
+						<div class="taR"><label for="others" class="taR">氏名・会社名で絞り込み(部分一致)</label></div>
+						<div><input type="text" style="width:200px" name="nameWord" id="nameWord" value=""></div>
+					</div>
+					<div class="w100p taC"><input type="button" style="width:200px" name="resultView" id="resultView" value="レポート表示"></div>
+				</div>
+			</form>
+		</section>
+		<section>
+			<iframe name="result" id="result" style="width:100%;height:500px"></iframe>
+		</section>
+	</main>
+	<? include("common/template/footer.html"); /* 共通Footer */ ?>
+</div>
+</body>
+<script src="js/report_form.js?dt=<?= date("YmdHis") ?>"></script>
+</html>

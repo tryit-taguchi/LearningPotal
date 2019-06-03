@@ -1,0 +1,13 @@
+{
+    "name": "nlp/app",
+    "authors": [
+        {
+            "name": "田口敦",
+            "email": "taguchi@tryit.co.jp"
+        }
+    ],
+    "require": {
+        "cboden/ratchet": "*",
+        "ratchet/pawl": "^0.3.4"
+    }
+}

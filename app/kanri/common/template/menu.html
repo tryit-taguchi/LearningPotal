@@ -1,0 +1,28 @@
+	<?
+		$questionAtrList = getQuestionAtrList(); // 設問属性取得
+		$questionType    = getQuestionType();    // 設問属性リスト取得
+	?>
+	<nav class="menu">
+		<a href="index.php"><h2>勉強会ポータル 管理</h2></a>
+		<ul>
+			<li class="<?= $title=='管理ＴＯＰ'?'active':'' ?>"><a href="index.php">管理ＴＯＰ</a></li>
+			<li class="<?= $title=='受講者登録'?'active':'' ?>"><a href="member.php">受講者登録</a></li>
+			<li><hr></li>
+			<li class="<?= $questionType=='questions_1'?'active':'' ?>"><a href="entry_questions_1.php">設問登録 (<?= $questionAtrList['questions_1']['QUESTION_NAME'] ?>)</a></li>
+			<li class="<?= $questionType=='reporting_1'?'active':'' ?>"><a href="entry_reporting_1.php">設問登録 (<?= $questionAtrList['reporting_1']['QUESTION_NAME'] ?>)</a></li>
+			<li class="<?= $questionType=='questions_2'?'active':'' ?>"><a href="entry_questions_2.php">設問登録 (<?= $questionAtrList['questions_2']['QUESTION_NAME'] ?>)</a></li>
+			<li class="<?= $questionType=='reporting_2'?'active':'' ?>"><a href="entry_reporting_2.php">設問登録 (<?= $questionAtrList['reporting_2']['QUESTION_NAME'] ?>)</a></li>
+			<li class="<?= $questionType=='reporting_3'?'active':'' ?>"><a href="entry_reporting_3.php">設問登録 (<?= $questionAtrList['reporting_3']['QUESTION_NAME'] ?>)</a></li>
+			<li class="<?= $questionType=='questions_3'?'active':'' ?>"><a href="entry_questions_3.php">設問登録 (<?= $questionAtrList['questions_3']['QUESTION_NAME'] ?>)</a></li>
+			<li class="<?= $questionType=='questions_4'?'active':'' ?>"><a href="entry_questions_4.php">設問登録 (<?= $questionAtrList['questions_4']['QUESTION_NAME'] ?>)</a></li>
+			<li class="<?= $questionType=='examinations_1'?'active':'' ?>"><a href="entry_examinations_1.php">設問登録 (<?= $questionAtrList['examinations_1']['QUESTION_NAME'] ?>)</a></li>
+			<li class="<?= $questionType=='enquetes_1'?'active':'' ?>"><a href="entry_enquetes_1.php">設問登録 (<?= $questionAtrList['enquetes_1']['QUESTION_NAME'] ?>)</a></li>
+			<li><hr></li>
+			<li class="<?= $title=='勉強会QA登録'?'active':'' ?>"><a href="faq_entry.php">勉強会QA登録</a></li>
+			<li class="<?= $title=='集計結果'?'active':'' ?>"><a href="summary_form.php">集計結果</a></li>
+			<li class="<?= $title=='レポート出力'?'active':'' ?>"><a href="report_form.php">レポート出力</a></li>
+			<li><hr></li>
+			<li class="<?= $title=='その他の機能'||$ptitle=='その他の機能'?'active':'' ?>"><a href="other.php">その他の機能</a></li>
+			
+		</ul>
+	</nav>

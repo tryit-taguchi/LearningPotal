@@ -1,0 +1,6 @@
+## * base *
+
+php_value include_path ".;C:\xampp\php\pear\;C:\xampp\htdocs\nlp\app\;"
+
+ErrorDocument 403 http://%{http_host}/nsp/403.php
+ErrorDocument 404 http://%{http_host}/nsp/404.php

@@ -1,0 +1,62 @@
+<?
+	$ptitle = "その他の機能";
+	$title = "データマージ";
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<? include("common/template/meta.html"); /* 共通META */ ?>
+	<title><?= $title ?></title>
+</head>
+<body>
+<div class="page-wrap">
+	<? include("common/template/header.html"); /* 共通Header */ ?>
+	<? include("common/template/menu.html"); /* 共通Menu */ ?>
+	<main class="contents">
+		<h1><?= $title ?></h1>
+		<section>
+			<h2>エクスポート・インポート</h2>
+			<form method="post" action="" enctype="multipart/form-data">
+				<div class="row">
+					<div class="w100p row separate">
+					<div>■ファイルからインポート</div>
+						<input type="hidden" name="nextProcess" value="dataImport">
+						<div class="w50p"><input type="file" name="dataFile"></div>
+						<div class="w25p"><input type="submit" class="w100p" name="import" id="import" value="登録" OnClick="document.body.style.cursor = 'wait';"></div>
+						<div class="w100p">
+							※インポートには数分かかります。しばらくお待ちください。<br>
+							<? if( !empty($errorMessage) ) { ?>
+								<div class="w100p taL error" style="color:red">
+								<? foreach($errorMessage as $error) { ?>
+									<p><?= $error ?></p>
+								<? } ?>
+								</div>
+							<? } ?>
+							<? if( !empty($resultMessage) ) { ?>
+								<div class="w100p taL error" style="color:blue">
+								<? foreach($resultMessage as $error) { ?>
+									<p><?= $error ?></p>
+								<? } ?>
+								</div>
+							<? } ?>
+						</div>
+						<div style="width: 70%;">
+						</div>
+						<div style="width: 30%;">最終更新日：<span id="dataImportRes"><?= $form['lastUpdate'] ?></span></div>
+					</div>
+				</form>
+				<form method="post" action="">
+					<div class="w100p row">
+						<input type="hidden" name="nextProcess" value="dataExport">
+						<div>■ファイルへエクスポート</div>
+						<div class="w50p"></div>
+						<div class="w25p"><input type="submit" class="w100p" name="export" id="export" value="出力"></div>
+					</div>
+				</div>
+			</form>
+		</section>
+	</main>
+	<? include("common/template/footer.html"); /* 共通Footer */ ?>
+</div>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<?
+	// QUESTION_DIV(質問区分) qo=1問1択 qm=1問複数択 qc=比較設問 rp=レポート ex=テスト en=アンケート
+	global $qAtr,$qList;
+	$questionAtr  = getQuestionAtr();  // 設問属性取得
+	$questionType = getQuestionType(); // 設問属性リスト取得
+	$title = "設問登録（".$questionAtr['QUESTION_NAME']."）";
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<? include("common/template/meta.html"); /* 共通META */ ?>
+	<title><?= $title ?></title>
+</head>
+<body>
+<div class="page-wrap">
+	<? include("common/template/header.html"); /* 共通Header */ ?>
+	<? include("common/template/menu.html"); /* 共通Menu */ ?>
+	<main class="contents">
+		<h1><?= $title ?></h1>
+		<section>
+			<h2>一括登録・出力</h2>
+			<div class="row">
+				<div class="w100p row separate">
+					<div>■EXCELから登録</div>
+					<div class="w50p"><input type="file" name="dataFile"></div>
+					<div class="w25p"><input type="button" class="w100p" name="dataImport" id="dataImport" value="登録"></div>
+					<div style="width: 70%;"></div>
+					<div style="width: 30%;">最終更新日：<span id="dataImportRes"><?= $form['lastUpdate'] ?></span></div>
+				</div>
+				<div class="w100p row">
+					<div>■EXCELに出力</div>
+					<div class="w50p"></div>
+					<div class="w25p"><input type="button" class="w100p" name="dataExport" id="dataExport" value="出力"></div>
+				</div>
+			</div>
+		</section>
+		<section>
+			<h2>設問編集
+				（<?
+				switch($qAtr['QUESTION_DIV']) {
+					case qo: echo "1問1択タイプ"; break;
+					case qm: echo "1問複数択タイプ"; break;
+					case qc: echo "比較設問タイプ"; break;
+					case rp: echo "レポートタイプ"; break;
+					case ex: echo "テストタイプ"; break;
+					case en: echo "アンケートタイプ"; break;
+				}
+				?>
+				）
+			</h2>
+			<form id="editForm" name="editForm" method="post" action="">
+			<div class="w100p row">
+				<div>■編集内容を保存</div>
+				<div class="w50p"></div>
+				<div class="w25p"><input type="button" class="w100p" name="dataSave" id="dataSave1" value="保存"></div>
+			</div>
+			<? if( $qAtr['QUESTION_DIV'] == 'rp' ) { ?>
+				見出し文言：<input type="text" name="a[QUESTION_EXPLANATION]" style="width:50%" value="<?= $qAtr['QUESTION_EXPLANATION'] ?>"><br>
+			<? } ?>
+			<? if( $qAtr['QUESTION_DIV'] == 'rp' ) { ?>
+				<!--
+				回答段階数：<input type="number" name="a[ANSWER_SELECT_CNT]" style="width:10%;text-align:right;font-size:110%;" value="<?= $qAtr['ANSWER_SELECT_CNT'] ?>"> ※3～7 が目安<br>
+				-->
+			<? } ?>
+			<? if( $qAtr['QUESTION_DIV'] == 'qm' ) { ?>
+				複数選択数：<input type="number" name="a[ANSWER_SELECT_CNT]" style="width:10%;text-align:right;font-size:110%;" value="<?= $qAtr['ANSWER_SELECT_CNT'] ?>"> ※3 程度<br>
+			<? } ?>
+			<? if( $qAtr['QUESTION_DIV'] == 'qc' ) { ?>
+				比較対象は１問１択の設問から選択できます。
+			<? } ?>
+			<div>
+			<? $flg = 0; ?>
+			<? foreach($qList as $rec) { ?>
+				<? $no = $rec['QUESTION_NO']; ?>
+				<input type="hidden" name="q[<?= $no ?>][QUESTION_ID]" value="<?= $rec['QUESTION_ID'] ?>">
+				<input type="hidden" name="q[<?= $no ?>][QUESTION_NO]" value="<?= $no ?>">
+				<? if( empty($rec['QUESTION_STR']) ) { $flg++; } ?>
+				<? if( $flg == 1 ) { ?>
+					</div>
+					<center>
+					<a href="javascript:$('#q_space').toggle('fast');">[▼追加する]</a>
+					</center>
+					<div id="q_space" style="display:none">
+				<? } ?>
+				<? if( $qAtr['QUESTION_DIV'] == 'qc' ) { ?>
+					<!-- 比較設問 -->
+					<?
+						if( !empty($rec['QUESTION_RID']) ) {
+							$rQes = cMasterQuestion::getData(array("QUESTION_ID"=>$rec['QUESTION_RID']));
+						} else {
+							$rQes = array();
+						}
+					?>
+					<table style="width:100%">
+						<tr style="background-color:#eee;"><th style="width:5%">No</th><th style="width:95%">比較対象</th></tr>
+						<tr style="background-color:#efe;">
+							<th nowrap style="text-align:center"><span style="color:blue">Q <?= $no ?></span>：</th>
+							<td>
+								設問種類：
+								<select name="q[<?= $no ?>][R_QUESTION_TYPE]">
+									<option value="">設問種類</option>
+									<? foreach($qTypeList as $qType => $qName) { ?>
+										<option value="<?= $qType ?>" <?= $rQes['QUESTION_TYPE']==$qType?'selected':'' ?>><?= $qName ?></option>
+									<? } ?>
+								</select>
+								問題番号：
+								<select name="q[<?= $no ?>][R_QUESTION_NO]">
+									<option val="">問題番号</option>
+									<? for($no = 1;$no<=15;$no++) { ?>
+										<option value="<?= $no ?>" <?= $rQes['QUESTION_NO']==$no?'selected':'' ?>><?= $no ?></option>
+									<? } ?>
+								</select>
+								<?= $rQes['QUESTION_STR'] ?>
+							</td>
+						</tr>
+					</table>
+				<? } else { ?>
+					<!-- 比較設問以外 -->
+					<table>
+						<tr style="background-color:#eee;"><th style="width:5%">No</th><th style="width:70%">記載内容</th><th style="width:20%">略称</th></tr>
+						<tr style="background-color:#efe;"><th nowrap style="text-align:center"><span style="color:blue">Q <?= $no ?></span>：</th><td><input style="width:95%" type="text" name="q[<?= $no ?>][QUESTION_STR]" value="<?= $rec['QUESTION_STR'] ?>"></td><td><input type="text" name="q[<?= $no ?>][QUESTION_SHORT_STR]" value="<?= $rec['QUESTION_SHORT_STR'] ?>"></td></tr>
+						<tr><td style="text-align:center">A 1：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_0]" value="<?= $rec['ANSWER_0'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_0]" value="<?= $rec['ANSWER_SHORT_0'] ?>"><br>
+						<tr><td style="text-align:center">A 2：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_1]" value="<?= $rec['ANSWER_1'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_1]" value="<?= $rec['ANSWER_SHORT_1'] ?>"><br>
+						<tr><td style="text-align:center">A 3：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_2]" value="<?= $rec['ANSWER_2'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_2]" value="<?= $rec['ANSWER_SHORT_2'] ?>"><br>
+						<tr><td style="text-align:center">A 4：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_3]" value="<?= $rec['ANSWER_3'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_3]" value="<?= $rec['ANSWER_SHORT_3'] ?>"><br>
+						<tr><td style="text-align:center">A 5：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_4]" value="<?= $rec['ANSWER_4'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_4]" value="<?= $rec['ANSWER_SHORT_4'] ?>"><br>
+						<tr><td style="text-align:center">A 6：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_5]" value="<?= $rec['ANSWER_5'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_5]" value="<?= $rec['ANSWER_SHORT_5'] ?>"><br>
+						<tr><td style="text-align:center">A 7：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_6]" value="<?= $rec['ANSWER_6'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_6]" value="<?= $rec['ANSWER_SHORT_6'] ?>"><br>
+						<tr><td style="text-align:center">A 8：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_7]" value="<?= $rec['ANSWER_7'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_7]" value="<?= $rec['ANSWER_SHORT_7'] ?>"><br>
+						<tr><td style="text-align:center">A 9：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_8]" value="<?= $rec['ANSWER_8'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_8]" value="<?= $rec['ANSWER_SHORT_8'] ?>"><br>
+						<tr><td style="text-align:center">A10：</td><td><input style="width:95%" type="text" name="q[<?= $no ?>][ANSWER_9]" value="<?= $rec['ANSWER_9'] ?>"></td><td><input type="text" name="q[<?= $no ?>][ANSWER_SHORT_9]" value="<?= $rec['ANSWER_SHORT_9'] ?>"><br>
+					</table>
+				<? } ?>
+			<? } ?>
+			</div>
+
+			<div class="w100p row">
+				<div>■編集内容を保存</div>
+				<div class="w50p"></div>
+				<div class="w25p"><input type="button" class="w100p" name="dataSave" id="dataSave2" value="保存"></div>
+			</div>
+			</form>
+		</section>
+	</main>
+	<? include("common/template/footer.html"); /* 共通Footer */ ?>
+</div>
+</body>
+<script src="js/entry.js?dt=<?= date("YmdHis") ?>"></script>
+</html>

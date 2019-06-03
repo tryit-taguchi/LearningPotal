@@ -1,0 +1,31 @@
+<?
+	global $siteList;
+	$title = "その他の機能";
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<? include("common/template/meta.html"); /* 共通META */ ?>
+	<title><?= $title ?></title>
+</head>
+<body>
+<div class="page-wrap">
+	<? include("common/template/header.html"); /* 共通Header */ ?>
+	<? include("common/template/menu.html"); /* 共通Menu */ ?>
+	<main class="contents">
+		<h1><?= $title ?></h1>
+		<section>
+			<h2>その他の機能</h2>
+			<ul>
+				<li class="<?= $title=='データマージ'?'active':'' ?>"><a href="marge_form.php">データマージ</a></li>
+				<li class="<?= $title=='会場マスタ'?'active':'' ?>"><a href="site.php">会場マスタ</a></li>
+				<li class="<?= $title=='画像登録'?'active':'' ?>"><a href="image.php">画像登録</a></li>
+			</ul>
+		</section>
+	</main>
+
+	<? include("common/template/footer.html"); /* 共通Footer */ ?>
+</div>
+</body>
+<script src="js/entry.js?dt=<?= date("YmdHis") ?>"></script>
+</html>
