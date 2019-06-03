@@ -36,8 +36,6 @@ export default {
 				method  : 'GET',
 				url     : url,
 				timeout : 1000,  // ms
-//				headers: { 'Content-Type': 'application/json','Cookie': 'token=${token}' },
-//				headers: { 'Content-Type': 'application/json','Cookie': 'token=test' },
 				headers: {
 					'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
 					'Content-Type': 'application/json'//,
@@ -55,7 +53,7 @@ export default {
 							localStorage.setItem(url,JSON.stringify(response.data));
 						} catch(e) {
 							// iOS SecurityError (DOM Exception 18): The operation is insecure.
-							alert("ブラウザのCokkieがブロックされています。設定を変更してください。\niOS Safariの場合[設定 > Safari > Cookieをブロック > 常にブロック]を変更する");
+							alert("ブラウザのCokkieがブロックされています。設定を変更してください。\niOS Safariの場合\n[設定 > Safari > Cookieをブロック > 常にブロック]\nを変更してください。");
 						}
 						collback(response.data);
 					}
@@ -71,10 +69,6 @@ export default {
 			}).catch(function (e) {
 				console.log("コールバック中にキャッチかタイムアウト等");
 				console.log(e);
-
-				alert("コールバック中にキャッチかタイムアウト等");
-				alert(e);
-
 				console.log("GET ストレージからロード : " + url);
 				var storage = localStorage.getItem(url);
 				cacheJson = JSON.parse(storage);
