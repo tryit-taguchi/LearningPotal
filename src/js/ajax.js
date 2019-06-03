@@ -14,6 +14,8 @@ export default {
 			//console.log("HTTPメソッド「GET」実行 : " + url);
 			var $this = this;
 			var cacheJson = null;
+
+
 			// axiosでキャッシュされないようにする
 			$this.$axios.interceptors.request.use(function (config) {
 				if (typeof config.params === 'undefined') {
@@ -41,14 +43,20 @@ export default {
 					'Content-Type': 'application/json'//,
 					 //Cookie: "cookie1=value; cookie2=value; cookie3=value;"
 					},
-			 Cookie: "cookie1=value; cookie2=value; cookie3=value;",
-				xsrfHeaderName: 'X-CSRF-Token',
+//			 Cookie: "cookie1=value; cookie2=value; cookie3=value;",
+//				xsrfHeaderName: 'X-CSRF-Token',
 				withCredentials: true
 			}).then(await function (response) {
+
 				//console.log("GET サーバからロード : " + url);
 				if( response.data.status == 'success' ) {
 					if( collback != null ) {
-						localStorage.setItem(url,JSON.stringify(response.data));
+						try {
+							localStorage.setItem(url,JSON.stringify(response.data));
+						} catch(e) {
+							// iOS SecurityError (DOM Exception 18): The operation is insecure.
+							alert("ブラウザのCokkieがブロックされています。設定を変更してください。\niOS Safariの場合[設定 > Safari > Cookieをブロック > 常にブロック]を変更する");
+						}
 						collback(response.data);
 					}
 				} else {
@@ -63,6 +71,10 @@ export default {
 			}).catch(function (e) {
 				console.log("コールバック中にキャッチかタイムアウト等");
 				console.log(e);
+
+				alert("コールバック中にキャッチかタイムアウト等");
+				alert(e);
+
 				console.log("GET ストレージからロード : " + url);
 				var storage = localStorage.getItem(url);
 				cacheJson = JSON.parse(storage);
@@ -110,7 +122,8 @@ export default {
 			}).catch(function (e) {
 				console.log("コールバック中にキャッチされた？");
 				console.log(e);
-				alert("通信ができません。");
+				//alert("通信ができません。");
+				//alert(e);
 				/*
 				console.log("POST ストレージからロード");
 				cacheJson = JSON.parse(storage);

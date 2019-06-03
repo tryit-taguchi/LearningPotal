@@ -3,10 +3,10 @@
       <page-title>
         ログイン（席番号入力）
       </page-title>
-      <input type="text" v-model="SEAT_CD_1" placeholder="" maxlength="1" style="font-size:70pt;width:70pt;text-align:center;">
+      <input type="text" v-model="SEAT_CD_1" placeholder="" maxlength="1" style="font-size:70pt;width:110pt;text-align:center;">
       <span style="font-size:70pt">－</span>
-      <input type="text" v-model="SEAT_CD_2" placeholder="" maxlength="1" style="font-size:70pt;width:70pt;text-align:center" readonly>
-      <input type="text" v-model="SEAT_CD_3" placeholder="" maxlength="1" style="font-size:70pt;width:70pt;text-align:center;" readonly>
+      <input type="text" v-model="SEAT_CD_2" placeholder="" maxlength="1" style="font-size:70pt;width:110pt;text-align:center;" readonly="readonly">
+      <input type="text" v-model="SEAT_CD_3" placeholder="" maxlength="1" style="font-size:70pt;width:110pt;text-align:center;" readonly="readonly">
       <br>
       <table align="center">
         <tr>
