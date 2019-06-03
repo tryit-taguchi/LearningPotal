@@ -1,5 +1,5 @@
 <template>
-	<div style="width:412px;color:#000;background-color:#fff;">
+	<div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff'}">
 		<apexchart type="radar" :width="width" :height="height" :options="apexChartRadarOptions" :series="apexChartRadarSeries" />
 	</div>
 </template>
@@ -37,25 +37,23 @@ export default {
 					position: 'top',
 				},
 				fill: {
-					colors: this.chartData.backgroundColor
+					colors: this.chartData.backgroundColor.map((val)=>val.replace(/\s{2,}/g,' ')), // 連続した半角スペースが含まれているとパースの不具合で描画が崩れるための処置
 				},
 				stroke: {
-					colors: this.chartData.borderColor
+					colors: this.chartData.borderColor.map((val)=>val.replace(/\s{2,}/g,' ')), // 連続した半角スペースが含まれているとパースの不具合で描画が崩れるための処置
 				},
-				colors: this.chartData.borderColor,
+				colors: this.chartData.borderColor.map((val)=>val.replace(/\s{2,}/g,' ')), // 連続した半角スペースが含まれているとパースの不具合で描画が崩れるための処置
 			}
 		},
 		apexChartRadarSeries: function(){
-			return [
-				{
-					name: this.chartData.valueName[0],
-					data: this.chartData.valueList[0],
-				},
-				{
-					name: this.chartData.valueName[1],
-					data: this.chartData.valueList[1],
-				}
-			]
+			const series = [];
+			const l = Math.min(this.chartData.valueName.length,this.chartData.valueList.length);
+			for(let i=0;i<l;++i){
+				series[i] = {};
+				series[i].name = this.chartData.valueName[i];
+				series[i].data = this.chartData.valueList[i];
+			}
+			return series
 		},
 	}
 }

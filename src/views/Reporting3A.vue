@@ -138,11 +138,10 @@ export default {
 
 <style scoped lang="scss">
 .graph{
+	width: 834px;
 	display: flex;
-	justify-content: center;
-	margin-top: 10px;
-	:first-child{
-		margin-right:10px;
-	}
+  justify-content: space-between;
+	margin: 10px auto 0;
+	background-color: #fff;
 }
 </style>
