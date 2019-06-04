@@ -1,5 +1,7 @@
 <template>
-  <radar-chart :width="width" :height="height" :chart-data="processedData" :options="options" :title="chartData.questionStr" :style="style"></radar-chart>
+	<div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff'}">
+		<apexchart type="radar" :width="width" :height="height" :options="apexChartRadarOptions" :series="apexChartRadarSeries" />
+	</div>
 </template>
 
 <script>
@@ -7,62 +9,51 @@ export default {
 	props: ['chartData', 'width', 'height'],
 	data(){
 		return{
-			options: {
-				animation: {
-					duration: 0
-				},
-				scale: {
-					ticks: {
-						beginAtZero:true,
-						stepSize: 1,
-						max: 5,
-						fontSize: 12
-					},
-					pointLabels: {
-						fontSize: 12
-					}
-				},
-				legend: {
-					labels: {
-						fontSize: 12
-					}
-				},
-				tooltips: {
-					enabled: false
-				},
-				title: {
-					display: true,
-					fontSize: 24,
-					text: this.chartData.questionStr
-				},
-				maintainAspectRatio:false
-			},
-			style: {
-				backgroundColor: '#fff',
-				width: this.width+'px',
-				margin: '0'
-			},
 		}
 	},
 	computed: {
-		processedData: function(){
-			var cdata = {
-					labels: this.chartData.answerList,
-					selectedId: this.chartData.selectedNo, // 「あなたの回答」判別のために加えた独自のプロパティ
-					datasets: [],
-				};
-				for(var no=0; no<this.chartData.borderCount; no++) {
-					var setdata = {
-						label: this.chartData.valueName[no],
-						data: this.chartData.valueList[no],
-						backgroundColor: this.chartData.backgroundColor[no],
-						fill:false,
-						borderColor: this.chartData.borderColor[no],
-						borderWidth: 2,
-					};
-					cdata.datasets.push(setdata);
-				}
-			return cdata;
+		apexChartRadarOptions: function(){
+			return {
+				chart: {
+					toolbar: {
+						show: false
+					},
+				},
+				labels: this.chartData.answerList,
+				title: {
+						text: this.chartData.questionStr,
+						align: 'center',
+						style: {
+							fontSize: '20px',
+							color: '#000'
+						}
+				},
+				yaxis: {
+					tickAmount: 5,
+					min:0,
+					max:5,
+				},
+				legend: {
+					position: 'top',
+				},
+				fill: {
+					colors: this.chartData.backgroundColor.map((val)=>val.replace(/\s{2,}/g,' ')), // 連続した半角スペースが含まれているとパースの不具合で描画が崩れるための処置
+				},
+				stroke: {
+					colors: this.chartData.borderColor.map((val)=>val.replace(/\s{2,}/g,' ')), // 連続した半角スペースが含まれているとパースの不具合で描画が崩れるための処置
+				},
+				colors: this.chartData.borderColor.map((val)=>val.replace(/\s{2,}/g,' ')), // 連続した半角スペースが含まれているとパースの不具合で描画が崩れるための処置
+			}
+		},
+		apexChartRadarSeries: function(){
+			const series = [];
+			const l = Math.min(this.chartData.valueName.length,this.chartData.valueList.length);
+			for(let i=0;i<l;++i){
+				series[i] = {};
+				series[i].name = this.chartData.valueName[i];
+				series[i].data = this.chartData.valueList[i];
+			}
+			return series
 		},
 	}
 }

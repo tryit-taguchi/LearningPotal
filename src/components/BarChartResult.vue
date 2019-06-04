@@ -1,119 +1,123 @@
-<template>
-  <bar-chart :width="width" :height="height" :chart-data="processedData" :options="options" :title="chartData.questionStr" :after-datasets-draw="afterDatasetsDraw" :style="style"></bar-chart>
+<template><!-- 「全国平均」ありの棒グラフ／タイトルなし -->
+  <div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff',margin:'10px auto 0'}">
+    <apexchart ref="chart" type="bar" :width="width" :height="height" :options="apexChartRadarOptions" :series="apexChartRadarSeries" />
+  </div>
 </template>
 
 <script>
 export default {
-  props: ['chartData', 'width', 'height'],
+  props: {
+    chartData: {},
+    width: {},
+    height: {},
+    showYourSelect: Boolean
+  },
   data(){
     return{
-      options: {
-        layout: {
-          padding: {
-            right: 30
-          }
-        },
-        animation: {
-          duration: 0
-        },
-        scales: {
-          xAxes: [{
-            ticks: {
-              display: false
-            },
-            gridLines: {
-              drawBorder: false,
-            }
-          }],
-          yAxes: [{
-            ticks: {
-              fontSize: 12
-            },
-            gridLines: {
-              display:false
-            },
-          }]
-        },
-        legend: {
-          labels: {
-            fontSize: 12
-          }
-        },
-        tooltips: {
-          enabled: false
-        },
-        title: {
-          display: true,
-          fontSize: 24,
-          text: this.chartData.questionStr
-        },
-        maintainAspectRatio:false
-      },
-      style: {
-        backgroundColor: '#fff',
-        width: this.width+'px',
-        margin: '0 auto'
-      },
-      afterDatasetsDraw: (chart)=>{
-        var ctx = chart.ctx;
-        chart.data.datasets.forEach(function(dataset, i) {
-          // 非表示にするラベルはスキップ
-          // if(_hideLabel&&_hideLabel.includes(i)){
-          //   return false;
-          // }
-          // 「この会場」はスキップ
-          if(i===0){
-            return false;
-          }
-          var meta = chart.getDatasetMeta(i);
-          if (!meta.hidden) {
-            meta.data.forEach(function(element, index) {
-              ctx.font = Chart.helpers.fontString(12, 'normal', 'Helvetica Neue');
-              ctx.fillStyle = '#666';
-              ctx.textAlign = 'right';
-              ctx.textBaseline = 'middle';
-              console.log(dataset)
-              var dataString = dataset.data[index].toString()+'%';
-              var position = element.tooltipPosition();
-              if( position.x < 700 ) {
-                ctx.fillText(dataString, position.x+30, position.y);
-              } else {
-                ctx.fillText(dataString, position.x-30, position.y);
-              }
-            });
-          }
-        });
-      }
+    }
+  },
+  mounted() {
+    if(this.showYourSelect){
+      // legend を無理矢理追加
+      const legends = this.$refs.chart.$el.querySelector('.apexcharts-legend')
+      const legend = this.$refs.chart.$el.querySelector('.apexcharts-legend-series').cloneNode(true)
+      legend.querySelector('.apexcharts-legend-marker').style.background = 'rgba(86, 206, 255, 1)'
+      legend.querySelector('.apexcharts-legend-marker').style.borderColor = 'rgba(86, 206, 255, 1)'
+      legend.querySelector('.apexcharts-legend-text').innerText = 'あなたの回答'
+      legend.setAttribute('rel', 3)
+      legend.querySelector('.apexcharts-legend-marker').setAttribute('rel', 3)
+      legend.querySelector('.apexcharts-legend-text').setAttribute('rel', 3)
+      legends.appendChild(legend)
+      // path を無理矢理変更
+      this.chartData.selectedNoList.forEach((v)=>{
+        const path = this.$refs.chart.$el.querySelectorAll('.apexcharts-series[rel="1"] path')[v]
+        path.setAttribute("fill","rgba(86, 206, 255, 0.2)")
+        path.setAttribute("stroke","rgba(86, 206, 255, 1)")
+      })
     }
   },
   computed: {
-    processedData: function(){
-      //console.log(this.chartData)
+    apexChartRadarOptions: function(){
       return {
-        labels: this.chartData.answerList,
-        datasets: [
-          {
-            label: 'この会場',
-            // data: this.chartData.siteValueList.map((v,i)=>(i!==this.chartData.selectedNo)?0:v),
-            data: this.chartData.siteValueList,
-            // sum: this.chartData.siteSumList,
-            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-            borderColor: 'rgba(255, 206, 86, 1)',
-            borderWidth: 2,
-            stack: 'Stack 1'
-          },{
-            label: '全国平均',
-            // data: this.chartData.totalValueList.map((v,i)=>(i===this.chartData.selectedNo)?0:v),
-            data: this.chartData.totalValueList,
-            // sum: this.chartData.totalSumList,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255,99,132,1)',
-            borderWidth: 2,
-            stack: 'Stack 0'
+        plotOptions: {
+          bar: {
+            horizontal: true,
+            dataLabels: {
+              position: 'top'
+            }
           }
-        ],
-        selectedId: this.chartData.selectedNo // 「あなたの回答」判別のために加えた独自のプロパティ
+        },
+        chart: {
+          toolbar: {
+            show: false
+          },
+        },
+        labels: this.chartData.answerList,
+        title: {
+          text: undefined,
+          // text: this.chartData.questionStr,
+          align: 'center',
+          style: {
+            fontSize: '20px',
+            color: '#000'
+          }
+        },
+        legend: {
+          showForSingleSeries: true,
+          position: 'top',
+          onItemClick: {
+              toggleDataSeries: false
+          },
+          onItemHover: {
+              highlightDataSeries: false
+          },
+        },
+        dataLabels: {
+          formatter: (val, opts)=>{
+            return val+'%'
+          },
+          offsetX: -14,
+          offsetY: 0,
+          style: {
+            colors: ['#666']
+          }
+        },
+        xaxis: {
+          labels: {
+            show: false,
+          },
+          axisBorder: {
+            show: false,
+          },
+          axisTicks: {
+            show: false,
+          },
+          crosshairs: {
+            show: false,
+          },
+          max: Math.max(...this.chartData.totalValueList.map((v)=>parseInt(v))),
+        },
+        fill: {
+          colors: ['rgba(255, 206, 86, 0.2)','rgba(255, 99, 132, 0.2)']
+        },
+        stroke: {
+          width: 2,
+          colors: ['rgba(255, 206, 86, 1)','rgba(255,99,132,1)']
+        },
+        colors: ['rgba(255, 206, 86, 1)','rgba(255,99,132,1)']
       }
+    },
+    apexChartRadarSeries: function(){
+      return [
+        {
+          name: 'この会場',
+          data: this.chartData.siteValueList
+        },
+        {
+          name: '全国平均',
+          data: this.chartData.totalValueList
+        }
+      ]
     },
   }
 }
@@ -122,29 +126,3 @@ export default {
 <style lang="scss">
 
 </style>
-
-<!--
-
-'chartData' に渡されるオブジェクトの形式
-
-chartData: {
-  questionStr: "設問のタイトル",
-  answerList: ["選択肢1","選択肢2","選択肢3","選択肢4"],
-  siteValueList: [25,75,0,0], // 会場 ％ (棒の長さに反映)
-  siteSumList:[1,3,0,0], // 会場 合計 (棒の右に表示する数。票数とは独立)
-  totalValueList: [25,75,0,0], // 全体 ％ (棒の長さに反映)
-  totalSumList:[1,3,0,0], // 全体 合計 (棒の右に表示する数。票数とは独立)
-  selectedNo: 1 // (単一選択) 「あなたの回答」この選択肢の棒は色が変わる
-  selectedNoList: [1,2]  // (複数選択) 「あなたの回答」この選択肢の棒は色が変わる
-}
-
-TODO：複数選択の場合の処理はまだ未実装
-
-備忘録(書く場所がないので)
-
-他の棒グラフのパターン
-(コンポーネントを分けたほうが建設的だと思うもの)
-・「あなたの回答(青)」「この会場(黄)」「全国平均(赤)」のパターン(Question10のAnswerページに使われていた)
-・「この会場(黄)」「全国平均(赤)」のパターン(結果まとめページ)
-
--->

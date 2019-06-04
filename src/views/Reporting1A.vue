@@ -3,17 +3,9 @@
 		<page-title  :raw-html="questionHtml">
 			{{questionExplanation}}
 		</page-title>
-
-		<!-- ■動作確認が終わったら、新しい RadarChartReportingNew は今までの RadarChartReporting に改名します -->
-
-		<div class="graph" v-if="chartViewFlg&&false">
-			<radar-chart-reporting :width="412" :height="450" :chart-data="chartData1"></radar-chart-reporting>
-			<radar-chart-reporting :width="412" :height="450" :chart-data="chartData2"></radar-chart-reporting>
-		</div>
-
 		<div class="graph" v-if="chartViewFlg">
-			<radar-chart-reporting-new :width="412" :height="450" :chart-data="chartData1" />
-			<radar-chart-reporting-new :width="412" :height="450" :chart-data="chartData2" />
+			<radar-chart-reporting :width="412" :height="450" :chart-data="chartData1" />
+			<radar-chart-reporting :width="412" :height="450" :chart-data="chartData2" />
 		</div>
 
 	</div>
