@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-for="question in questionList" :key="question.QUESTION_NO">
-      <page-title :before-text="questionName">
+    <template v-for="(question, index) in questionList">
+      <page-title :before-text="index===0?questionName:''">
         <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
         {{question.QUESTION_STR}}
       </page-title>
@@ -9,7 +9,7 @@
       <button-area>
         <base-button text="次へ" @click="prevPage" v-if="question.QUESTION_NO<questionCnt" />
       </button-area>
-    </div>
+    </template>
   </div>
 </template>
 

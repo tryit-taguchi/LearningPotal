@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="question in questionList" key="question1">
+    <template v-for="question in questionList">
       <page-title :before-text="questionName">
         <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
         {{question.QUESTION_STR}}
@@ -10,7 +10,7 @@
         <!--<base-button text="前へ" @click="prevPage" />-->
         <base-button text="次の質問へ" @click="nextPage" />
       </button-area>
-    </div>
+    </template>
   </div>
 </template>
 
