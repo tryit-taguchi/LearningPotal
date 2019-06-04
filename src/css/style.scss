@@ -3,6 +3,7 @@
 }
 html{
   font-size: 62.5%;
+  touch-action: manipulation;
 }
 body{
   margin: 0;
@@ -11,7 +12,6 @@ body{
   color: #fff;
   background-color: #000;
   font-family: "Noto Sans";
-  touch-action: manipulation;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
