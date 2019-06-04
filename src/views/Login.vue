@@ -3,10 +3,10 @@
       <page-title>
         ログイン（席番号入力）
       </page-title>
-      <input type="text" v-model="SEAT_CD_1" placeholder="" maxlength="1" style="font-size:70pt;width:110pt;text-align:center;">
+      <input type="text" v-model="SEAT_CD_1" placeholder="" maxlength="1" style="font-size:70pt;width:90pt;text-align:center; padding:0;">
       <span style="font-size:70pt">－</span>
-      <input type="text" v-model="SEAT_CD_2" placeholder="" maxlength="1" style="font-size:70pt;width:110pt;text-align:center;" readonly="readonly">
-      <input type="text" v-model="SEAT_CD_3" placeholder="" maxlength="1" style="font-size:70pt;width:110pt;text-align:center;" readonly="readonly">
+      <input type="text" v-model="SEAT_CD_2" placeholder="" maxlength="1" style="font-size:70pt;width:90pt;text-align:center; padding:0;" readonly="readonly">
+      <input type="text" v-model="SEAT_CD_3" placeholder="" maxlength="1" style="font-size:70pt;width:90pt;text-align:center; padding:0;" readonly="readonly">
       <br>
       <table align="center">
         <tr>
@@ -172,6 +172,17 @@ export default {
 			this.SEAT_CD_1 = val;
 			this.softkeyClickColor(event); // 色を変える
 		},
+		/*
+		// softkey アルファベット
+		softkeyA2: function (event,val) {
+			return function(event,val) {
+				console.log(val);
+				this.SEAT_CD_1 = val;
+				this.softkeyClickColor(event); // 色を変える
+			}
+		},
+		*/
+
 		// softkey 数字
 		softkeyN: function (event,val) {
 			console.log(val);
