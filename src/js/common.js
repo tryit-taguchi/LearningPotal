@@ -75,7 +75,11 @@ export default {
 		startSession : function(callback) {
 			var obj = this;
 
-			console.log("セッションスタート");
+			// セッションスタート時に最後にアクセスしたURLを記録しておく
+			//console.log(this.$route.fullPath);
+			localStorage.setItem('lastestUrl',this.$route.fullPath);
+
+			//console.log("セッションスタート");
 			//console.log(this.$parent.session);
 			if( !this.isEmpty(this.$parent.session) ) {
 				if( !this.isEmpty(localStorage.getItem('session')) ) {
@@ -157,13 +161,18 @@ export default {
 			this.$cookies.set('MEMBER_NAME',login.MEMBER_NAME);
 			this.$cookies.set('COMPANY_NAME',login.COMPANY_NAME);
 			this.$cookies.set('LECTURE_DT',login.LECTURE_DT);
+			this.$cookies.set('LECTURE_TYPE',login.LECTURE_TYPE);
 			this.$cookies.set('ADMIN_FLG',login.ADMIN_FLG);
+
+			localStorage.setItem('login',JSON.stringify(login));
+
 			this.$parent.userCompany = login.COMPANY_NAME;
 			this.$parent.userName    = login.MEMBER_NAME;
 		},
 		// ログイン情報をクッキーに保存(クリア）
 		toLogout : function() {
-			localStorage.removeItem('session');
+			localStorage.clear();
+			//localStorage.removeItem('session');
 			delete this.$parent.session;
 			this.$cookies.set('MEMBER_ID','');
 			this.$cookies.set('SEAT_CD','');
@@ -171,6 +180,7 @@ export default {
 			this.$cookies.set('MEMBER_NAME','');
 			this.$cookies.set('COMPANY_NAME','');
 			this.$cookies.set('LECTURE_DT','');
+			this.$cookies.set('LECTURE_TYPE','');
 			this.$cookies.set('ADMIN_FLG','');
 			this.$parent.userCompany = '';
 			this.$parent.userName    = '';

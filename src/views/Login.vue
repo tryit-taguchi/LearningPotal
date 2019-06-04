@@ -1,5 +1,5 @@
 <template>
-    <div style="text-align:center">
+    <div  v-if="pageViewFlg" style="text-align:center">
       <page-title>
         ログイン（席番号入力）
       </page-title>
@@ -107,6 +107,7 @@ export default {
 			SEAT_CD_3: '',
 			oldColor: '#000',
 			blinkColor: '#88c',
+			pageViewFlg: false, // データセット後に描画を行う
 		}
 	},
 	// 初回処理
@@ -115,7 +116,41 @@ export default {
 		this.SEAT_CD_2 = this.SEAT_CD.charAt(1);
 		this.SEAT_CD_3 = this.SEAT_CD.charAt(2);
 		console.log("ログアウト処理");
-		this.toLogout();
+		var loginFlg = true;
+		var login = JSON.parse(localStorage.getItem('login')); // ストレージに保存してあったログイン情報を確認する
+		var nowYMD    = this.dateToFormatString(new Date(), '%YYYY%-%MM%-%DD%');
+		if( !this.isEmpty(login) ) {
+			if( !this.isEmpty(login.SEAT_CD) ) {
+				if( login.LECTURE_DT == '0000-00-00'
+				 || login.LECTURE_DT == nowYMD ) {
+					console.log("再ログイン処理");
+					loginFlg = false;
+					this.SEAT_CD = login.SEAT_CD;
+					let params = new FormData();
+					// 再ログイン処理
+					params.append("SEAT_CD",this.SEAT_CD);
+					this.postJson(this.getAPIPath()+'/login',params, function (response) {
+						if( response.data != null ) {
+							this.login = response.data.member;
+							this.$parent.session = response.data.session;
+						}
+						if( this.login != null ) {
+							// ログイン情報をクッキーに保存
+							this.toLogin(this.login);
+							if( !this.isEmpty(localStorage.getItem('lastestUrl')) ) {
+								this.jump(localStorage.getItem('lastestUrl')); // 自動ログインできたら最後にアクセスしたURL
+							} else {
+								this.jump('/'); // 最後にアクセスしたURLが無かったらHomeに遷移
+							}
+						}
+					}.bind(this));
+				}
+			}
+		}
+		if( loginFlg == true ) {
+			this.toLogout();
+			this.pageViewFlg = true;
+		}
 	},
 	// メソッド群
 	methods: {

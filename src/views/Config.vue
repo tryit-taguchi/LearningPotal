@@ -20,6 +20,9 @@
         </div>
       </form>
       <br>
+      <div class="question-button">
+        <base-button text="ログアウト" @click="logout" />
+      </div>
     </main>
   </div>
 </template>
@@ -67,6 +70,11 @@ export default {
 		// 保存
 		save: function () {
 			this.validation(this.callback_formSubmit);
+		},
+		// ログアウト
+		logout: function () {
+			this.toLogout();
+			this.jump('/login');
 		},
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
