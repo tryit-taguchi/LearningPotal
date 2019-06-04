@@ -70,6 +70,7 @@ export default {
 				console.log("コールバック中にキャッチかタイムアウト等");
 				console.log(e);
 				console.log("GET ストレージからロード : " + url);
+				//alert.log(e);
 				var storage = localStorage.getItem(url);
 				cacheJson = JSON.parse(storage);
 				if( collback != null ) {
@@ -98,32 +99,36 @@ export default {
 				return config;
 			});
 
-			$this.$axios({
-				method  : 'POST',
-				url     : url,
-				timeout : 3000,  // ms
-				data    : params,
-				headers: {
-					'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
-					'Content-Type': 'application/x-www-form-urlencoded'
+			try {
+				$this.$axios({
+					method  : 'POST',
+					url     : url,
+					timeout : 3000,  // ms
+					data    : params,
+					headers: {
+						'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,OPTIONS',
+						'Content-Type': 'application/x-www-form-urlencoded'
+						}
+				}).then(function (response) {
+					localStorage.setItem(url,JSON.stringify(response.data));
+					//console.log("POST サーバからロード");
+					if( collback != null ) {
+						collback(response.data);
 					}
-			}).then(function (response) {
-				localStorage.setItem(url,JSON.stringify(response.data));
-				//console.log("POST サーバからロード");
-				if( collback != null ) {
-					collback(response.data);
-				}
-			}).catch(function (e) {
-				console.log("コールバック中にキャッチされた？");
-				console.log(e);
-				//alert("通信ができません。");
-				//alert(e);
-				/*
-				console.log("POST ストレージからロード");
-				cacheJson = JSON.parse(storage);
-				collback(cacheJson);
-				*/
-			});
+				}).catch(function (e) {
+					console.log("コールバック中にキャッチされた？");
+					console.log(e);
+					alert("データの送信ができません。電波の良い所で再度お試しください。1");
+					//alert(e);
+					/*
+					console.log("POST ストレージからロード");
+					cacheJson = JSON.parse(storage);
+					collback(cacheJson);
+					*/
+				});
+			} catch(e) {
+				alert("データの送信ができません。電波の良い所で再度お試しください。0");
+			}
 		},
 		deleteJson: function(url,collback) {
 			console.log("HTTPメソッド「DELETE」実行");

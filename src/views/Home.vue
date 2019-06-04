@@ -88,7 +88,7 @@ export default {
 	methods: {
 		// セッション読み込み後
 		callback_getSession: function() {
-			console.log("セッション読み込み後");
+			//console.log("セッション読み込み後");
 			this.config = this.$parent.serverInfo.config; // ローディング直後のコンフィグの初期状態をセット
 			this.enableList = this.config.statusHome.enableList;
 			// コンフィグ定期読み込み処理
