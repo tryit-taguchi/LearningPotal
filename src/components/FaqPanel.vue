@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dl class="faq" v-if="isTop">
+    <dl class="faq">
       <dt class="faq-q" @click="isOpened=!isOpened">
         <span class="faq-q-label">質問{{index+1}}</span>
         <span class="faq-q-text">{{faqRec.Q_STR}}</span>
@@ -39,7 +39,7 @@
 export default {
 	props: {
 		faqRec: Object,
-		currentCat: "",
+		// currentCat: "",
 		faqId: {},
 		index: {}
 	},
@@ -53,13 +53,13 @@ export default {
 	// 算出プロパティ
 	computed: {
 		// カテゴリが指定されていない場合は、topFlgが立っているもののみ表示
-		isTop: function () {
-			if( this.currentCat !== '' ) return true;
-			if( this.faqRec.topFlg == true ) {
-				return true;
-			}
-			return false;
-		},
+		// isTop: function () {
+		// 	if( this.currentCat !== '' ) return true;
+		// 	if( this.faqRec.topFlg == true ) {
+		// 		return true;
+		// 	}
+		// 	return false;
+		// },
 	},
   mounted() {
 	//	console.log(faq.ADD);

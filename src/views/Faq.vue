@@ -15,7 +15,7 @@
       <div :key="currentCat">
         <template v-for="(faqCat, catName) in displayFaqList">
           <h2>{{catName}}</h2>
-          <faq-panel v-for="(faq, faqId, index) in faqCat" :faqRec="faq" :faq-id="faqId" :index="index" :currentCat="currentCat"  />
+          <faq-panel v-for="(faq, faqId, index) in faqCat" :faqRec="faq" :faq-id="faqId" :index="index"  />
         </template>
       </div>
     </transition>
@@ -45,8 +45,8 @@ export default {
     return {
       pageType: 'faq',
       faqList: [],
-      currentCat: "",
-      selectCat: "",
+      currentCat: "", // 表示しているカテゴリー
+      selectCat: "", // 新しい質問の選択カテゴリー
       addStr: "",
       faqViewFlg: false, // データセット後に描画を行う
     }
@@ -64,21 +64,30 @@ export default {
   },
   computed: {
     catList: function(){
-      return Object.entries(this.faqList).map((v)=>v[0])
+      return Object.entries(this.faqList).map(v=>v[0])
     },
     displayFaqList: function(){
       if(this.currentCat===""){
-        return this.faqList
+        // 表示するカテゴリーとIDのMapを作成
+        const isTopMap = new Map(this.catList.map(cat=>{
+          const faqIdList = Object.keys(this.faqList[cat])
+          const isTopId = faqIdList.filter(faqId => this.faqList[cat][faqId].topFlg)[0]
+          return [cat,isTopId]
+        }))
+        // Mapからオブジェクトを生成
+        const obj = {}
+        isTopMap.forEach((id,cat) => obj[cat] = {[id]:this.faqList[cat][id]});
+        return obj
       }else{
         return {[this.currentCat]:this.faqList[this.currentCat]}
       }
     },
   },
-	watch: {
-		currentCat: function () {
-			this.selectCat = this.currentCat;
-		}
-	},
+  watch: {
+    currentCat: function () {
+      this.selectCat = this.currentCat;
+    }
+  },
   // 初回処理（createdではDOM操作をしない）
   created: function () {
     console.log('-- '+this.pageType+'_q');
@@ -100,54 +109,52 @@ export default {
       this.faqViewFlg = true;
     },
 
-		// FAQへの追加質問を送信する（カテゴリ）
-		faqInputCategory: function() {
+    // FAQへの追加質問を送信する（カテゴリ）
+    faqInputCategory: function() {
 
-			if( this.isEmpty(this.selectCat) ) {
-				this.$modal.show('dialog', {
-					text: 'カテゴリを選択してください。',
-					buttons: [
-						{title: 'OK'}
-					]
-				});
-				return;
-			}
+      if( this.isEmpty(this.selectCat) ) {
+        this.$modal.show('dialog', {
+          text: 'カテゴリを選択してください。',
+          buttons: [
+            {title: 'OK'}
+          ]
+        });
+        return;
+      }
 
-			if( !this.isEmpty(this.addStr) ) {
-				var form = {};
-				form.addStr = this.addStr;
-				form.selectCat  = this.selectCat;
-				//console.log(form.addStr);
-				//console.log(form.selectCat);
-				this.submit(this.getAPIPath()+'/faq_i_category/' + this.getMemberId(),form, function(response) {
-					this.result = response.data;
-					if( this.result != null ) {
-						this.$modal.show('dialog', {
-						  text: '質問を送信いたしました。<br>ありがとうございました。',
-						  buttons: [
-						    {title: 'OK'}
-						  ]
-						})
-					} else {
-						this.$modal.show('dialog', {
-							text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
-							buttons: [
-								{title: 'OK'}
-							]
-						});
-					}
-				}.bind(this));
-			} else {
-				this.$modal.show('dialog', {
-					text: '質問を入力してください。',
-					buttons: [
-						{title: 'OK'}
-					]
-				});
-			}
-		}
-
-
+      if( !this.isEmpty(this.addStr) ) {
+        var form = {};
+        form.addStr = this.addStr;
+        form.selectCat  = this.selectCat;
+        //console.log(form.addStr);
+        //console.log(form.selectCat);
+        this.submit(this.getAPIPath()+'/faq_i_category/' + this.getMemberId(),form, function(response) {
+          this.result = response.data;
+          if( this.result != null ) {
+            this.$modal.show('dialog', {
+              text: '質問を送信いたしました。<br>ありがとうございました。',
+              buttons: [
+                {title: 'OK'}
+              ]
+            })
+          } else {
+            this.$modal.show('dialog', {
+              text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
+              buttons: [
+                {title: 'OK'}
+              ]
+            });
+          }
+        }.bind(this));
+      } else {
+        this.$modal.show('dialog', {
+          text: '質問を入力してください。',
+          buttons: [
+            {title: 'OK'}
+          ]
+        });
+      }
+    }
   }
 }
 </script>
@@ -163,200 +170,66 @@ select {
   border-radius: 5px;
 }
 
-.faq{
+.faq-new-form{
   margin: 0 0 0 50px;
   font-size: 3.0rem;
-  &-q{
+  &-cat{
+    margin: 0 0 5px 0;
     display: flex;
-    flex-direction: column;
-    vertical-align: middle;
-    margin: 0 0 5px;
-    border-radius: 10px 10px 0 0;
-    overflow: hidden;
-    cursor: pointer;
-    &-label{
-      // flex: 0 1 calc(1024px - 720px);
-      background-color: rgba(36,36,36,1);
-      margin-left: auto;
-      color: #fff;
-      padding: 5px;
-      display: block;
-      width: 100%;
-      &::before{
-        content: "？";
-      }
+    align-items: flex-start;
+    label{
+      font-size: 3.0rem;
+      border: none;
+      padding: .2em;
+      line-height: 1.2;
+      margin-right: 5px;
+      white-space: nowrap;
+      flex: 1 1 auto;
+      text-align: right;
     }
-    &-text{
-      // flex: 0 0 720px;
-      background-color: #fff;
-      color: #000;
-      padding: 5px;
-      display: block;
-      width: 100%;
-    }
-  }
-  &-a{
-    display: flex;
-    vertical-align: middle;
-    margin: 0 0 5px;
-    &-label{
-      flex: 0 1 calc(1024px - 720px);
-      background-color: rgba(98,0,23,1);
-      margin-left: auto;
-      color: #fff;
-      padding: 5px;
-      &::before{
-        content: "！";
-      }
-    }
-    &-text{
+    &-select{
+      flex: 0 0 auto;
+      margin-right: auto;
       flex: 0 0 720px;
-      background-color: #fff;
+      select{
+        font-size: 3.0rem;
+      }
+    }
+  }
+  &-q{
+    margin: 0 0 30px 0;
+    display: flex;
+    align-items: flex-start;
+    label{
+      font-size: 3.0rem;
+      border: none;
+      padding: .2em;
+      line-height: 1.2;
+      margin-right: 5px;
+      white-space: nowrap;
+      flex: 1 0 auto;
+      text-align: right;
+    }
+    textarea{
+      font-size: 3.0rem;
+      width: auto;
+      flex: 0 0 calc(720px - 105px);
+
+      border: none;
+      padding: .2em;
+      line-height: 1.2;
+      font-family: "Nissan Brand font", "新ゴ";
       color: #000;
-      padding: 5px;
+      background-color: #fff;
+      border-radius: 5px;
     }
-  }
-  &-add{
-    margin: 0 0 0 100px;
-    font-size: 3.0rem;
-    &-q{
-      display: flex;
-      vertical-align: middle;
-      margin: 0 0 5px;
-      &-label{
-        flex: 0 1 calc(1024px - 720px);
-        background-color: rgba(36,36,36,1);
-        margin-left: auto;
-        color: #fff;
-        padding: 5px;
-        &::before{
-          content: "？";
-        }
-      }
-      &-text{
-        flex: 0 0 calc(720px - 50px);
-        background-color: #fff;
-        color: #000;
-        padding: 5px;
-      }
-    }
-    &-a{
-      display: flex;
-      vertical-align: middle;
-      margin: 0 0 5px;
-      &-label{
-        flex: 0 1 calc(1024px - 720px);
-        background-color: rgba(98,0,23,1);
-        margin-left: auto;
-        color: #fff;
-        padding: 5px;
-        &::before{
-          content: "！";
-        }
-      }
-      &-text{
-        flex: 0 0 calc(720px - 50px);
-        background-color: #fff;
-        color: #000;
-        padding: 5px;
-      }
-    }
-    &-form{
-      margin: 0 0 30px 0;
-      display: flex;
-      align-items: flex-start;
-      label{
-        font-size: 3.0rem;
-        border: none;
-        padding: .2em;
-        line-height: 1.2;
-        margin-right: 5px;
-        white-space: nowrap;
-        flex: 1 0 auto;
-        text-align: right;
-      }
-      textarea{
-        font-size: 3.0rem;
-        width: auto;
-        flex: 0 0 calc(720px - 105px);
-
-        border: none;
-        padding: .2em;
-        line-height: 1.2;
-        font-family: "Nissan Brand font", "新ゴ";
-        color: #000;
-        background-color: #fff;
-        border-radius: 5px;
-      }
-      input[type="button"],
-      input[type="submit"],
-      button{
-        font-size: 3.0rem;
-        flex: 0 0 100px;
-        align-self: flex-end;
-        margin-left: 5px;
-      }
-    }
-  }
-  &-new-form{
-    &-cat{
-      margin: 0 0 5px 0;
-      display: flex;
-      align-items: flex-start;
-      label{
-        font-size: 3.0rem;
-        border: none;
-        padding: .2em;
-        line-height: 1.2;
-        margin-right: 5px;
-        white-space: nowrap;
-        flex: 1 1 auto;
-        text-align: right;
-      }
-      &-select{
-        flex: 0 0 auto;
-        margin-right: auto;
-        flex: 0 0 720px;
-        select{
-          font-size: 3.0rem;
-        }
-      }
-    }
-    &-q{
-      margin: 0 0 30px 0;
-      display: flex;
-      align-items: flex-start;
-      label{
-        font-size: 3.0rem;
-        border: none;
-        padding: .2em;
-        line-height: 1.2;
-        margin-right: 5px;
-        white-space: nowrap;
-        flex: 1 0 auto;
-        text-align: right;
-      }
-      textarea{
-        font-size: 3.0rem;
-        width: auto;
-        flex: 0 0 calc(720px - 105px);
-
-        border: none;
-        padding: .2em;
-        line-height: 1.2;
-        font-family: "Nissan Brand font", "新ゴ";
-        color: #000;
-        background-color: #fff;
-        border-radius: 5px;
-      }
-      input[type="button"],
-      input[type="submit"],
-      button{
-        font-size: 3.0rem;
-        flex: 0 0 100px;
-        align-self: flex-end;
-        margin-left: 5px;
-      }
+    input[type="button"],
+    input[type="submit"],
+    button{
+      font-size: 3.0rem;
+      flex: 0 0 100px;
+      align-self: flex-end;
+      margin-left: 5px;
     }
   }
 }
