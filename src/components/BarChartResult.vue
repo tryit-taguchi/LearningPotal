@@ -1,6 +1,6 @@
 <template><!-- 「全国平均」ありの棒グラフ／タイトルなし -->
   <div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff',margin:'10px auto 0'}">
-    <apexchart ref="chart" type="bar" :width="width" :height="height" :options="apexChartRadarOptions" :series="apexChartRadarSeries" />
+    <apexchart ref="chart" type="bar" :width="width" :height="height" :options="apexChartOptions" :series="apexChartSeries" />
   </div>
 </template>
 
@@ -17,27 +17,10 @@ export default {
     }
   },
   mounted() {
-    if(this.showYourSelect){
-      // legend を無理矢理追加
-      const legends = this.$refs.chart.$el.querySelector('.apexcharts-legend')
-      const legend = this.$refs.chart.$el.querySelector('.apexcharts-legend-series').cloneNode(true)
-      legend.querySelector('.apexcharts-legend-marker').style.background = 'rgba(86, 206, 255, 1)'
-      legend.querySelector('.apexcharts-legend-marker').style.borderColor = 'rgba(86, 206, 255, 1)'
-      legend.querySelector('.apexcharts-legend-text').innerText = 'あなたの回答'
-      legend.setAttribute('rel', 3)
-      legend.querySelector('.apexcharts-legend-marker').setAttribute('rel', 3)
-      legend.querySelector('.apexcharts-legend-text').setAttribute('rel', 3)
-      legends.appendChild(legend)
-      // path を無理矢理変更
-      this.chartData.selectedNoList.forEach((v)=>{
-        const path = this.$refs.chart.$el.querySelectorAll('.apexcharts-series[rel="1"] path')[v]
-        path.setAttribute("fill","rgba(86, 206, 255, 0.2)")
-        path.setAttribute("stroke","rgba(86, 206, 255, 1)")
-      })
-    }
+    this.addYourSelect()
   },
   computed: {
-    apexChartRadarOptions: function(){
+    apexChartOptions: function(){
       return {
         plotOptions: {
           bar: {
@@ -51,6 +34,11 @@ export default {
           toolbar: {
             show: false
           },
+          events: {
+            updated: (chartContext, config)=>{
+              this.addYourSelect()
+            }
+          }
         },
         labels: this.chartData.answerList,
         title: {
@@ -95,7 +83,8 @@ export default {
           crosshairs: {
             show: false,
           },
-          max: Math.max(...this.chartData.totalValueList.map((v)=>parseInt(v))),
+          // 更新後にmaxが無視される挙動の解決策が見つからないためmaxの指定は削除
+          // max: Math.max(...this.chartData.totalValueList.map((v)=>parseInt(v))),
         },
         fill: {
           colors: ['rgba(255, 206, 86, 0.2)','rgba(255, 99, 132, 0.2)']
@@ -107,7 +96,7 @@ export default {
         colors: ['rgba(255, 206, 86, 1)','rgba(255,99,132,1)']
       }
     },
-    apexChartRadarSeries: function(){
+    apexChartSeries: function(){
       return [
         {
           name: 'この会場',
@@ -119,6 +108,31 @@ export default {
         }
       ]
     },
+  },
+  methods: {
+    addYourSelect: function(){
+      if(this.showYourSelect){
+        // legend を無理矢理追加
+        // option と series の更新で2回呼ばれてしまうためここで数を見る
+        const legendCount = [...this.$refs.chart.$el.querySelectorAll('.apexcharts-legend-series')].length
+        if(legendCount===2) return false
+        const legends = this.$refs.chart.$el.querySelector('.apexcharts-legend')
+        const legend = this.$refs.chart.$el.querySelector('.apexcharts-legend-series').cloneNode(true)
+        legend.querySelector('.apexcharts-legend-marker').style.background = 'rgba(86, 206, 255, 1)'
+        legend.querySelector('.apexcharts-legend-marker').style.borderColor = 'rgba(86, 206, 255, 1)'
+        legend.querySelector('.apexcharts-legend-text').innerText = 'あなたの回答'
+        legend.setAttribute('rel', 2)
+        legend.querySelector('.apexcharts-legend-marker').setAttribute('rel', 2)
+        legend.querySelector('.apexcharts-legend-text').setAttribute('rel', 2)
+        legends.appendChild(legend)
+        // path を無理矢理変更
+        this.chartData.selectedNoList.forEach((v)=>{
+          const path = this.$refs.chart.$el.querySelectorAll('.apexcharts-series[rel="1"] path')[v]
+          path.setAttribute("fill","rgba(86, 206, 255, 0.2)")
+          path.setAttribute("stroke","rgba(86, 206, 255, 1)")
+        })
+      }
+    }
   }
 }
 </script>
