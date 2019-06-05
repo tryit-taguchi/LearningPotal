@@ -4,7 +4,7 @@
       <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{current+1}}</span></template>
       {{questions[current].text}}
     </page-title>
-    <bar-chart-result v-if="chartViewFlg" :width="824" :height="450" :chart-data="question" show-your-select />
+    <bar-chart-result v-if="chartViewFlg" :width="824" :height="450" :chart-data="question" chart-index="0" show-your-select />
     <button-area>
       <base-button text="前へ" @click="prevQuestion" v-if="current>0" />
       <base-button text="回答" @click="nextQuestion" />

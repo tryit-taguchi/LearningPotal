@@ -10,7 +10,8 @@ export default {
     chartData: {},
     width: {},
     height: {},
-    showYourSelect: Boolean
+    showYourSelect: Boolean,
+    chartIndex: {}
   },
   data(){
     return{
@@ -100,7 +101,7 @@ export default {
       return [
         {
           name: 'この会場',
-          data: this.chartData.totalValueList
+          data: this.chartData.chartList[parseInt(this.chartIndex)].aggregateList.site.valueList
         }
       ]
     },
