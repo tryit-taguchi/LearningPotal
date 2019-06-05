@@ -72,7 +72,7 @@ export default {
 				var form = {};
 				form.addStr = this.addStr;
 				form.faqId  = this.faqId;
-				this.submit(this.getAPIPath()+'/faq_i_single/' + this.getMemberId(),form, function(response) {
+				this.post(this.getAPIPath()+'/faq_i_single/' + this.getMemberId(),form, function(response) {
 					this.result = response.data;
 					if( this.result != null ) {
 						this.$modal.show('dialog', {

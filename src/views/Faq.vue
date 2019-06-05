@@ -128,7 +128,7 @@ export default {
         form.selectCat  = this.selectCat;
         //console.log(form.addStr);
         //console.log(form.selectCat);
-        this.submit(this.getAPIPath()+'/faq_i_category/' + this.getMemberId(),form, function(response) {
+        this.post(this.getAPIPath()+'/faq_i_category/' + this.getMemberId(),form, function(response) {
           this.result = response.data;
           if( this.result != null ) {
             this.$modal.show('dialog', {
