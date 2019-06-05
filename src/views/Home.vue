@@ -93,8 +93,8 @@ export default {
 			this.enableList = this.config.statusHome.enableList;
 			// コンフィグ定期読み込み処理
 			this.intervalId = setInterval(function() {
-				this.getJson(this.getAPIPath()+'/json/config.json',function(responce) { // 生成済みのjsonからコンフィグデータを読み込む
-					this.config = responce.data; // 3秒おきにコンフィグデータをロード
+				this.getJson(this.getAPIPath()+'/json/config.json',function(response) { // 生成済みのjsonからコンフィグデータを読み込む
+					this.config = response.data; // 3秒おきにコンフィグデータをロード
 					this.$parent.serverInfo.config = this.config;
 					this.enableList = this.config.statusHome.enableList;
 					//console.log(this.enableList); // ボタンの有効・無効状態

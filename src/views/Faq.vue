@@ -15,7 +15,7 @@
       <div :key="currentCat">
         <template v-for="(faqCat, catName) in displayFaqList">
           <h2>{{catName}}</h2>
-          <faq-panel v-for="(faq, faqId, index) in faqCat" :data="faq" :faq-id="faqId" :index="index" />
+          <faq-panel v-for="(faq, faqId, index) in faqCat" :faqRec="faq" :faq-id="faqId" :index="index" :currentCat="currentCat"  />
         </template>
       </div>
     </transition>
@@ -24,17 +24,18 @@
     <div class="faq-new-form-cat">
       <label for="">対象カテゴリ</label>
       <div class="faq-new-form-cat-select">
-        <select name="FAQ_CAT" id="faqCat">
+        <select name="FAQ_CAT" id="faqCat" v-model="selectCat">
           <option value="">選択して下さい</option>
-          <option v-for="cat in catList" value="cat">{{cat}}</option>
+          <option v-for="cat in catList" :value="cat">{{cat}}</option>
         </select>
       </div>
     </div>
     <div class="faq-new-form-q">
       <label for="">追加質問</label>
-      <textarea class="autoheight" name="Q_STR" id="Q_STR" cols="30" rows="1"></textarea>
-      <input type="button" value="送信" id="BTN_MAIN" onClick="answerSendMain('form_main')">
+      <textarea class="autoheight" name="Q_STR" v-model="addStr" id="Q_STR" cols="30" rows="1"></textarea>
+      <input type="button" value="送信" id="BTN_MAIN" @click="faqInputCategory">
     </div>
+    <v-dialog/>
   </div>
 </template>
 
@@ -45,6 +46,8 @@ export default {
       pageType: 'faq',
       faqList: [],
       currentCat: "",
+      selectCat: "",
+      addStr: "",
       faqViewFlg: false, // データセット後に描画を行う
     }
   },
@@ -71,6 +74,11 @@ export default {
       }
     },
   },
+	watch: {
+		currentCat: function () {
+			this.selectCat = this.currentCat;
+		}
+	},
   // 初回処理（createdではDOM操作をしない）
   created: function () {
     console.log('-- '+this.pageType+'_q');
@@ -91,6 +99,55 @@ export default {
       this.faqList = response.data.faqList;
       this.faqViewFlg = true;
     },
+
+		// FAQへの追加質問を送信する（カテゴリ）
+		faqInputCategory: function() {
+
+			if( this.isEmpty(this.selectCat) ) {
+				this.$modal.show('dialog', {
+					text: 'カテゴリを選択してください。',
+					buttons: [
+						{title: 'OK'}
+					]
+				});
+				return;
+			}
+
+			if( !this.isEmpty(this.addStr) ) {
+				var form = {};
+				form.addStr = this.addStr;
+				form.selectCat  = this.selectCat;
+				//console.log(form.addStr);
+				//console.log(form.selectCat);
+				this.submit(this.getAPIPath()+'/faq_i_category/' + this.getMemberId(),form, function(response) {
+					this.result = response.data;
+					if( this.result != null ) {
+						this.$modal.show('dialog', {
+						  text: '質問を送信いたしました。<br>ありがとうございました。',
+						  buttons: [
+						    {title: 'OK'}
+						  ]
+						})
+					} else {
+						this.$modal.show('dialog', {
+							text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
+							buttons: [
+								{title: 'OK'}
+							]
+						});
+					}
+				}.bind(this));
+			} else {
+				this.$modal.show('dialog', {
+					text: '質問を入力してください。',
+					buttons: [
+						{title: 'OK'}
+					]
+				});
+			}
+		}
+
+
   }
 }
 </script>

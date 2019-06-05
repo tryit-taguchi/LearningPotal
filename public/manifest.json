@@ -1,6 +1,6 @@
 {
-  "name": "cmc",
-  "short_name": "cmc",
+  "name": "勉強会",
+  "short_name": "勉強会",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
       "type": "image/png"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/nlp/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#4DBA87"
