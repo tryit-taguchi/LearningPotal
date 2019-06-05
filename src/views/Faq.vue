@@ -15,7 +15,7 @@
       <div :key="currentCat">
         <template v-for="(faqCat, catName) in displayFaqList">
           <h2>{{catName}}</h2>
-          <faq-panel v-for="(faq, faqId, index) in faqCat" :faqRec="faq" :faq-id="faqId" :index="index"  />
+          <faq-panel v-for="(faq, faqId) in faqCat" :faqRec="faq" :faq-id="faqId" :index="faqIndexMap.get(faqId)" />
         </template>
       </div>
     </transition>
@@ -82,6 +82,14 @@ export default {
         return {[this.currentCat]:this.faqList[this.currentCat]}
       }
     },
+    faqIndexMap: function(){
+      const indexMap = new Map()
+      this.catList.forEach(cat=>{
+        const faqIdList = Object.keys(this.faqList[cat])
+        const indexArr = faqIdList.map((id,index)=>indexMap.set(id, index))
+      })
+      return indexMap
+    }
   },
   watch: {
     currentCat: function () {
