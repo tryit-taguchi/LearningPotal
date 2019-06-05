@@ -24,6 +24,7 @@ export default {
 			questionList: [],
 			questionName: "",
 			chartViewFlg: false, // データセット後に描画を行う
+			intervalId: undefined, // 画面切り替え時にポーリングを停止させるために保存するID
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
@@ -60,8 +61,14 @@ export default {
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
 			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-			this.getJson(this.getAPIPath()+'/'+this.pageType + '_a/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
+			this.getJson(this.getAPIPath()+ '/' + this.pageType + '_a/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
 			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+
+			// 投稿定期読み込み処理
+			this.intervalId = setInterval(function() {
+				this.getJson(this.getAPIPath()+ '/' + this.pageType + '_a/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
+			}.bind(this), 3000);
+
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {
@@ -79,7 +86,11 @@ export default {
 			this.chartViewFlg = true;
 			this.$forceUpdate();
 		},
-	}
+	},
+	beforeDestroy: function () {
+		//console.log('clearInterval');
+		clearInterval(this.intervalId); // 画面が変わったらインターバルを外す
+	},
 }
 </script>
 
