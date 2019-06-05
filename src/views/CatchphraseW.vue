@@ -29,6 +29,7 @@ export default {
 	data: function(){
 		return {
 			pageType: 'catchphrase',
+			intervalId: undefined, // 画面切り替え時にポーリングを停止させるために保存するID
 			catchphraseList: [],
 		}
 	},
@@ -53,7 +54,11 @@ export default {
 		nextPage: function () {
 			this.jump({ name: this.pageType+'_s' });
 		},
-	}
+	},
+	beforeDestroy: function () {
+		console.log('clearInterval');
+		clearInterval(this.intervalId); // 画面が変わったらインターバルを外す
+	},
 }
 </script>
 
