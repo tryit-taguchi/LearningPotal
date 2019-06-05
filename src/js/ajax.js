@@ -118,7 +118,7 @@ export default {
 				}).catch(function (e) {
 					console.log("コールバック中にキャッチされた？");
 					console.log(e);
-					alert("データの送信ができません。電波の良い所で再度お試しください。1");
+					alert("データの送信ができません。電波の良い所で再度お試しください。");
 					//alert(e);
 					/*
 					console.log("POST ストレージからロード");
@@ -127,7 +127,7 @@ export default {
 					*/
 				});
 			} catch(e) {
-				alert("データの送信ができません。電波の良い所で再度お試しください。0");
+				alert("データの送信ができません。電波の良い所で再度お試しください。");
 			}
 		},
 		deleteJson: function(url,collback) {
