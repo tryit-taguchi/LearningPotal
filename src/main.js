@@ -38,6 +38,7 @@ Object.keys(components).forEach(key => {
   Vue.component(key, components[key]);
 });
 
+// charts
 import VueApexCharts from 'vue-apexcharts'
 Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts)
@@ -46,8 +47,17 @@ require('@/css/style.scss')
 
 Vue.config.productionTip = false
 
+// modal
 import VModal from 'vue-js-modal'
 Vue.use(VModal, { dialog: true, dynamic: true })
+
+// smooth scroll
+var VueScrollTo = require('vue-scrollto');
+Vue.use(VueScrollTo, {
+ duration: 300,
+ easing: "ease-in-out",
+  offset: -120,
+})
 
 new Vue({
 	router,

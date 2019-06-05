@@ -1,13 +1,13 @@
 <template>
   <div>
     <template v-for="(question, index) in questionList">
-      <page-title :before-text="index===0?questionName:''">
+      <page-title :before-text="index===0?questionName:''" :id="'question'+question.QUESTION_NO">
         <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
         {{question.QUESTION_STR}}
       </page-title>
       <bar-chart-result v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" />
       <button-area>
-        <base-button text="次へ" @click="prevPage" v-if="question.QUESTION_NO<questionCnt" />
+        <base-button text="次へ" v-if="question.QUESTION_NO<questionCnt" v-scroll-to="'#question'+(parseInt(question.QUESTION_NO)+1)" />
       </button-area>
     </template>
   </div>
@@ -39,13 +39,12 @@ export default {
 			return true;
 		},
 		// 前ページへ
-		prevPage: function(e){
-			this.jump({ name: this.pageType+'_a' });
-		},
+		// prevPage: function(e){
+		// 	this.jump({ name: this.pageType+'_a' });
+		// },
 		// 回答
-		nextPage: function(e){
-		
-		},
+		// nextPage: function(e){
+		// },
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
 		callback_getSession: function() {

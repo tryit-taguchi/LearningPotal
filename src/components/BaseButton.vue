@@ -1,14 +1,22 @@
 <template>
-  <button type="button" v-on="$listeners" :style="style">
+  <span
+    :is="is"
+    :type="type!=='link'?type:null"
+    :href="type==='link'?href:null"
+    v-on="$listeners"
+    :style="style"
+  >
     {{this.text}}
-  </button>
+  </span>
 </template>
 
 <script>
 export default {
   props: {
     text: String,
-    backgroundColor: String
+    backgroundColor: String,
+    type: {type: String, default: 'button'},
+    href: String
   },
   computed: {
     style: function() {
@@ -17,18 +25,21 @@ export default {
         styleObj['--background-color'] = this.backgroundColor
       }
       return styleObj
+    },
+    is: function(){
+      return this.type==='link' ? 'a' : 'button'
     }
   }
 }
 </script>
 
-<style lang="scss">
-button{
+<style scoped lang="scss">
+button,a{
 
   --color: #fff;
   --background-color: #4472c4;
 
-  display: inline-block;
+  display: inline-flex;
 
   appearance: none;
   padding: 0 1em;
@@ -39,13 +50,16 @@ button{
   color: var(--color);
   background-color: var(--background-color);
   cursor: pointer;
-  text-align: center;
   text-decoration: none;
 
-  align-self: center;
+  align-items: center;
+  justify-content: center;
   height: 50px;
 
   flex: 0 0 200px;
 
+}
+button:focus{
+  outline: none;
 }
 </style>
