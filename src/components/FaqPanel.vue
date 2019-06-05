@@ -1,35 +1,35 @@
 <template>
   <div>
-    <dl class="faq">
+    <dl class="faq" v-if="isTop">
       <dt class="faq-q" @click="isOpened=!isOpened">
         <span class="faq-q-label">質問{{index+1}}</span>
-        <span class="faq-q-text">{{data.Q_STR}}</span>
+        <span class="faq-q-text">{{faqRec.Q_STR}}</span>
       </dt>
       <transition name="fade">
         <dd class="faq-a" v-show="isOpened">
           <span class="faq-a-label">回答</span>
-          <span class="faq-a-text">{{data.A_STR}}</span>
+          <span class="faq-a-text">{{faqRec.A_STR}}</span>
         </dd>
       </transition>
     </dl>
     <!-- 追加質問の回答があったら表示？必要なのかわからない -->
     <transition name="fade">
-      <dl class="faq-add" v-if="false" v-show="isOpened">
+      <dl class="faq-add" v-for="(addfaq, index) in faqRec.ADD" v-show="isOpened">
         <dt class="faq-add-q">
           <span class="faq-add-q-label">追加質問</span>
-          <span class="faq-add-q-text">追加質問あああああ</span>
+          <span class="faq-add-q-text">{{addfaq.Q_STR}}</span>
         </dt>
         <dd class="faq-add-a">
           <span class="faq-add-a-label">回答</span>
-          <span class="faq-add-a-text">追加質問の回答いいいいい</span>
+          <span class="faq-add-a-text">{{addfaq.A_STR}}</span>
         </dd>
       </dl>
     </transition>
     <transition name="fade">
       <div class="faq-add-form" v-show="isOpened">
         <label for="">追加質問</label>
-        <textarea class="autoheight" name="Q_STR" id="Q_STR_<?= $prec['FAQ_ID'] ?>" cols="30" rows="1"></textarea>
-        <input type="button" value="送信" onClick="answerSendAdd('form_<?= $prec['FAQ_ID'] ?>')">
+        <textarea class="autoheight" name="Q_STR" v-model="addStr" :id="'Q_STR_'+faqId" cols="30" rows="1"></textarea>
+        <input type="button" value="送信" @click="faqInputSingle">
       </div>
     </transition>
   </div>
@@ -38,14 +38,66 @@
 <script>
 export default {
 	props: {
-		data: Object,
-    faqId: {},
-    index: {}
+		faqRec: Object,
+		currentCat: "",
+		faqId: {},
+		index: {}
 	},
 	// データ定義
 	data: function(){
 		return {
-			isOpened: false
+			isOpened: false,
+			addStr: "",
+		}
+	},
+	// 算出プロパティ
+	computed: {
+		// カテゴリが指定されていない場合は、topFlgが立っているもののみ表示
+		isTop: function () {
+			if( this.currentCat !== '' ) return true;
+			if( this.faqRec.topFlg == true ) {
+				return true;
+			}
+			return false;
+		},
+	},
+  mounted() {
+	//	console.log(faq.ADD);
+  },
+	// メソッド群
+	methods: {
+		// FAQへの追加質問を送信する（個別）
+		faqInputSingle: function() {
+			if( !this.isEmpty(this.addStr) ) {
+				var form = {};
+				form.addStr = this.addStr;
+				form.faqId  = this.faqId;
+				this.submit(this.getAPIPath()+'/faq_i_single/' + this.getMemberId(),form, function(response) {
+					this.result = response.data;
+					if( this.result != null ) {
+						this.$modal.show('dialog', {
+						  text: '質問を送信いたしました。<br>ありがとうございました。',
+						  buttons: [
+						    {title: 'OK'}
+						  ]
+						})
+					} else {
+						this.$modal.show('dialog', {
+							text: '通信が正常に完了しませんでした。電波の良いところで再度お試し下さい。',
+							buttons: [
+								{title: 'OK'}
+							]
+						});
+					}
+				}.bind(this));
+			} else {
+				this.$modal.show('dialog', {
+					text: '質問を入力してください。',
+					buttons: [
+						{title: 'OK'}
+					]
+				});
+			}
 		}
 	},
 }
