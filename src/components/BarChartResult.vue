@@ -115,15 +115,15 @@ export default {
         // legend を無理矢理追加
         // option と series の更新で2回呼ばれてしまうためここで数を見る
         const legendCount = [...this.$refs.chart.$el.querySelectorAll('.apexcharts-legend-series')].length
-        if(legendCount===2) return false
+        if(legendCount===3) return false
         const legends = this.$refs.chart.$el.querySelector('.apexcharts-legend')
         const legend = this.$refs.chart.$el.querySelector('.apexcharts-legend-series').cloneNode(true)
         legend.querySelector('.apexcharts-legend-marker').style.background = 'rgba(86, 206, 255, 1)'
         legend.querySelector('.apexcharts-legend-marker').style.borderColor = 'rgba(86, 206, 255, 1)'
         legend.querySelector('.apexcharts-legend-text').innerText = 'あなたの回答'
-        legend.setAttribute('rel', 2)
-        legend.querySelector('.apexcharts-legend-marker').setAttribute('rel', 2)
-        legend.querySelector('.apexcharts-legend-text').setAttribute('rel', 2)
+        legend.setAttribute('rel', 3)
+        legend.querySelector('.apexcharts-legend-marker').setAttribute('rel', 3)
+        legend.querySelector('.apexcharts-legend-text').setAttribute('rel', 3)
         legends.appendChild(legend)
         // path を無理矢理変更
         this.chartData.selectedNoList.forEach((v)=>{
