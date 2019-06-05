@@ -56,7 +56,7 @@ export default {
 		},
 	},
 	beforeDestroy: function () {
-		console.log('clearInterval');
+		//console.log('clearInterval');
 		clearInterval(this.intervalId); // 画面が変わったらインターバルを外す
 	},
 }
