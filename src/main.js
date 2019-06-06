@@ -54,10 +54,16 @@ Vue.use(VModal, { dialog: true, dynamic: true })
 // smooth scroll
 var VueScrollTo = require('vue-scrollto');
 Vue.use(VueScrollTo, {
- duration: 300,
- easing: "ease-in-out",
+  duration: 300,
+  easing: "ease-in-out",
   offset: -120,
 })
+
+// anime.js
+import anime from 'animejs'
+Vue.use((Vue, options) => {
+  Vue.prototype.$anime = anime
+});
 
 new Vue({
 	router,
