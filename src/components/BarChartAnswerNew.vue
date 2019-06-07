@@ -6,18 +6,12 @@
       </div>
       <div class="chart-yaxis-outer">
         <div class="chart-yaxis">
-          <span>0台<br>aaa<br>aaa<br>aaa<br>aaa<br>aaa<br>aaa</span>
-          <span>1～5台</span>
-          <span>6～9台</span>
-          <span>10台以上</span>
+          <span v-for="category in xaxis.categories">{{category}}</span>
         </div>
       </div>
       <div class="chart-series-outer">
         <svg class="chart-series" ref="series">
-            <rect :x="barStrokeWidth/2" y="10" width="0" height="70" stroke="red" :stroke-width="barStrokeWidth" fill="pink" />
-            <rect :x="barStrokeWidth/2" y="100" width="0" height="70" stroke="blue" :stroke-width="barStrokeWidth" fill="cyan" />
-            <rect :x="barStrokeWidth/2" y="190" width="0" height="70" stroke="red" :stroke-width="barStrokeWidth" fill="pink" />
-            <rect :x="barStrokeWidth/2" y="280" width="0" height="70" stroke="blue" :stroke-width="barStrokeWidth" fill="cyan" />
+          <rect v-for="i in series[0].length" :x="barStrokeWidth/2" :y="(seriesHeight/series[0].length)*(i-1)+(barStrokeWidth/2)+(seriesHeight/series[0].length*0.1)" width="0" :height="barHeight" :stroke-width="barStrokeWidth" :stroke="getBarStrokeColor(i-1)" :fill="getBarFillColor(i-1)" />
         </svg>
       </div>
     </div>
@@ -32,7 +26,8 @@ export default {
     height: {},
     showYourSelect: Boolean,
     chartIndex: {},
-    series: Array
+    series: Array,
+    xaxis: Object
   },
   data(){
     return{
@@ -51,7 +46,21 @@ export default {
   },
   computed: {
     barStrokeWidth: function(){
-      return 1
+      return 2
+    },
+    barHeight: function(){
+      const h = (this.seriesHeight/this.xaxis.categories.length)-(this.barStrokeWidth)-(this.seriesHeight/this.xaxis.categories.length*0.2)
+      if(h>0){
+        return h
+      }else{
+        return 0.1
+      }
+    },
+    barStrokeColor: function(){
+      return 'rgba(255,206, 86,1)'
+    },
+    barFillColor: function(){
+      return 'rgba(255,206, 86,0.2)'
     }
   },
   watch: {
@@ -60,9 +69,6 @@ export default {
     }
   },
   methods: {
-    getSeriesWidth: function(){
-      return this.$refs.series.width.baseVal.value
-    },
     setBarAnimation(){
       this.$anime({
         targets: '.chart-series rect',
@@ -73,6 +79,20 @@ export default {
         duration: 1000,
         delay: 500
       })
+    },
+    getBarStrokeColor(i){
+      if(this.chartData.selectedNoList.includes(i)){
+        return 'rgba( 86,206,255,1)'
+      }else{
+        return 'rgba(255,206, 86,1)'
+      }
+    },
+    getBarFillColor(i){
+      if(this.chartData.selectedNoList.includes(i)){
+        return 'rgba(86, 206,255,0.2)'
+      }else{
+        return 'rgba(255,206, 86,0.2)'
+      }
     }
   }
 }
@@ -103,7 +123,7 @@ export default {
   grid-template-rows: 1fr 1fr 1fr 1fr;
   height: 100%;
   span{
-    border: 1px solid #000;
+    // border: 1px solid #000;
     display: flex;
     align-items: center;
     justify-content: flex-end;

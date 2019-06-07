@@ -6,7 +6,7 @@
 				{{question.QUESTION_STR}}
 			</page-title>
 			<bar-chart-answer v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" chart-index="0" show-your-select />
-			<bar-chart-answer-new v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" :series="[question.chartList[0].aggregateList.site.sumList]" chart-index="0" show-your-select />
+			<bar-chart-answer-new v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" :series="[question.chartList[0].aggregateList.site.sumList]" :xaxis="{categories:question.answerList}" chart-index="0" show-your-select />
 			<button-area>
 				<!--<base-button text="前へ" @click="prevPage" />-->
 				<base-button text="次の質問へ" @click="nextPage" />
