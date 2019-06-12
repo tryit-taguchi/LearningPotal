@@ -72,7 +72,7 @@ export default {
 				console.log("GET ストレージからロード : " + url);
 				//alert.log(e);
 				var storage = localStorage.getItem(url);
-				if( !this.isEmpty(storage) ) {
+				if( storage != null && storage != "" ) {
 					cacheJson = JSON.parse(storage);
 					if( collback != null ) {
 						collback(cacheJson);
