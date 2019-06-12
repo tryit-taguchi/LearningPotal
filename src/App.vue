@@ -42,14 +42,17 @@ export default {
 		console.log(this.userCompany);
 		console.log(this.userName);
 		*/
+		this.serverInfo.imgLogo = "../assets/logo.png";
+		this.serverInfo.imgTitle = "../assets/title.png";
+		this.serverInfo.imgTopVisual = "../assets/top_visual.png";
 	},
 	methods: {
 		collback_ServerInfo: async function(response) {
 			// this.serverInfo 変数に共通サーバ情報を収納
 			this.serverInfo = response.data;
 			this.serverInfo.imgLogo = this.getUpfilesPath() + this.serverInfo.imgLogo;
-      this.serverInfo.imgTitle = this.getUpfilesPath() + this.serverInfo.imgTitle;
-      this.serverInfo.imgTopVisual = this.getUpfilesPath() + this.serverInfo.imgTopVisual;
+			this.serverInfo.imgTitle = this.getUpfilesPath() + this.serverInfo.imgTitle;
+			this.serverInfo.imgTopVisual = this.getUpfilesPath() + this.serverInfo.imgTopVisual;
 			this.headerViewFlg = true;
 			console.log("サーバの共通情報読み込み完了");
 			//console.log("アップファイルフォルダ : "+this.getUpfilesPath());

@@ -72,9 +72,18 @@ export default {
 				console.log("GET ストレージからロード : " + url);
 				//alert.log(e);
 				var storage = localStorage.getItem(url);
-				cacheJson = JSON.parse(storage);
-				if( collback != null ) {
-					collback(cacheJson);
+				if( !this.isEmpty(storage) ) {
+					cacheJson = JSON.parse(storage);
+					if( collback != null ) {
+						collback(cacheJson);
+					}
+				} else {
+					var result = window.confirm("電波の良い所で再度お試しください。\n画面を再読み込みしますか？");
+					if( result ) {
+						location.reload();
+					} else {
+						
+					}
 				}
 			});
 		},
