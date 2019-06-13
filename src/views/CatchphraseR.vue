@@ -44,7 +44,7 @@ export default {
 		}
 	},
 	created: function () {
-		console.log('-- '+this.pageType+'_s');
+		console.log('-- '+this.pageType+'_r');
 		// セッション情報の取得等
 		this.isLogin();
 		this.startSession(function () {
