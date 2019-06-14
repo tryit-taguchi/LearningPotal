@@ -5,14 +5,16 @@
       試乗①、試乗②、現車・競合車確認
     </page-title>
 		<div v-for="(sub,no) in clist">
-			<div style="font-size:150%" :id="'chart'+no">　{{sub.questionName}}</div>
-			<div class="graph" v-if="sub.chartViewFlg">
-				<radar-chart-reporting :width="412" :height="450" :chart-data="sub.chartData1" />
-				<radar-chart-reporting :width="412" :height="450" :chart-data="sub.chartData2" />
-			</div>
-      <button-area>
-        <base-button text="次へ" v-if="no<clist.length-1" v-scroll-to="'#chart'+(parseInt(no)+1)" />
-      </button-area>
+			<div>
+				<div style="font-size:150%" :id="'chart'+no">　{{sub.questionName}}</div>
+				<div class="graph" v-if="sub.chartViewFlg">
+					<radar-chart-reporting :width="412" :height="450" :chart-data="sub.chartData1" />
+					<radar-chart-reporting :width="412" :height="450" :chart-data="sub.chartData2" />
+				</div>
+	      <button-area>
+	        <base-button text="次へ" v-if="no<clist.length-1" v-scroll-to="'#chart'+(parseInt(no)+1)" />
+	      </button-area>
+	    </div>
 		</div>
 	</div>
 </template>
@@ -31,6 +33,7 @@ export default {
 					questionName: "",
 					questionHtml: "",
 					questionExplanation : "",
+					chartEnable: false,
 					chartList: {},
 					chartData1: { // グラフ１
 						valueMax: 5,
@@ -61,6 +64,7 @@ export default {
 					questionName: "",
 					questionHtml: "",
 					questionExplanation : "",
+					chartEnable: false,
 					chartList: {},
 					chartData1: { // グラフ１
 						valueMax: 5,
@@ -91,6 +95,7 @@ export default {
 					questionName: "",
 					questionHtml: "",
 					questionExplanation : "",
+					chartEnable: false,
 					chartList: {},
 					chartData1: { // グラフ１
 						valueMax: 5,
@@ -129,7 +134,7 @@ export default {
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
 		callback_getSession: function() {
-			// セッションを読み込み終わって状態を取得したら問題データを読み込む
+			// セッションを読み込み終わって状態を取得したら回答データを読み込む
 			for( var no in this.clist ) {
 				var sub = this.clist[no];
 				var pageType = sub.pageType;
@@ -142,9 +147,17 @@ export default {
 					this.chartData1.questionStr  = this.chartList.member.questionStr;
 					this.chartData1.answerList   = this.chartList.member.answerList;
 					this.chartData1.borderCount  = this.questionList[0].answerList.length;
+
+					if( this.chartList.member.aggregateList[0].valueList != null ) {
+						this.chartEnable = true;
+					}
 					for( var ano in this.questionList[0].answerList ) {
 						this.chartData1.valueName[ano] = this.chartList.member.aggregateList[ano].valueName;
-						this.chartData1.valueList[ano] = this.chartList.member.aggregateList[ano].valueList;
+						if( this.chartList.member.aggregateList[ano].valueList != null ) {
+							this.chartData1.valueList[ano] = this.chartList.member.aggregateList[ano].valueList;
+						} else {
+							this.chartData1.valueList[ano] = [0,0,0,0,0,0,0,0,0,0,];
+						}
 						this.chartData1.backgroundColor[ano] = this.chartList.member.aggregateList[ano].backgroundColor;
 						this.chartData1.borderColor[ano] = this.chartList.member.aggregateList[ano].borderColor;
 					}
@@ -154,10 +167,10 @@ export default {
 					this.chartData2.answerList   = this.chartList.site.answerList;
 					this.chartData2.borderCount  = this.questionList[0].answerList.length;
 					for( var ano in this.questionList[0].answerList ) {
-						this.chartData2.valueName[ano] = this.chartList.member.aggregateList[ano].valueName;
-						this.chartData2.valueList[ano] = this.chartList.member.aggregateList[ano].valueList;
-						this.chartData2.backgroundColor[ano] = this.chartList.member.aggregateList[ano].backgroundColor;
-						this.chartData2.borderColor[ano] = this.chartList.member.aggregateList[ano].borderColor;
+						this.chartData2.valueName[ano] = this.chartList.site.aggregateList[ano].valueName;
+						this.chartData2.valueList[ano] = this.chartList.site.aggregateList[ano].valueList;
+						this.chartData2.backgroundColor[ano] = this.chartList.site.aggregateList[ano].backgroundColor;
+						this.chartData2.borderColor[ano] = this.chartList.site.aggregateList[ano].borderColor;
 					}
 					this.chartViewFlg = true;
 				}.bind(sub));

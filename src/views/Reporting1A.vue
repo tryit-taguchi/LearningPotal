@@ -87,10 +87,10 @@ export default {
 			this.chartData2.answerList   = this.chartList.site.answerList;
 			this.chartData2.borderCount  = this.questionList[0].answerList.length;
 			for( var ano in this.questionList[0].answerList ) {
-				this.chartData2.valueName[ano] = this.chartList.member.aggregateList[ano].valueName;
-				this.chartData2.valueList[ano] = this.chartList.member.aggregateList[ano].valueList;
-				this.chartData2.backgroundColor[ano] = this.chartList.member.aggregateList[ano].backgroundColor;
-				this.chartData2.borderColor[ano] = this.chartList.member.aggregateList[ano].borderColor;
+				this.chartData2.valueName[ano] = this.chartList.site.aggregateList[ano].valueName;
+				this.chartData2.valueList[ano] = this.chartList.site.aggregateList[ano].valueList;
+				this.chartData2.backgroundColor[ano] = this.chartList.site.aggregateList[ano].backgroundColor;
+				this.chartData2.borderColor[ano] = this.chartList.site.aggregateList[ano].borderColor;
 			}
 
 			this.chartViewFlg = true;

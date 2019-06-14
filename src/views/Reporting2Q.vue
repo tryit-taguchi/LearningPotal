@@ -66,7 +66,7 @@ export default {
 					}
 				}
 			}
-			if( this.freeComment == "" ) {
+			if( this.isEmpty(this.freeComment) ) {
 				this.$modal.show('dialog', {
 					text: '未入力のフリーコメントがありますが、回答を完了しますか？',
 					buttons: [
