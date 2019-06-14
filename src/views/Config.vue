@@ -23,6 +23,10 @@
       <div class="question-button">
         <base-button text="ログアウト" @click="logout" />
       </div>
+      <br>
+      <div class="question-button">
+        <base-button text="本日用データ生成" @click="testData" />
+      </div>
     </main>
   </div>
 </template>
@@ -113,6 +117,13 @@ export default {
 			setTimeout(function() {
 				this.infoMessageViewFlg = false;
 			}.bind(this), 2000);
+		},
+		// テストデータ生成
+		testData: function() {
+			// セッションを読み込み終わって状態を取得したら問題データを読み込む
+			this.getJson(this.getAPIPath()+'/createtestdata',function () {
+				alert("テストデータ用のセッティングをしました。");
+			});
 		},
 	}
 }
