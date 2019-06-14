@@ -2,17 +2,54 @@
   <div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff',margin:'10px auto 0'}">
     <div class="chart-outer">
       <div class="chart-header-outer">
-        ヘッダー
+        <div class="chart-header-title">
+          {{chartOptions.title.text}}
+        </div>
+        <div class="chart-header-legend">
+          <span v-for="(series, seriesIndex) in chartOptions.series">
+            <span :style="{color: chartOptions.stroke.colors[seriesIndex]}">■</span>
+            <span>{{series.name}}</span>
+          </span>
+        </div>
       </div>
       <div class="chart-yaxis-outer">
         <div class="chart-yaxis">
-          <span v-for="category in xaxis.categories">{{category}}</span>
+          <span v-for="category in chartOptions.xaxis.categories">{{category}}</span>
         </div>
       </div>
       <div class="chart-series-outer">
-        <svg class="chart-series" ref="series">
-          <rect v-for="i in series[0].length" :x="barStrokeWidth/2" :y="(seriesHeight/series[0].length)*(i-1)+(barStrokeWidth/2)+(seriesHeight/series[0].length*0.1)" width="0" :height="barHeight" :stroke-width="barStrokeWidth" :stroke="getBarStrokeColor(i-1)" :fill="getBarFillColor(i-1)" />
-        </svg>
+        <div class="chart-series" ref="series">
+          <div class="chart-series-category" v-for="(category,categoryIndex) in chartOptions.xaxis.categories">
+            <div class="chart-series-stack" v-for="stack in chartOptions.stack">
+              <div
+                class="chart-series-bar-outer"
+                v-for="seriesId in stack.series"
+                :data-series-id="seriesId"
+                :data-category-index="categoryIndex"
+                :style="{
+                  width:'0%',
+                  height:'100%'
+                }"
+              >
+                <div
+                  class="chart-series-bar"
+                  :style="{
+                    borderWidth:'2px',
+                    borderStyle:'solid',
+                    borderColor: chartOptions.stroke.colors[seriesId],
+                    backgroundColor: chartOptions.fill.colors[seriesId]
+                  }"
+                >{{chartOptions.series[seriesId].data[categoryIndex]}}</div>
+              </div>
+            </div>
+          </div>
+<!--
+          <div v-for="stack in chartOptions.stack">
+            {{stack.name}}
+          </div>
+          <div v-for="i in series[0].length" :style="{margin:'10px 0',width:'0',height:'100%',border:'2px solid #000'}"></div>
+-->
+        </div>
       </div>
     </div>
   </div>
@@ -21,79 +58,58 @@
 <script>
 export default {
   props: {
-    chartData: {},
+    chartOptions: {type: Object},
     width: {},
     height: {},
-    showYourSelect: Boolean,
-    chartIndex: {},
-    series: Array,
-    xaxis: Object
   },
   data(){
     return{
-      seriesWidth: 0,
-      seriesHeight: 0,
-      seriesMaxValue: []
+      seriesAreaWidth: 0,
+      seriesAreaHeight: 0,
     }
   },
   mounted() {
-    this.seriesWidth = this.$refs.series.width.baseVal.value;
-    this.seriesHeight = this.$refs.series.height.baseVal.value;
-    this.series.forEach((v)=>{
-      this.seriesMaxValue.push(Math.max(...v))
-    })
+    this.seriesAreaWidth = this.$refs.series.offsetWidth;
+    this.seriesAreaHeight = this.$refs.series.offsetHeight;
     this.setBarAnimation()
   },
   computed: {
-    barStrokeWidth: function(){
-      return 2
-    },
-    barHeight: function(){
-      const h = (this.seriesHeight/this.xaxis.categories.length)-(this.barStrokeWidth)-(this.seriesHeight/this.xaxis.categories.length*0.2)
-      if(h>0){
-        return h
-      }else{
-        return 0.1
-      }
-    },
-    barStrokeColor: function(){
-      return 'rgba(255,206, 86,1)'
-    },
-    barFillColor: function(){
-      return 'rgba(255,206, 86,0.2)'
+    seriesMaxValue: function(){
+      const sumArray = []
+      this.chartOptions.stack.forEach((stack,stackIndex)=>{
+        // stack.series = [1,2]
+        const l = this.chartOptions.xaxis.categories.length
+        for(let i=0;i<l;i++){
+          sumArray[stackIndex*l+i] = 0
+          stack.series.forEach(seriesId=>{
+            sumArray[stackIndex*l+i] += this.chartOptions.series[seriesId].data[i]
+          })
+        }
+      })
+      return Math.max(...sumArray)
     }
   },
   watch: {
-    series: function(){
-      this.setBarAnimation()
+    'chartOptions': {
+      handler:  function(){
+        console.log('changed')
+        setTimeout(this.setBarAnimation, 0)
+      },
+      deep: true
     }
   },
   methods: {
     setBarAnimation(){
       this.$anime({
-        targets: '.chart-series rect',
+        targets: '.chart-series-bar-outer',
         width: (el,i)=>{
-          return ( this.seriesWidth - this.barStrokeWidth ) * this.series[0][i] / this.seriesMaxValue[0];
+          return ( this.chartOptions.series[el.getAttribute('data-series-id')].data[el.getAttribute('data-category-index')] / this.seriesMaxValue * 100 )+'%'
         },
-        round: 1,
         duration: 1000,
-        delay: 500
+        delay: 0,
+        easing: 'easeOutQuint'
       })
     },
-    getBarStrokeColor(i){
-      if(this.chartData.selectedNoList.includes(i)){
-        return 'rgba( 86,206,255,1)'
-      }else{
-        return 'rgba(255,206, 86,1)'
-      }
-    },
-    getBarFillColor(i){
-      if(this.chartData.selectedNoList.includes(i)){
-        return 'rgba(86, 206,255,0.2)'
-      }else{
-        return 'rgba(255,206, 86,0.2)'
-      }
-    }
   }
 }
 </script>
@@ -102,16 +118,24 @@ export default {
 .chart-outer{
   width: 100%;
   height: 100%;
-  background-color: #ccc;
   display: grid;
   grid-template-columns: max-content 1fr;
   grid-template-rows: max-content 1fr;
   grid-template-areas: "header header" "yaxis series";
   grid-gap: 10px;
   padding: 10px;
+  user-select: none;
 }
 .chart-header-outer{
   grid-area: header;
+}
+.chart-header-title{
+  text-align: center;
+  font-size: 20px;
+}
+.chart-header-legend{
+  text-align: center;
+  font-size: 12px;
 }
 .chart-yaxis-outer{
   grid-area: yaxis;
@@ -134,77 +158,45 @@ export default {
 }
 .chart-series-outer{
   grid-area: series;
+  overflow: hidden;
 }
 .chart-series{
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
-
-      .apexcharts-legend {
-        display: flex;
-        overflow: auto;
-        padding: 0 10px;
-      }
-
-      .apexcharts-legend.position-bottom, .apexcharts-legend.position-top {
-        flex-wrap: wrap
-      }
-      .apexcharts-legend.position-right, .apexcharts-legend.position-left {
-        flex-direction: column;
-        bottom: 0;
-      }
-
-      .apexcharts-legend.position-bottom.left, .apexcharts-legend.position-top.left, .apexcharts-legend.position-right, .apexcharts-legend.position-left {
-        justify-content: flex-start;
-      }
-
-      .apexcharts-legend.position-bottom.center, .apexcharts-legend.position-top.center {
-        justify-content: center;  
-      }
-
-      .apexcharts-legend.position-bottom.right, .apexcharts-legend.position-top.right {
-        justify-content: flex-end;
-      }
-
-      .apexcharts-legend-series {
-        cursor: pointer;
-        line-height: normal;
-      }
-
-      .apexcharts-legend.position-bottom .apexcharts-legend-series, .apexcharts-legend.position-top .apexcharts-legend-series{
-        display: flex;
-        align-items: center;
-      }
-
-      .apexcharts-legend-text {
-        position: relative;
-        font-size: 14px;
-      }
-
-      .apexcharts-legend-text *, .apexcharts-legend-marker * {
-        pointer-events: none;
-      }
-
-      .apexcharts-legend-marker {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-        margin-right: 3px;
-      }
-      
-      .apexcharts-legend.right .apexcharts-legend-series, .apexcharts-legend.left .apexcharts-legend-series{
-        display: inline-block;
-      }
-
-      .apexcharts-legend-series.no-click {
-        cursor: auto;
-      }
-
-      .apexcharts-legend .apexcharts-hidden-zero-series, .apexcharts-legend .apexcharts-hidden-null-series {
-        display: none !important;
-      }
-
-      .inactive-legend {
-        opacity: 0.45;
-      }
+.chart-series-category{
+  flex: 0 1 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0;
+}
+.chart-series-stack{
+  flex: 0 1 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  &+&{
+    margin-top: 2px;
+  }
+}
+.chart-series-bar-outer{
+  flex: 0 0 auto;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.chart-series-bar{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 .5em;
+  font-size: 12px;
+}
 </style>

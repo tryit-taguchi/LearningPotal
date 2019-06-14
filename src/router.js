@@ -212,6 +212,10 @@ export default new Router({
       component: () => import('./views/Config.vue')
     },
     {
+      path: '/barcharttest',
+      component: () => import('./views/BarChartTest.vue')
+    },
+    {
       path: '*',
       component: () => import('./views/Error404.vue')
     }

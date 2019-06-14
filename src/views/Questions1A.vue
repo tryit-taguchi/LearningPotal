@@ -5,8 +5,8 @@
 				<template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
 				{{question.QUESTION_STR}}
 			</page-title>
-			<bar-chart-answer v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" chart-index="0" show-your-select />
-			<bar-chart-answer-new v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" :series="[question.chartList[0].aggregateList.site.sumList]" :xaxis="{categories:question.answerList}" chart-index="0" show-your-select />
+			<!-- <bar-chart-answer v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" chart-index="0" show-your-select /> -->
+			<bar-chart-answer-new v-if="chartViewFlg" :width="824" :height="400" :chart-options="barChartOptions" :series="[question.chartList[0].aggregateList.site.sumList]" :xaxis="{categories:question.answerList}" chart-index="0" show-your-select />
 			<button-area>
 				<!--<base-button text="前へ" @click="prevPage" />-->
 				<base-button text="次の質問へ" @click="nextPage" />
@@ -87,6 +87,45 @@ export default {
 			this.chartViewFlg = true;
 			this.$forceUpdate();
 		},
+	},
+	computed: {
+		barChartOptions: function(){
+			return {
+				stroke: {
+					colors: [
+						this.questionList[0].chartList[0].aggregateList.site.borderColor,
+						this.questionList[0].chartList[0].aggregateList.member.borderColor,
+					]
+				},
+				fill: {
+					colors: [
+						this.questionList[0].chartList[0].aggregateList.site.backgroundColor,
+						this.questionList[0].chartList[0].aggregateList.member.backgroundColor,
+					]
+				},
+				series: [
+					{
+						name: this.questionList[0].chartList[0].aggregateList.site.valueName,
+						data: this.questionList[0].chartList[0].aggregateList.site.sumList.map((v,i)=>this.questionList[0].chartList[0].aggregateList.member.selectedNoList.includes(i)?0:v),
+					},{
+						name: this.questionList[0].chartList[0].aggregateList.member.valueName,
+						data: this.questionList[0].chartList[0].aggregateList.site.sumList.map((v,i)=>this.questionList[0].chartList[0].aggregateList.member.selectedNoList.includes(i)?v:0),
+					},
+				],
+				stack: [
+					{
+						name: 'stack1',
+						series: [0,1]
+					}
+				],
+				title: {
+					text: this.questionList[0].questionStr
+				},
+				xaxis: {
+					categories: this.questionList[0].answerList,
+				}
+			}
+		}
 	},
 	beforeDestroy: function () {
 		//console.log('clearInterval');
