@@ -32,6 +32,7 @@ export default {
 					tickAmount: 5,
 					min:0,
 					max:5,
+					decimalsInFloat: 0
 				},
 				legend: {
 					position: 'top',
@@ -51,7 +52,7 @@ export default {
 			for(let i=0;i<l;++i){
 				series[i] = {};
 				series[i].name = this.chartData.valueName[i];
-				series[i].data = this.chartData.valueList[i].map(v=>parseInt(v));
+				series[i].data = this.chartData.valueList[i];
 			}
 			return series
 		},
