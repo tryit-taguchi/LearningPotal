@@ -5,8 +5,7 @@
         <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
         {{question.QUESTION_STR}}
       </page-title>
-      <!-- <bar-chart-answer v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" chart-index="0" show-your-select /> -->
-			<bar-chart-answer-new v-if="chartViewFlg" :width="824" :height="400" :chart-options="barChartOptions" />
+			<bar-chart v-if="chartViewFlg" :width="824" :height="400" :chart-options="barChartOptions" />
       <button-area>
         <base-button text="前へ" @click="prevPage" />
         <base-button text="次へ" @click="nextPage" v-if="questionNo<question.QUESTION_CNT" />

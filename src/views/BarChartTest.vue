@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<bar-chart-answer-new :width="824" :height="400" :chart-options="barChartOptions" />
+		<bar-chart :width="824" :height="400" :chart-options="barChartOptions" />
 		<input type="text" v-model="testTitle">
 		<table>
 			<tr>

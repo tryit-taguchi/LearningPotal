@@ -5,8 +5,7 @@
         <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
         {{question.QUESTION_STR}}
       </page-title>
-      <!-- <bar-chart-result v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" chart-index="0" show-your-select /> -->
-      <bar-chart-answer-new v-if="chartViewFlg" :width="824" :height="400" :chart-options="barChartOptions[index]" />
+      <bar-chart v-if="chartViewFlg" :width="824" :height="400" :chart-options="barChartOptions[index]" />
     </template>
   </div>
 </template>
