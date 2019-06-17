@@ -1,14 +1,19 @@
-<template><!-- 「全国平均」なしの棒グラフ／タイトルあり -->
+<template>
   <div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff',margin:'10px auto 0'}">
     <div class="chart-outer">
       <div class="chart-header-outer">
-        <div class="chart-header-title">
+        <div v-if="chartOptions.title.text" class="chart-header-title">
           {{chartOptions.title.text}}
         </div>
-        <div class="chart-header-legend">
-          <span v-for="(series, seriesIndex) in chartOptions.series">
-            <span :style="{color: chartOptions.stroke.colors[seriesIndex]}">■</span>
-            <span>{{series.name}}</span>
+        <div class="chart-header-legends">
+          <span v-for="(series, seriesIndex) in chartOptions.series" class="chart-header-legend">
+            <span
+              class="chart-header-legend-marker"
+              :style="{
+                backgroundColor: chartOptions.stroke.colors[seriesIndex]
+              }"
+            ></span>
+            <span class="chart-header-legend-text">{{series.name}}</span>
           </span>
         </div>
       </div>
@@ -19,7 +24,7 @@
       </div>
       <div class="chart-series-outer">
         <div class="chart-series" ref="series">
-          <div class="chart-series-category" v-for="(category,categoryIndex) in chartOptions.xaxis.categories">
+          <div class="chart-series-category" :style="{margin:xaxisGap+' 0'}" v-for="(category,categoryIndex) in chartOptions.xaxis.categories">
             <div class="chart-series-stack" v-for="stack in chartOptions.stack">
               <div
                 class="chart-series-bar-outer"
@@ -34,21 +39,15 @@
                 <div
                   class="chart-series-bar"
                   :style="{
-                    borderWidth:'2px',
+                    borderWidth: strokeWidth,
                     borderStyle:'solid',
                     borderColor: chartOptions.stroke.colors[seriesId],
                     backgroundColor: chartOptions.fill.colors[seriesId]
                   }"
-                >{{chartOptions.series[seriesId].data[categoryIndex]}}</div>
+                >{{chartOptions.series[seriesId].data[categoryIndex]}}{{chartOptions.dataLabels.suffix}}</div>
               </div>
             </div>
           </div>
-<!--
-          <div v-for="stack in chartOptions.stack">
-            {{stack.name}}
-          </div>
-          <div v-for="i in series[0].length" :style="{margin:'10px 0',width:'0',height:'100%',border:'2px solid #000'}"></div>
--->
         </div>
       </div>
     </div>
@@ -87,7 +86,13 @@ export default {
         }
       })
       return Math.max(...sumArray)
-    }
+    },
+    strokeWidth: function(){
+      return '2px'
+    },
+    xaxisGap: function(){
+      return this.chartOptions.xaxis.gap || '10px'
+    },
   },
   watch: {
     'chartOptions': {
@@ -101,7 +106,7 @@ export default {
   methods: {
     setBarAnimation(){
       this.$anime({
-        targets: '.chart-series-bar-outer',
+        targets: this.$refs.series.querySelectorAll('.chart-series-bar-outer'),
         width: (el,i)=>{
           return ( this.chartOptions.series[el.getAttribute('data-series-id')].data[el.getAttribute('data-category-index')] / this.seriesMaxValue * 100 )+'%'
         },
@@ -133,9 +138,22 @@ export default {
   text-align: center;
   font-size: 20px;
 }
-.chart-header-legend{
+.chart-header-legends{
   text-align: center;
   font-size: 12px;
+}
+.chart-header-legend{
+  &+&{
+    margin-left: 1em;
+  }
+}
+.chart-header-legend-marker{
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: .3em;
 }
 .chart-yaxis-outer{
   grid-area: yaxis;
@@ -144,10 +162,9 @@ export default {
 .chart-yaxis{
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-auto-rows: 1fr;
   height: 100%;
   span{
-    // border: 1px solid #000;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -172,7 +189,6 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  margin: 10px 0;
 }
 .chart-series-stack{
   flex: 0 1 100%;
@@ -180,6 +196,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: row;
+  box-shadow: inset 2px 0 0 0 #999;
   &+&{
     margin-top: 2px;
   }

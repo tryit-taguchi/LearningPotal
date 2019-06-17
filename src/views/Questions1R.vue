@@ -5,7 +5,8 @@
         <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
         {{question.QUESTION_STR}}
       </page-title>
-      <bar-chart-result v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" chart-index="0" />
+      <!-- <bar-chart-result v-if="chartViewFlg" :width="824" :height="400" :chart-data="question" chart-index="0" /> -->
+      <bar-chart-answer-new v-if="chartViewFlg" :width="824" :height="400" :chart-options="barChartOptions[index]" />
       <button-area>
         <base-button text="次へ" v-if="question.QUESTION_NO<questionCnt" v-scroll-to="'#question'+(parseInt(question.QUESTION_NO)+1)" />
       </button-area>
@@ -68,7 +69,181 @@ export default {
 		onClick: function(e){
 			e.preventDefault()
 		}
-	}
+	},
+	computed: {
+		barChartOptions: function(){
+			return [
+				{
+					stroke: {
+						colors: [
+							this.questionList[0].chartList[0].aggregateList.site.borderColor,
+							this.questionList[0].chartList[0].aggregateList.total.borderColor,
+						]
+					},
+					fill: {
+						colors: [
+							this.questionList[0].chartList[0].aggregateList.site.backgroundColor,
+							this.questionList[0].chartList[0].aggregateList.total.backgroundColor,
+						]
+					},
+					series: [
+						{
+							name: this.questionList[0].chartList[0].aggregateList.site.valueName,
+							data: this.questionList[0].chartList[0].aggregateList.site.valueList,
+						},{
+							name: this.questionList[0].chartList[0].aggregateList.total.valueName,
+							data: this.questionList[0].chartList[0].aggregateList.total.valueList,
+						},
+					],
+					stack: [
+						{
+							name: 'stack1',
+							series: [0]
+						},
+						{
+							name: 'stack2',
+							series: [1]
+						}
+					],
+					title: {
+						text: null
+					},
+					xaxis: {
+						categories: this.questionList[0].answerList,
+					},
+					dataLabels: {
+						suffix: '%'
+					}
+				},
+				{
+					stroke: {
+						colors: [
+							this.questionList[1].chartList[0].aggregateList.site.borderColor,
+							this.questionList[1].chartList[0].aggregateList.total.borderColor,
+						]
+					},
+					fill: {
+						colors: [
+							this.questionList[1].chartList[0].aggregateList.site.backgroundColor,
+							this.questionList[1].chartList[0].aggregateList.total.backgroundColor,
+						]
+					},
+					series: [
+						{
+							name: this.questionList[1].chartList[0].aggregateList.site.valueName,
+							data: this.questionList[1].chartList[0].aggregateList.site.valueList,
+						},{
+							name: this.questionList[1].chartList[0].aggregateList.total.valueName,
+							data: this.questionList[1].chartList[0].aggregateList.total.valueList,
+						},
+					],
+					stack: [
+						{
+							name: 'stack1',
+							series: [0]
+						},
+						{
+							name: 'stack2',
+							series: [1]
+						}
+					],
+					title: {
+						text: null
+					},
+					xaxis: {
+						categories: this.questionList[1].answerList,
+					},
+					dataLabels: {
+						suffix: '%'
+					}
+				},
+				{
+					stroke: {
+						colors: [
+							this.questionList[2].chartList[0].aggregateList.site.borderColor,
+							this.questionList[2].chartList[0].aggregateList.total.borderColor,
+						]
+					},
+					fill: {
+						colors: [
+							this.questionList[2].chartList[0].aggregateList.site.backgroundColor,
+							this.questionList[2].chartList[0].aggregateList.total.backgroundColor,
+						]
+					},
+					series: [
+						{
+							name: this.questionList[2].chartList[0].aggregateList.site.valueName,
+							data: this.questionList[2].chartList[0].aggregateList.site.valueList,
+						},{
+							name: this.questionList[2].chartList[0].aggregateList.total.valueName,
+							data: this.questionList[2].chartList[0].aggregateList.total.valueList,
+						},
+					],
+					stack: [
+						{
+							name: 'stack1',
+							series: [0]
+						},
+						{
+							name: 'stack2',
+							series: [1]
+						}
+					],
+					title: {
+						text: null
+					},
+					xaxis: {
+						categories: this.questionList[2].answerList,
+					},
+					dataLabels: {
+						suffix: '%'
+					}
+				},
+				{
+					stroke: {
+						colors: [
+							this.questionList[3].chartList[0].aggregateList.site.borderColor,
+							this.questionList[3].chartList[0].aggregateList.total.borderColor,
+						]
+					},
+					fill: {
+						colors: [
+							this.questionList[3].chartList[0].aggregateList.site.backgroundColor,
+							this.questionList[3].chartList[0].aggregateList.total.backgroundColor,
+						]
+					},
+					series: [
+						{
+							name: this.questionList[3].chartList[0].aggregateList.site.valueName,
+							data: this.questionList[3].chartList[0].aggregateList.site.valueList,
+						},{
+							name: this.questionList[3].chartList[0].aggregateList.total.valueName,
+							data: this.questionList[3].chartList[0].aggregateList.total.valueList,
+						},
+					],
+					stack: [
+						{
+							name: 'stack1',
+							series: [0]
+						},
+						{
+							name: 'stack2',
+							series: [1]
+						}
+					],
+					title: {
+						text: null
+					},
+					xaxis: {
+						categories: this.questionList[3].answerList,
+					},
+					dataLabels: {
+						suffix: '%'
+					}
+				},
+			]
+		}
+	},
 }
 </script>
 
