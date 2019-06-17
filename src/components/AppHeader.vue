@@ -7,16 +7,19 @@
       </router-link>
       <!-- adminFlgが立っている場合は、タイトルタップでコンフィグモードに -->
       <div class="title" v-if="adminFlg">
-        <!-- <img src="../assets/title.svg" width="640" alt="CMC GROUP Learning Portal"> -->
+        <!-- <img src="../assets/title.svg" width="640" alt="Learning Portal"> -->
         <router-link to="/config">
           <img :src="imgTitle" width="50%" alt="Learning Portal">
         </router-link>
         <!--Learning Portal-->
       </div>
-      <!-- 通常はタイトルタップは無反応 -->
+      <!-- 通常はタイトルタップは無反応（とりあえず今は反応状態にする） -->
       <div class="title" v-else>
-        <!-- <img src="../assets/title.svg" width="640" alt="CMC GROUP Learning Portal"> -->
-        <img :src="imgTitle" width="50%" alt="Learning Portal">
+        <!-- <img src="../assets/title.svg" width="640" alt="Learning Portal"> -->
+        <router-link to="/config">
+          <img :src="imgTitle" width="50%" alt="Learning Portal">
+        </router-link>
+        <!--<img :src="imgTitle" width="50%" alt="Learning Portal">-->
         <!--Learning Portal-->
       </div>
       <span class="username" v-if="userName != ''">ようこそ！ {{userCompany}} {{userName}}さん</span>

@@ -48,7 +48,7 @@ export default {
 		// 次の質問へ
 		nextPage: function(e){
 			this.$parent.session.question_atr[this.pageType].currentQuestionNo++;
-			if( this.$parent.session.question_atr[this.pageType].currentQuestionNo < this.$parent.session.question_atr[this.pageType].QUESTION_CNT ) {
+			if( this.$parent.session.question_atr[this.pageType].currentQuestionNo <= this.$parent.session.question_atr[this.pageType].QUESTION_CNT ) {
 				this.jump({ name: this.pageType+'_q' });
 			} else {
 				this.$parent.session.question_atr[this.pageType].QUESTION_COMPLETE = true;

@@ -5,7 +5,8 @@
         <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
         {{question.QUESTION_STR}}
       </page-title>
-      <bar-chart v-if="chartViewFlg" :width="824" :height="400" :chart-options="barChartOptions[index]" />
+      <bar-chart v-if="chartViewFlg" :width="412" :height="400" :chart-options="barChartOptions[index][0]" />
+      <bar-chart v-if="chartViewFlg" :width="412" :height="400" :chart-options="barChartOptions[index][1]" />
       <button-area>
         <base-button text="次へ" v-if="question.QUESTION_NO<questionCnt" v-scroll-to="'#question'+(parseInt(question.QUESTION_NO)+1)" />
       </button-area>
@@ -68,134 +69,59 @@ export default {
 	},
 	computed: {
 		barChartOptions: function(){
-			return [
-				{
-					stroke: {
-						colors: [
-							this.questionList[0].chartList[0].aggregateList.site.borderColor,
-							this.questionList[0].chartList[0].aggregateList.total.borderColor,
-						]
-					},
-					fill: {
-						colors: [
-							this.questionList[0].chartList[0].aggregateList.site.backgroundColor,
-							this.questionList[0].chartList[0].aggregateList.total.backgroundColor,
-						]
-					},
-					series: [
-						{
-							name: this.questionList[0].chartList[0].aggregateList.site.valueName,
-							data: this.questionList[0].chartList[0].aggregateList.site.valueList,
-						},{
-							name: this.questionList[0].chartList[0].aggregateList.total.valueName,
-							data: this.questionList[0].chartList[0].aggregateList.total.valueList,
+			var clist = [];
+			// 問題毎
+			for( var qno=0; qno < this.questionList.length; qno++ ) {
+				var glist = [];
+				// 左右
+				for(var tno=0; tno < 2; tno++ ) {
+					var chart = {
+						stroke: {
+							colors: [
+								this.questionList[qno].chartList[tno].aggregateList.site.borderColor,
+								this.questionList[qno].chartList[tno].aggregateList.total.borderColor,
+							]
 						},
-					],
-					stack: [
-						{
-							name: 'stack1',
-							series: [0]
+						fill: {
+							colors: [
+								this.questionList[qno].chartList[tno].aggregateList.site.backgroundColor,
+								this.questionList[qno].chartList[tno].aggregateList.total.backgroundColor,
+							]
 						},
-						{
-							name: 'stack2',
-							series: [1]
+						series: [
+							{
+								name: this.questionList[qno].chartList[tno].aggregateList.site.valueName,
+								data: this.questionList[qno].chartList[tno].aggregateList.site.valueList,
+							},{
+								name: this.questionList[qno].chartList[tno].aggregateList.total.valueName,
+								data: this.questionList[qno].chartList[tno].aggregateList.total.valueList,
+							},
+						],
+						stack: [
+							{
+								name: 'stack1',
+								series: [0]
+							},
+							{
+								name: 'stack2',
+								series: [1]
+							}
+						],
+						title: {
+							text: this.questionList[qno].chartList[tno].questionStr
+						},
+						xaxis: {
+							categories: this.questionList[qno].answerShortList,
+						},
+						dataLabels: {
+							suffix: '%'
 						}
-					],
-					title: {
-						text: null
-					},
-					xaxis: {
-						categories: this.questionList[0].answerList,
-					},
-					dataLabels: {
-						suffix: '%'
-					}
-				},
-				{
-					stroke: {
-						colors: [
-							this.questionList[1].chartList[0].aggregateList.site.borderColor,
-							this.questionList[1].chartList[0].aggregateList.total.borderColor,
-						]
-					},
-					fill: {
-						colors: [
-							this.questionList[1].chartList[0].aggregateList.site.backgroundColor,
-							this.questionList[1].chartList[0].aggregateList.total.backgroundColor,
-						]
-					},
-					series: [
-						{
-							name: this.questionList[1].chartList[0].aggregateList.site.valueName,
-							data: this.questionList[1].chartList[0].aggregateList.site.valueList,
-						},{
-							name: this.questionList[1].chartList[0].aggregateList.total.valueName,
-							data: this.questionList[1].chartList[0].aggregateList.total.valueList,
-						},
-					],
-					stack: [
-						{
-							name: 'stack1',
-							series: [0]
-						},
-						{
-							name: 'stack2',
-							series: [1]
-						}
-					],
-					title: {
-						text: null
-					},
-					xaxis: {
-						categories: this.questionList[1].answerList,
-					},
-					dataLabels: {
-						suffix: '%'
-					}
-				},
-				{
-					stroke: {
-						colors: [
-							this.questionList[2].chartList[0].aggregateList.site.borderColor,
-							this.questionList[2].chartList[0].aggregateList.total.borderColor,
-						]
-					},
-					fill: {
-						colors: [
-							this.questionList[2].chartList[0].aggregateList.site.backgroundColor,
-							this.questionList[2].chartList[0].aggregateList.total.backgroundColor,
-						]
-					},
-					series: [
-						{
-							name: this.questionList[2].chartList[0].aggregateList.site.valueName,
-							data: this.questionList[2].chartList[0].aggregateList.site.valueList,
-						},{
-							name: this.questionList[2].chartList[0].aggregateList.total.valueName,
-							data: this.questionList[2].chartList[0].aggregateList.total.valueList,
-						},
-					],
-					stack: [
-						{
-							name: 'stack1',
-							series: [0]
-						},
-						{
-							name: 'stack2',
-							series: [1]
-						}
-					],
-					title: {
-						text: null
-					},
-					xaxis: {
-						categories: this.questionList[2].answerList,
-					},
-					dataLabels: {
-						suffix: '%'
-					}
-				},
-			]
+					};
+					glist.push(chart);
+				}
+				clist.push(glist);
+			}
+			return clist;
 		}
 	},
 }
