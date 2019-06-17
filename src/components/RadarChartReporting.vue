@@ -51,7 +51,7 @@ export default {
 			for(let i=0;i<l;++i){
 				series[i] = {};
 				series[i].name = this.chartData.valueName[i];
-				series[i].data = this.chartData.valueList[i];
+				series[i].data = this.chartData.valueList[i].map(v=>parseInt(v));
 			}
 			return series
 		},
