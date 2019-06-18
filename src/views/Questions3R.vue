@@ -1,17 +1,19 @@
 <template>
-  <div>
-    <template v-for="(question, index) in questionList">
-      <page-title :before-text="index===0?questionName:''" :id="'question'+question.QUESTION_NO">
-        <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
-        {{question.QUESTION_STR}}
-      </page-title>
-      <bar-chart v-if="chartViewFlg" :width="412" :height="400" :chart-options="barChartOptions[index][0]" />
-      <bar-chart v-if="chartViewFlg" :width="412" :height="400" :chart-options="barChartOptions[index][1]" />
-      <button-area>
-        <base-button text="次へ" v-if="question.QUESTION_NO<questionCnt" v-scroll-to="'#question'+(parseInt(question.QUESTION_NO)+1)" />
-      </button-area>
-    </template>
-  </div>
+	<div>
+		<template v-for="(question, index) in questionList">
+			<page-title :before-text="index===0?questionName:''" :id="'question'+question.QUESTION_NO">
+				<template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
+				{{question.QUESTION_STR}}
+			</page-title>
+			<div class="graph">
+				<bar-chart v-if="chartViewFlg" :width="412" :height="400" :chart-options="barChartOptions[index][0]" />
+				<bar-chart v-if="chartViewFlg" :width="412" :height="400" :chart-options="barChartOptions[index][1]" />
+			</div>
+			<button-area>
+				<base-button text="次へ" v-if="question.QUESTION_NO<questionCnt" v-scroll-to="'#question'+(parseInt(question.QUESTION_NO)+1)" />
+			</button-area>
+		</template>
+	</div>
 </template>
 
 <script>
@@ -128,5 +130,11 @@ export default {
 </script>
 
 <style lang="scss">
-
+.graph{
+	width: 834px;
+	display: flex;
+	justify-content: space-between;
+	margin: 10px auto 0;
+	background-color: #fff;
+}
 </style>
