@@ -68,27 +68,29 @@ export default {
 	},
 	computed: {
 		barChartOptions: function(){
-			return [
-				{
+			var clist = [];
+			// 問題毎
+			for( var qno=0; qno < this.questionList.length; qno++ ) {
+				var chart = {
 					stroke: {
 						colors: [
-							this.questionList[0].chartList[0].aggregateList.site.borderColor,
-							this.questionList[0].chartList[0].aggregateList.total.borderColor,
+							this.questionList[qno].chartList[0].aggregateList.site.borderColor,
+							this.questionList[qno].chartList[0].aggregateList.total.borderColor,
 						]
 					},
 					fill: {
 						colors: [
-							this.questionList[0].chartList[0].aggregateList.site.backgroundColor,
-							this.questionList[0].chartList[0].aggregateList.total.backgroundColor,
+							this.questionList[qno].chartList[0].aggregateList.site.backgroundColor,
+							this.questionList[qno].chartList[0].aggregateList.total.backgroundColor,
 						]
 					},
 					series: [
 						{
-							name: this.questionList[0].chartList[0].aggregateList.site.valueName,
-							data: this.questionList[0].chartList[0].aggregateList.site.valueList,
+							name: this.questionList[qno].chartList[0].aggregateList.site.valueName,
+							data: this.questionList[qno].chartList[0].aggregateList.site.valueList,
 						},{
-							name: this.questionList[0].chartList[0].aggregateList.total.valueName,
-							data: this.questionList[0].chartList[0].aggregateList.total.valueList,
+							name: this.questionList[qno].chartList[0].aggregateList.total.valueName,
+							data: this.questionList[qno].chartList[0].aggregateList.total.valueList,
 						},
 					],
 					stack: [
@@ -105,55 +107,15 @@ export default {
 						text: null
 					},
 					xaxis: {
-						categories: this.questionList[0].answerList,
+						categories: this.questionList[qno].answerShortList,
 					},
 					dataLabels: {
 						suffix: '%'
 					}
-				},
-				{
-					stroke: {
-						colors: [
-							this.questionList[1].chartList[0].aggregateList.site.borderColor,
-							this.questionList[1].chartList[0].aggregateList.total.borderColor,
-						]
-					},
-					fill: {
-						colors: [
-							this.questionList[1].chartList[0].aggregateList.site.backgroundColor,
-							this.questionList[1].chartList[0].aggregateList.total.backgroundColor,
-						]
-					},
-					series: [
-						{
-							name: this.questionList[1].chartList[0].aggregateList.site.valueName,
-							data: this.questionList[1].chartList[0].aggregateList.site.valueList,
-						},{
-							name: this.questionList[1].chartList[0].aggregateList.total.valueName,
-							data: this.questionList[1].chartList[0].aggregateList.total.valueList,
-						},
-					],
-					stack: [
-						{
-							name: 'stack1',
-							series: [0]
-						},
-						{
-							name: 'stack2',
-							series: [1]
-						}
-					],
-					title: {
-						text: null
-					},
-					xaxis: {
-						categories: this.questionList[1].answerList,
-					},
-					dataLabels: {
-						suffix: '%'
-					}
-				},
-			]
+				};
+				clist.push(chart);
+			}
+			return clist;
 		}
 	},
 }
