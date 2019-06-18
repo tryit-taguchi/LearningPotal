@@ -7,7 +7,7 @@
       </page-title>
 			<bar-chart v-if="chartViewFlg" :width="824" :height="400" :chart-options="barChartOptions" />
       <button-area>
-        <base-button text="前へ" @click="prevPage" />
+        <!--<base-button text="前へ" @click="prevPage" />-->
         <base-button text="次へ" @click="nextPage" v-if="questionNo<question.QUESTION_CNT" />
       </button-area>
     </template>
