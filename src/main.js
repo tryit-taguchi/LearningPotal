@@ -65,6 +65,11 @@ Vue.use((Vue, options) => {
   Vue.prototype.$anime = anime
 });
 
+// service-worker.js 組み込み
+if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
+}
+
 new Vue({
 	router,
 	store,
