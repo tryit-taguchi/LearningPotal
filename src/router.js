@@ -205,6 +205,12 @@ export default new Router({
       name: 'enquetes_1_f',
       component: () => import('./views/Enquete1F.vue')
     },
+
+    // 印刷用
+    {
+      path: '/print/:lectureDate/:siteName/:lectureType',
+      component: () => import('./views/Print.vue')
+    },
     // 設定
     {
       path: '/config',
