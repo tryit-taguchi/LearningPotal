@@ -71,104 +71,6 @@ export default {
 			chartViewFlg : false,
 			catchphrase : {},
 			answers : [],
-/*
-			clist :
-			[
-				{
-					pageType: 'reporting_1',
-					questionNo: 1,
-					questionList: [],
-					questionName: "",
-					questionHtml: "",
-					questionExplanation : "",
-					chartEnable: false,
-					chartList: {},
-					chartData1: { // グラフ１
-						valueMax: 5,
-						questionStr: "",
-						answerList: [],
-						valueName: [],
-						valueList: [],
-						backgroundColor: [],
-						borderColor: [],
-						borderCount: 0,
-					},
-					chartData2: { // グラフ２
-						valueMax: 5,
-						questionStr: "",
-						answerList: [],
-						valueName: [],
-						valueList: [],
-						backgroundColor: [],
-						borderColor: [],
-						borderCount: 0,
-					},
-					chartViewFlg: false, // データセット後に描画を行う
-				},
-				{
-					pageType: 'reporting_2',
-					questionNo: 1,
-					questionList: [],
-					questionName: "",
-					questionHtml: "",
-					questionExplanation : "",
-					chartEnable: false,
-					chartList: {},
-					chartData1: { // グラフ１
-						valueMax: 5,
-						questionStr: "",
-						answerList: [],
-						valueName: [],
-						valueList: [],
-						backgroundColor: [],
-						borderColor: [],
-						borderCount: 0,
-					},
-					chartData2: { // グラフ２
-						valueMax: 5,
-						questionStr: "",
-						answerList: [],
-						valueName: [],
-						valueList: [],
-						backgroundColor: [],
-						borderColor: [],
-						borderCount: 0,
-					},
-					chartViewFlg: false, // データセット後に描画を行う
-				},
-				{
-					pageType: 'reporting_3',
-					questionNo: 1,
-					questionList: [],
-					questionName: "",
-					questionHtml: "",
-					questionExplanation : "",
-					chartEnable: false,
-					chartList: {},
-					chartData1: { // グラフ１
-						valueMax: 5,
-						questionStr: "",
-						answerList: [],
-						valueName: [],
-						valueList: [],
-						backgroundColor: [],
-						borderColor: [],
-						borderCount: 0,
-					},
-					chartData2: { // グラフ２
-						valueMax: 5,
-						questionStr: "",
-						answerList: [],
-						valueName: [],
-						valueList: [],
-						backgroundColor: [],
-						borderColor: [],
-						borderCount: 0,
-					},
-					chartViewFlg: false, // データセット後に描画を行う
-				},
-			],
-*/
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
@@ -181,68 +83,11 @@ export default {
 		this.getJson(this.getAPIPath()+'/print/' + lectureDate + '/' + siteName + '/' + lectureType,function(response) {
 			this.catchphrase = response.data.catchphrase; // キャッチフレーズデータ
 			this.answers = response.data.answers; // グラフ用データ（該当受講者分のリスト）
-
-//			console.log(response.data.answers.raderChartList);
-
 			this.chartViewFlg = true;
 		}.bind(this));
 	},
 	// メソッド群
 	methods: {
-/*
-		// -- サーバサイドからのコールバック
-		// セッション読み込み後
-		callback_getSession: function() {
-			// セッションを読み込み終わって状態を取得したら回答データを読み込む
-			/print/20190619/追浜グランドライブ/1
-
-			for( var no in this.clist ) {
-				var sub = this.clist[no];
-				var pageType = sub.pageType;
-
-				this.getJson(this.getAPIPath()+'/'+pageType + '_a/' + this.getMemberId(),function(response) {
-					// 問題データ取得後
-					this.questionList = response.data.questionList;
-					this.chartList    = response.data.chartList;
-					// あなた
-					this.chartData1.valueMax     = this.chartList.property.valueMax;
-					this.chartData1.questionStr  = this.chartList.member.questionStr;
-					this.chartData1.answerList   = this.chartList.member.answerList;
-					this.chartData1.borderCount  = this.questionList[0].answerList.length;
-
-					if( this.chartList.member.aggregateList[0].valueList != null ) {
-						this.chartEnable = true;
-					}
-					for( var ano in this.questionList[0].answerList ) {
-						this.chartData1.valueName[ano] = this.chartList.member.aggregateList[ano].valueName;
-						if( this.chartList.member.aggregateList[ano].valueList != null ) {
-							this.chartData1.valueList[ano] = this.chartList.member.aggregateList[ano].valueList;
-						} else {
-							this.chartData1.valueList[ano] = [0,0,0,0,0,0,0,0,0,0,];
-						}
-						this.chartData1.backgroundColor[ano] = this.chartList.member.aggregateList[ano].backgroundColor;
-						this.chartData1.borderColor[ano] = this.chartList.member.aggregateList[ano].borderColor;
-					}
-					// 会場全体
-					this.chartData2.valueMax     = this.chartList.property.valueMax;
-					this.chartData2.questionStr  = this.chartList.site.questionStr;
-					this.chartData2.answerList   = this.chartList.site.answerList;
-					this.chartData2.borderCount  = this.questionList[0].answerList.length;
-					for( var ano in this.questionList[0].answerList ) {
-						this.chartData2.valueName[ano] = this.chartList.site.aggregateList[ano].valueName;
-						this.chartData2.valueList[ano] = this.chartList.site.aggregateList[ano].valueList;
-						this.chartData2.backgroundColor[ano] = this.chartList.site.aggregateList[ano].backgroundColor;
-						this.chartData2.borderColor[ano] = this.chartList.site.aggregateList[ano].borderColor;
-					}
-					this.chartViewFlg = true;
-				}.bind(sub));
-				sub.questionName = this.$parent.session.question_atr[pageType].QUESTION_NAME;
-				sub.questionHtml = this.$parent.session.question_atr[pageType].QUESTION_HTML;
-				sub.questionExplanation = this.$parent.session.question_atr[pageType].QUESTION_EXPLANATION;
-				sub.questionMaxValue = this.$parent.session.question_atr[pageType].ANSWER_SELECT_CNT;
-			}
-		},
-*/
 	},
 }
 </script>
