@@ -22,6 +22,9 @@
           <span v-for="category in chartOptions.xaxis.categories">{{category}}</span>
         </div>
       </div>
+      <div class="chart-grid-outer">
+        <div class="chart-grid" v-for="i in 6"></div>
+      </div>
       <div class="chart-series-outer">
         <div class="chart-series" ref="series">
           <div class="chart-series-category" :style="{margin:xaxisGap+' 0'}" v-for="(category,categoryIndex) in chartOptions.xaxis.categories">
@@ -172,6 +175,14 @@ export default {
     color: #333;
     overflow: hidden;
   }
+}
+.chart-grid-outer{
+  grid-area: series;
+  display: flex;
+}
+.chart-grid{
+  flex: 1 1 100%;
+  border-left: 1px solid #CCC;
 }
 .chart-series-outer{
   grid-area: series;
