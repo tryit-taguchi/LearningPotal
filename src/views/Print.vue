@@ -11,6 +11,10 @@
 				<div>
 				{{sub.member.COMPANY_NAME}} {{sub.member.MEMBER_NAME}}
 				</div>
+				<!-- 席番号 -->
+				<div>
+				{{sub.member.SEAT_CD}}
+				</div>
 				<!-- レーダーチャート -->
 				<div v-for="(raderChart, questionType, index) in sub.raderChartList">
 					{{raderChart.questionName}}
