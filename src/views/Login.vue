@@ -1,97 +1,97 @@
 <template>
-    <div  v-if="pageViewFlg" style="text-align:center">
-      <page-title>
-        ログイン（席番号入力）
-      </page-title>
-      <input type="text" v-model="SEAT_CD_1" placeholder="" maxlength="1" style="font-size:70pt;width:90pt;text-align:center; padding:0;">
-      <span style="font-size:70pt">－</span>
-      <input type="text" v-model="SEAT_CD_2" placeholder="" maxlength="1" style="font-size:70pt;width:90pt;text-align:center; padding:0;" readonly="readonly">
-      <input type="text" v-model="SEAT_CD_3" placeholder="" maxlength="1" style="font-size:70pt;width:90pt;text-align:center; padding:0;" readonly="readonly">
-      <br>
-      <table align="center">
-        <tr>
-          <td>
-            <table class="softkey">
-              <tr>
-                <td @click="softkeyA($event,'A')">A</td>
-                <td @click="softkeyA($event,'B')">B</td>
-                <td @click="softkeyA($event,'C')">C</td>
-                <td @click="softkeyA($event,'D')">D</td>
-                <td @click="softkeyA($event,'E')">E</td>
-                <td @click="softkeyA($event,'F')">F</td>
-                <td @click="softkeyA($event,'G')">G</td>
-              </tr>
-              <tr>
-                <td @click="softkeyA($event,'H')">H</td>
-                <td @click="softkeyA($event,'I')">I</td>
-                <td @click="softkeyA($event,'J')">J</td>
-                <td @click="softkeyA($event,'K')">K</td>
-                <td @click="softkeyA($event,'L')">L</td>
-                <td @click="softkeyA($event,'M')">M</td>
-                <td @click="softkeyA($event,'N')">N</td>
-              </tr>
-              <tr>
-                <td @click="softkeyA($event,'O')">O</td>
-                <td @click="softkeyA($event,'P')">P</td>
-                <td @click="softkeyA($event,'Q')">Q</td>
-                <td @click="softkeyA($event,'R')">R</td>
-                <td @click="softkeyA($event,'S')">S</td>
-                <td @click="softkeyA($event,'T')">T</td>
-                <td @click="softkeyA($event,'U')">U</td>
-              </tr>
-              <tr>
-                <td @click="softkeyA($event,'V')">V</td>
-                <td @click="softkeyA($event,'W')">W</td>
-                <td @click="softkeyA($event,'X')">X</td>
-                <td @click="softkeyA($event,'Y')">Y</td>
-                <td @click="softkeyA($event,'Z')">Z</td>
-                <td></td>
-                <td></td>
-              </tr>
-            </table>
-          </td>
-          <td style="width:30px">
-          </td>
-          <td>
-            <table class="softkey">
-              <tr>
-                <td @click="softkeyN($event,'7')">7</td>
-                <td @click="softkeyN($event,'8')">8</td>
-                <td @click="softkeyN($event,'9')">9</td>
-              </tr>
-              <tr>
-                <td @click="softkeyN($event,'4')">4</td>
-                <td @click="softkeyN($event,'5')">5</td>
-                <td @click="softkeyN($event,'6')">6</td>
-              </tr>
-              <tr>
-                <td @click="softkeyN($event,'1')">1</td>
-                <td @click="softkeyN($event,'2')">2</td>
-                <td @click="softkeyN($event,'3')">3</td>
-              </tr>
-              <tr>
-                <td @click="softkeyN($event,'0')">0</td>
-                <td colspan="2" @click="softkeyC($event)">Clear</td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-      <base-button text="ログイン" @click="save" />
-      <p>{{errorMessage}}</p>
-    </div>
+		<div  v-if="pageViewFlg" style="text-align:center">
+			<page-title>
+				ログイン（席番号入力）
+			</page-title>
+			<input type="text" v-model="SEAT_CD_1" placeholder="" maxlength="1" style="font-size:70pt;width:90pt;text-align:center; padding:0;">
+			<span style="font-size:70pt">－</span>
+			<input type="text" v-model="SEAT_CD_2" placeholder="" maxlength="1" style="font-size:70pt;width:90pt;text-align:center; padding:0;" readonly="readonly">
+			<input type="text" v-model="SEAT_CD_3" placeholder="" maxlength="1" style="font-size:70pt;width:90pt;text-align:center; padding:0;" readonly="readonly">
+			<br>
+			<table align="center">
+				<tr>
+					<td>
+						<table class="softkey">
+							<tr>
+								<td @click="softkeyA($event,'A')">A</td>
+								<td @click="softkeyA($event,'B')">B</td>
+								<td @click="softkeyA($event,'C')">C</td>
+								<td @click="softkeyA($event,'D')">D</td>
+								<td @click="softkeyA($event,'E')">E</td>
+								<td @click="softkeyA($event,'F')">F</td>
+								<td @click="softkeyA($event,'G')">G</td>
+							</tr>
+							<tr>
+								<td @click="softkeyA($event,'H')">H</td>
+								<td @click="softkeyA($event,'I')">I</td>
+								<td @click="softkeyA($event,'J')">J</td>
+								<td @click="softkeyA($event,'K')">K</td>
+								<td @click="softkeyA($event,'L')">L</td>
+								<td @click="softkeyA($event,'M')">M</td>
+								<td @click="softkeyA($event,'N')">N</td>
+							</tr>
+							<tr>
+								<td @click="softkeyA($event,'O')">O</td>
+								<td @click="softkeyA($event,'P')">P</td>
+								<td @click="softkeyA($event,'Q')">Q</td>
+								<td @click="softkeyA($event,'R')">R</td>
+								<td @click="softkeyA($event,'S')">S</td>
+								<td @click="softkeyA($event,'T')">T</td>
+								<td @click="softkeyA($event,'U')">U</td>
+							</tr>
+							<tr>
+								<td @click="softkeyA($event,'V')">V</td>
+								<td @click="softkeyA($event,'W')">W</td>
+								<td @click="softkeyA($event,'X')">X</td>
+								<td @click="softkeyA($event,'Y')">Y</td>
+								<td @click="softkeyA($event,'Z')">Z</td>
+								<td></td>
+								<td></td>
+							</tr>
+						</table>
+					</td>
+					<td style="width:30px">
+					</td>
+					<td>
+						<table class="softkey">
+							<tr>
+								<td @click="softkeyN($event,'7')">7</td>
+								<td @click="softkeyN($event,'8')">8</td>
+								<td @click="softkeyN($event,'9')">9</td>
+							</tr>
+							<tr>
+								<td @click="softkeyN($event,'4')">4</td>
+								<td @click="softkeyN($event,'5')">5</td>
+								<td @click="softkeyN($event,'6')">6</td>
+							</tr>
+							<tr>
+								<td @click="softkeyN($event,'1')">1</td>
+								<td @click="softkeyN($event,'2')">2</td>
+								<td @click="softkeyN($event,'3')">3</td>
+							</tr>
+							<tr>
+								<td @click="softkeyN($event,'0')">0</td>
+								<td colspan="2" @click="softkeyC($event)">Clear</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<base-button text="ログイン" @click="save" />
+			<p>{{errorMessage}}</p>
+		</div>
 </template>
 
 <style lang="scss">
 table.softkey {
-  border-collapse:collapse;
-  border:0px;
+	border-collapse:collapse;
+	border:0px;
 }
 table.softkey tr td {
-  padding:2px;
-  font-size:24pt;
-  width: 60pt;
-  border:1px solid #fff;
+	padding:2px;
+	font-size:24pt;
+	width: 60pt;
+	border:1px solid #fff;
 }
 </style>
 
@@ -132,7 +132,7 @@ export default {
 					this.postJson(this.getAPIPath()+'/login',params, function (response) {
 						if( response.data != null ) {
 							this.login = response.data.member;
-							this.$parent.session = response.data.session;
+							this.$store.commit('setSession', response.data.session)
 						}
 						if( this.login != null ) {
 							// ログイン情報をクッキーに保存
@@ -223,7 +223,7 @@ export default {
 		collback: function(response) {
 			if( response.data != null ) {
 				this.login = response.data.member;
-				this.$parent.session = response.data.session;
+				this.$store.commit('setSession', response.data.session)
 			}
 			if( this.login != null ) {
 				// ログイン情報をクッキーに保存

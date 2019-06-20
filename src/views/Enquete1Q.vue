@@ -96,7 +96,7 @@ export default {
     callback_getSession: function() {
       // セッションを読み込み終わって状態を取得したら問題データを読み込む
       this.getJson(this.getAPIPath()+'/'+this.pageType + '_q/' + this.getMemberId(),this.collback_getData);
-      this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+      this.questionName = this.$store.state.session.question_atr[this.pageType].QUESTION_NAME;
     },
     // 問題データ取得後
     collback_getData: function(response) {

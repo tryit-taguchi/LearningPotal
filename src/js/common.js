@@ -23,18 +23,18 @@ export default {
 		jump : function(url) {
 			console.log("ページジャンプ");
 			console.log(url);
-			localStorage.setItem('session',JSON.stringify(this.$parent.session)); // ストレージに保存
+			localStorage.setItem('session',JSON.stringify(this.$store.state.session)); // ストレージに保存
 			// ジャンプ
 			this.$router.push(url);
 		},
 		// セッションをクローズして遷移
 		transfer : function(url) {
 			let params = new FormData();
-			params.append("session",JSON.stringify(this.$parent.session));
+			params.append("session",JSON.stringify(this.$store.state.session));
 			var memberId = this.getMemberId();
 			if( !this.isEmpty(memberId) ) {
 				console.log("セッションをサーバに書き込み memberId:"+memberId);
-				console.log(this.$parent.session);
+				console.log(this.$store.state.session);
 				this.postJson(this.getAPIPath()+'/session/'+memberId,params,this.toTransfer(url));
 			}
 		},
@@ -45,8 +45,8 @@ export default {
 		submit : function(url,form,callback) {
 			// ジャンプ前にセッションをDBに吐き出す
 			let params = new FormData();
-			localStorage.setItem('session',JSON.stringify(this.$parent.session)); // ストレージに保存
-			params.append("session",JSON.stringify(this.$parent.session));
+			localStorage.setItem('session',JSON.stringify(this.$store.state.session)); // ストレージに保存
+			params.append("session",JSON.stringify(this.$store.state.session));
 			params.append("form",JSON.stringify(form));
 			var memberId = this.getMemberId();
 			if( !this.isEmpty(memberId) ) {
@@ -73,19 +73,16 @@ export default {
 		},
 		// セッションのスタート
 		startSession : function(callback) {
-			var obj = this;
-
 			// セッションスタート時に最後にアクセスしたURLを記録しておく
 			//console.log(this.$route.fullPath);
 			localStorage.setItem('lastestUrl',this.$route.fullPath);
 
 			//console.log("セッションスタート");
-			//console.log(this.$parent.session);
-			if( !this.isEmpty(this.$parent.session) ) {
+			//console.log(this.$store.state.session);
+			if( !this.isEmpty(this.$store.state.session) ) {
 				if( !this.isEmpty(localStorage.getItem('session')) ) {
 					console.log("セッションをストレージから読み込み");
-					obj.$parent.session = JSON.parse(localStorage.getItem('session'));
-					//console.log(obj.$parent.session);
+					this.$store.commit('setSession', JSON.parse(localStorage.getItem('session')))
 					if( callback != null ) {
 						callback();
 					}
@@ -97,14 +94,12 @@ export default {
 			if( !this.isEmpty(memberId) ) {
 				// セッションの読み込み
 				console.log("セッションの読み込み memberId:"+memberId);
-				//var session = this.$parent.session;
 				this.getJson(this.getAPIPath()+'/session/'+memberId,function(response) {
 					//console.log("--------------- collback_startSession");
 					try {
 						if( response.data != null ) {
-							obj.$parent.session = response.data;
+							this.$store.commit('setSession', response.data)
 							console.log("セッションをサーバから読み込み完了");
-							//console.log(obj.$parent.session);
 							if( callback != null ) {
 								callback();
 							}
@@ -143,12 +138,12 @@ export default {
 				this.toLogout();
 				this.$router.push({ name: 'login' });
 			} else {
-				this.$parent.userCompany = this.$cookies.get('COMPANY_NAME');
-				this.$parent.userName    = this.$cookies.get('MEMBER_NAME');
+				this.$store.commit('setUserCompany', this.$cookies.get('COMPANY_NAME'))
+				this.$store.commit('setUserName', this.$cookies.get('MEMBER_NAME'))
 				if( this.$cookies.get('ADMIN_FLG') == "true" ) {
-					this.$parent.adminFlg    = true;
+					this.$store.commit('setAdminFlg', true)
 				} else {
-					this.$parent.adminFlg    = false;
+					this.$store.commit('setAdminFlg', false)
 				}
 			}
 			return;
@@ -166,14 +161,13 @@ export default {
 
 			localStorage.setItem('login',JSON.stringify(login));
 
-			this.$parent.userCompany = login.COMPANY_NAME;
-			this.$parent.userName    = login.MEMBER_NAME;
+			this.$store.commit('setUserCompany', login.COMPANY_NAME)
+			this.$store.commit('setUserName', login.MEMBER_NAME)
 		},
 		// ログイン情報をクッキーに保存(クリア）
 		toLogout : function() {
 			localStorage.clear();
-			//localStorage.removeItem('session');
-			delete this.$parent.session;
+			this.$store.commit('setSession', null)
 			this.$cookies.set('MEMBER_ID','');
 			this.$cookies.set('SEAT_CD','');
 			this.$cookies.set('GROUP_CD','');
@@ -182,8 +176,8 @@ export default {
 			this.$cookies.set('LECTURE_DT','');
 			this.$cookies.set('LECTURE_TYPE','');
 			this.$cookies.set('ADMIN_FLG','');
-			this.$parent.userCompany = '';
-			this.$parent.userName    = '';
+			this.$store.commit('setUserCompany', null)
+			this.$store.commit('setUserName', null)
 		},
 		// ユーザーID取得
 		getMemberId : function() {

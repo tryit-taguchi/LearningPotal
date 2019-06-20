@@ -1,34 +1,34 @@
 <template>
-  <div v-if="pageViewFlg">
-    <main class="question-layout">
-      <div style="width:900px;margin-left:50px;">
-        <h1>設定画面</h1>
-      </div>
-      <br>
-      <form @submit.prevent="submit">
-        <h2>有効設定</h2>
-        <!-- ON/OFF のラジオボタン -->
-        <div v-for="questionType in questionList">
-          <config-radio :name="questionType" :type="questionType" :title="statusHome.enableList[questionType].name"  v-model="statusHome.enableList[questionType].value" />
-        </div>
-        <p>{{errorMessage}}</p>
-        <div class="question-button">
-          <base-button text="保　存" @click="save" />
-        </div>
-        <div v-if="infoMessageViewFlg">
-          <p>{{infoMessage}}</p>
-        </div>
-      </form>
-      <br>
-      <div class="question-button">
-        <base-button text="ログアウト" @click="logout" />
-      </div>
-      <br>
-      <div class="question-button">
-        <base-button text="本日用データ生成" @click="testData" />
-      </div>
-    </main>
-  </div>
+	<div v-if="pageViewFlg">
+		<main class="question-layout">
+			<div style="width:900px;margin-left:50px;">
+				<h1>設定画面</h1>
+			</div>
+			<br>
+			<form @submit.prevent="submit">
+				<h2>有効設定</h2>
+				<!-- ON/OFF のラジオボタン -->
+				<div v-for="questionType in questionList">
+					<config-radio :name="questionType" :type="questionType" :title="statusHome.enableList[questionType].name"  v-model="statusHome.enableList[questionType].value" />
+				</div>
+				<p>{{errorMessage}}</p>
+				<div class="question-button">
+					<base-button text="保　存" @click="save" />
+				</div>
+				<div v-if="infoMessageViewFlg">
+					<p>{{infoMessage}}</p>
+				</div>
+			</form>
+			<br>
+			<div class="question-button">
+				<base-button text="ログアウト" @click="logout" />
+			</div>
+			<br>
+			<div class="question-button">
+				<base-button text="本日用データ生成" @click="testData" />
+			</div>
+		</main>
+	</div>
 </template>
 
 <script>
@@ -111,7 +111,7 @@ export default {
 		},
 		// 設定データ送信後
 		collback_postData: function(response) {
-			this.$parent.serverInfo.config = response.data;
+			this.$store.commit('setServerInfo', {config: response.data})
 			this.infoMessage = "保存しました。";
 			this.infoMessageViewFlg = true;
 			setTimeout(function() {

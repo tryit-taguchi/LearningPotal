@@ -1,27 +1,27 @@
 <template>
-  <div class="question-layout" v-if="questionViewFlg">
-    <page-title :raw-html="questionHtml">
-      {{questionExplanation}}
-    </page-title>
-    <div style="padding-left:100px;">
-      <bulb-text>あなたの回答を選択してください</bulb-text>
-      <div v-for="question in questionList" :key="question.QUESTION_NO">
-        <question-title>
-          <template v-slot:left>Question<span style="font-size:2em">{{question.QUESTION_NO}}</span></template>
-          {{question.QUESTION_STR}}
-        </question-title>
-        <reporting-radio-header />
-        <reporting-radio v-for="(answer, index) in question.answerList" :name="'Q_'+question.QUESTION_NO+'_'+index" :label="answer" :max-value="5" v-model="question.selectedNoList[index]" />
-      </div>
-    </div>
-    <h2>フリーコメント（120文字まで）</h2>
-    <textarea-balloon name="freeComment" id="freeComment" value="" v-model="freeComment"></textarea-balloon>
-    <button-area>
-      <text-before-button>講師の指示があるまでは<br>「回答」を押さないでください</text-before-button>
-      <base-button text="回答" @click="nextPage" />
-    </button-area>
-    <v-dialog/>
-  </div>
+	<div class="question-layout" v-if="questionViewFlg">
+		<page-title :raw-html="questionHtml">
+			{{questionExplanation}}
+		</page-title>
+		<div style="padding-left:100px;">
+			<bulb-text>あなたの回答を選択してください</bulb-text>
+			<div v-for="question in questionList" :key="question.QUESTION_NO">
+				<question-title>
+					<template v-slot:left>Question<span style="font-size:2em">{{question.QUESTION_NO}}</span></template>
+					{{question.QUESTION_STR}}
+				</question-title>
+				<reporting-radio-header />
+				<reporting-radio v-for="(answer, index) in question.answerList" :name="'Q_'+question.QUESTION_NO+'_'+index" :label="answer" :max-value="5" v-model="question.selectedNoList[index]" />
+			</div>
+		</div>
+		<h2>フリーコメント（120文字まで）</h2>
+		<textarea-balloon name="freeComment" id="freeComment" value="" v-model="freeComment"></textarea-balloon>
+		<button-area>
+			<text-before-button>講師の指示があるまでは<br>「回答」を押さないでください</text-before-button>
+			<base-button text="回答" @click="nextPage" />
+		</button-area>
+		<v-dialog/>
+	</div>
 </template>
 
 <script>
@@ -30,7 +30,6 @@ export default {
 	data: function(){
 		return {
 			pageType: 'reporting_1',
-			questionNo: 1,
 			questionList: [],
 			questionName: "",
 			questionHtml: "",
@@ -49,6 +48,26 @@ export default {
 	},
 	// メソッド群
 	methods: {
+		// -- サーバサイドからのコールバック
+		// セッション読み込み後
+		callback_getSession: function() {
+			// セッションを読み込み終わって状態を取得したら問題データを読み込む
+			this.questionName = this.$store.state.session.question_atr[this.pageType].QUESTION_NAME;
+			this.questionHtml = this.$store.state.session.question_atr[this.pageType].QUESTION_HTML;
+			this.questionExplanation = this.$store.state.session.question_atr[this.pageType].QUESTION_EXPLANATION;
+			this.questionMaxValue = this.$store.state.session.question_atr[this.pageType].ANSWER_SELECT_CNT;
+			this.getJson(this.getAPIPath()+'/'+this.pageType + '_q/' + this.getMemberId(),this.collback_getData);
+		},
+		// 問題データ取得後
+		collback_getData: function(response) {
+			this.questionList = response.data.questionList;
+			this.freeComment  = response.data.freeComment;
+			this.questionViewFlg = true;
+		},
+		// 回答
+		nextPage: function(e){
+			this.validation(this.callback_formSubmit);
+		},
 		// バリデーション
 		validation: function (callback) {
 			for( var qno in this.questionList ) {
@@ -56,10 +75,10 @@ export default {
 					if( this.questionList[qno].selectedNoList[ano] == 0 ) {
 						var questionNo = parseInt(qno)+1;
 						this.$modal.show('dialog', {
-						  text: 'Question'+questionNo+'に未回答があります。<br>ご回答のご確認をお願いします。',
-						  buttons: [
-						    {title: 'OK'}
-						  ]
+							text: 'Question'+questionNo+'に未回答があります。<br>ご回答のご確認をお願いします。',
+							buttons: [
+								{title: 'OK'}
+							]
 						})
 						return false;
 					}
@@ -70,12 +89,12 @@ export default {
 					text: '未入力のフリーコメントがありますが、回答を完了しますか？',
 					buttons: [
 						{
-						  title: 'OK',
-						  handler: () => {callback()} // ボタンが押されたときに実行される
+							title: 'OK',
+							handler: () => {callback()} // ボタンが押されたときに実行される
 						},
 						{
-						  title: 'キャンセル',
-						  default: true // Enterキーを押したときに押されるボタンを指定する
+							title: 'キャンセル',
+							default: true // Enterキーを押したときに押されるボタンを指定する
 						}
 					]
 				});
@@ -83,16 +102,6 @@ export default {
 				callback();
 			}
 			return true;
-		},
-		// 前ページへ
-		prevPage: function(e){
-			this.questionNo--;
-			this.$parent.session.question_atr[this.pageType].currentQuestionNo--;
-			this.jump({ name: this.pageType+'_a' });
-		},
-		// 回答
-		nextPage: function(e){
-			this.validation(this.callback_formSubmit);
 		},
 		// フォームのSubmit
 		callback_formSubmit: function(e) {
@@ -103,25 +112,8 @@ export default {
 			var form = {};
 			form.answerList = answerList;
 			form.freeComment = this.freeComment;
-			this.$parent.session.question_atr[this.pageType].QUESTION_COMPLETE = true;
+			this.$store.commit('completedQuestion', this.pageType)
 			this.submit(this.getAPIPath()+'/'+this.pageType + '/' + this.getMemberId(),form,this.collback_postData);
-		},
-		// -- サーバサイドからのコールバック
-		// セッション読み込み後
-		callback_getSession: function() {
-			// セッションを読み込み終わって状態を取得したら問題データを読み込む
-			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
-			this.getJson(this.getAPIPath()+'/'+this.pageType + '_q/' + this.getMemberId(),this.collback_getData);
-			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
-			this.questionHtml = this.$parent.session.question_atr[this.pageType].QUESTION_HTML;
-			this.questionExplanation = this.$parent.session.question_atr[this.pageType].QUESTION_EXPLANATION;
-			this.questionMaxValue = this.$parent.session.question_atr[this.pageType].ANSWER_SELECT_CNT;
-		},
-		// 問題データ取得後
-		collback_getData: function(response) {
-			this.questionList = response.data.questionList;
-			this.freeComment  = response.data.freeComment;
-			this.questionViewFlg = true;
 		},
 		// 回答データ送信後
 		collback_postData: function(response) {
@@ -143,32 +135,32 @@ export default {
 
 <style lang="scss">
 .button-area{
-  $_padding: 10px;
-  $_icon-size: 30px;
-  display: flex;
-  justify-content: flex-end;
-  &+&{
-    margin-top: 5px;
-  }
-  [type="button"],
-  [type="submit"],
-  button,
-  .button{
-    align-self: center;
-    background-color: rgb(68,114,196);
-    height: 50px;
-    font-size: 20px;
-    color: #fff;
-    border: none;
-    appearance: none;
-    cursor: pointer;
-    padding: 0 1em;
-    flex: 0 0 200px;
-    margin-right: 50px;
-  }
-  .button-primary{
-    background-color: #EB4D4B;
-  }
+	$_padding: 10px;
+	$_icon-size: 30px;
+	display: flex;
+	justify-content: flex-end;
+	&+&{
+		margin-top: 5px;
+	}
+	[type="button"],
+	[type="submit"],
+	button,
+	.button{
+		align-self: center;
+		background-color: rgb(68,114,196);
+		height: 50px;
+		font-size: 20px;
+		color: #fff;
+		border: none;
+		appearance: none;
+		cursor: pointer;
+		padding: 0 1em;
+		flex: 0 0 200px;
+		margin-right: 50px;
+	}
+	.button-primary{
+		background-color: #EB4D4B;
+	}
 }
 
 </style>

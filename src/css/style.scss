@@ -9,11 +9,17 @@ body{
   margin: 0;
   font-size: 1.6rem;
   line-height: 1.6;
-  color: #fff;
-  background-color: #000;
   font-family: "Noto Sans";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  &[data-theme="default"]{
+    color: #fff;
+    background-color: #000;
+  }
+  &[data-theme="print"]{
+    color: #000;
+    background-color: #fff;
+  }
 }
 
 // transition : fade

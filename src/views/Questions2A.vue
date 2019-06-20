@@ -1,17 +1,16 @@
 <template>
-  <div>
-    <template v-for="question in questionList">
-      <page-title :before-text="questionName">
-        <template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
-        {{question.QUESTION_STR}}
-      </page-title>
+	<div>
+		<template v-for="question in questionList">
+			<page-title :before-text="questionName">
+				<template v-slot:left><span style="font-size:1.4em">Q</span>uestion<span  style="font-size:2.0em">{{question.QUESTION_NO}}</span></template>
+				{{question.QUESTION_STR}}
+			</page-title>
 			<bar-chart v-if="chartViewFlg" :width="824" :height="400" :chart-options="barChartOptions" />
-      <button-area>
-        <!--<base-button text="前へ" @click="prevPage" />-->
-        <base-button text="次の質問へ" @click="nextPage" />
-      </button-area>
-    </template>
-  </div>
+			<button-area>
+				<base-button text="次の質問へ" @click="nextPage" />
+			</button-area>
+		</template>
+	</div>
 </template>
 
 <script>
@@ -21,8 +20,8 @@ export default {
 		return {
 			pageType: 'questions_2',
 			questionNo: 1,
-			questionList: [],
 			questionName: "",
+			questionList: [],
 			chartViewFlg: false, // データセット後に描画を行う
 		}
 	},
@@ -32,26 +31,16 @@ export default {
 		// セッション情報の取得等
 		this.isLogin(); // ログインチェック・ログインしていたらセッション取得
 		this.startSession(this.callback_getSession);
-//questionList
 	},
 	// メソッド群
 	methods: {
-		// バリデーション
-		validation: function () {
-			return true;
-		},
-		// 前ページへ
-		prevPage: function(e){
-			this.questionNo--;
-			this.jump({ name: this.pageType+'_q' });
-		},
 		// 次の質問へ
 		nextPage: function(e){
-			this.$parent.session.question_atr[this.pageType].currentQuestionNo++;
-			if( this.$parent.session.question_atr[this.pageType].currentQuestionNo <= this.$parent.session.question_atr[this.pageType].QUESTION_CNT ) {
+			if( this.$store.state.session.question_atr[this.pageType].currentQuestionNo < this.$store.state.session.question_atr[this.pageType].QUESTION_CNT ) {
+				this.$store.commit('incrementCurrentQuestionNo', this.pageType)
 				this.jump({ name: this.pageType+'_q' });
 			} else {
-				this.$parent.session.question_atr[this.pageType].QUESTION_COMPLETE = true;
+				this.$store.commit('completedQuestion', this.pageType)
 				this.jump({ name: this.pageType+'_r' });
 			}
 		},
@@ -59,9 +48,9 @@ export default {
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
-			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
+			this.questionNo = this.$store.state.session.question_atr[this.pageType].currentQuestionNo;
+			this.questionName = this.$store.state.session.question_atr[this.pageType].QUESTION_NAME;
 			this.getJson(this.getAPIPath()+'/'+this.pageType + '_a/' + this.getMemberId() + '/' + this.questionNo,this.collback_getData);
-			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {

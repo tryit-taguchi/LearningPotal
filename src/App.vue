@@ -1,33 +1,18 @@
 <template>
-  <div id="app">
-    <app-header :user-company="userCompany" :user-name="userName" :img-logo="serverInfo.imgLogo" :img-title="serverInfo.imgTitle" :header-view-flg="headerViewFlg" :admin-flg="adminFlg" ></app-header>
-    <main>
-      <transition name="fade" mode="out-in">
-        <router-view :img-top-visual="serverInfo.imgTopVisual" />
-      </transition>
-    </main>
-  </div>
+	<transition>
+		<router-view v-if="appViewFlg" />
+	</transition>
 </template>
 
-<style lang="scss">
-main{
-  width: 100%;
-  max-width: 1024px;
-  margin: 130px auto 0;
-  position: relative;
-}
+<style scoped lang="scss">
+
 </style>
 
 <script>
 export default {
 	data: function(){
 		return {
-			userCompany: '',
-			userName: '',
-			session: '',
-			serverInfo : {},
-			headerViewFlg : false,
-			adminFlg: false,
+			appViewFlg : false,
 		}
 	},
 	created: function () {
@@ -42,18 +27,18 @@ export default {
 		console.log(this.userCompany);
 		console.log(this.userName);
 		*/
-		this.serverInfo.imgLogo = "../assets/logo.png";
-		this.serverInfo.imgTitle = "../assets/title.png";
-		this.serverInfo.imgTopVisual = "../assets/top_visual.png";
+		console.log("App.vue 終了");
 	},
 	methods: {
 		collback_ServerInfo: async function(response) {
 			// this.serverInfo 変数に共通サーバ情報を収納
-			this.serverInfo = response.data;
-			this.serverInfo.imgLogo = this.getUpfilesPath() + this.serverInfo.imgLogo;
-			this.serverInfo.imgTitle = this.getUpfilesPath() + this.serverInfo.imgTitle;
-			this.serverInfo.imgTopVisual = this.getUpfilesPath() + this.serverInfo.imgTopVisual;
-			this.headerViewFlg = true;
+			// this.serverInfo = response.data;
+			const serverInfo = response.data;
+			serverInfo.imgLogo = this.getUpfilesPath() + serverInfo.imgLogo;
+			serverInfo.imgTitle = this.getUpfilesPath() + serverInfo.imgTitle;
+			serverInfo.imgTopVisual = this.getUpfilesPath() + serverInfo.imgTopVisual;
+			this.$store.commit('setServerInfo', serverInfo)
+			this.appViewFlg = true;
 			console.log("サーバの共通情報読み込み完了");
 			//console.log("アップファイルフォルダ : "+this.getUpfilesPath());
 			//console.log(this.serverInfo);

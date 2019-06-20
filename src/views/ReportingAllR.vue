@@ -1,9 +1,9 @@
 <template>
 	<div>
-    <page-title>
-      <template v-slot:left>比較</template>
-      試乗①、試乗②、現車・競合車確認
-    </page-title>
+		<page-title>
+			<template v-slot:left>比較</template>
+			試乗①、試乗②、現車・競合車確認
+		</page-title>
 		<div v-for="(sub,no) in clist">
 			<div>
 				<div style="font-size:150%" :id="'chart'+no">　{{sub.questionName}}</div>
@@ -11,10 +11,10 @@
 					<radar-chart-reporting :width="412" :height="450" :chart-data="sub.chartData1" />
 					<radar-chart-reporting :width="412" :height="450" :chart-data="sub.chartData2" />
 				</div>
-	      <button-area>
-	        <base-button text="次へ" v-if="no<clist.length-1" v-scroll-to="'#chart'+(parseInt(no)+1)" />
-	      </button-area>
-	    </div>
+				<button-area>
+					<base-button text="次へ" v-if="no<clist.length-1" v-scroll-to="'#chart'+(parseInt(no)+1)" />
+				</button-area>
+			</div>
 		</div>
 	</div>
 </template>
@@ -174,10 +174,10 @@ export default {
 					}
 					this.chartViewFlg = true;
 				}.bind(sub));
-				sub.questionName = this.$parent.session.question_atr[pageType].QUESTION_NAME;
-				sub.questionHtml = this.$parent.session.question_atr[pageType].QUESTION_HTML;
-				sub.questionExplanation = this.$parent.session.question_atr[pageType].QUESTION_EXPLANATION;
-				sub.questionMaxValue = this.$parent.session.question_atr[pageType].ANSWER_SELECT_CNT;
+				sub.questionName = this.$store.state.session.question_atr[pageType].QUESTION_NAME;
+				sub.questionHtml = this.$store.state.session.question_atr[pageType].QUESTION_HTML;
+				sub.questionExplanation = this.$store.state.session.question_atr[pageType].QUESTION_EXPLANATION;
+				sub.questionMaxValue = this.$store.state.session.question_atr[pageType].ANSWER_SELECT_CNT;
 			}
 		},
 	},
@@ -188,7 +188,7 @@ export default {
 .graph{
 	width: 834px;
 	display: flex;
-  justify-content: space-between;
+	justify-content: space-between;
 	margin: 10px auto 0;
 	background-color: #fff;
 }

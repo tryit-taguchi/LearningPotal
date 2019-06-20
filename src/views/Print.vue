@@ -1,6 +1,6 @@
 <template>
 	<!-- データの読み込みが終わったらレンダリング -->
-	<div v-if="chartViewFlg">
+	<div class="print-inner" v-if="printViewFlg">
 		<!-- 該当受講者分ループを回す 1受講者につき2枚 -->
 		<div v-for="(sub,no) in this.answers">
 			<section class="print_pages">
@@ -63,8 +63,10 @@
 				<hr><!-- とりあえずページ分けをわかりやすくするためにhr入れてるほんとはいらない -->
 			</section>
 		</div>
-
 	</div>
+	<p v-else>
+		読み込み中
+	</p>
 </template>
 
 <script>
@@ -72,13 +74,14 @@ export default {
 	// データ定義
 	data: function(){
 		return {
-			chartViewFlg : false,
+			printViewFlg : false,
 			catchphrase : {},
 			answers : [],
 		}
 	},
 	// 初回処理（createdではDOM操作をしない）
 	created: function () {
+		console.log(document.body.setAttribute('data-theme','print'))
 		console.log('-- '+this.pageType+'_a');
 		console.log(this.$route.params);
 		var lectureDate = this.$route.params.lectureDate;
@@ -87,7 +90,7 @@ export default {
 		this.getJson(this.getAPIPath()+'/print/' + lectureDate + '/' + siteName + '/' + lectureType,function(response) {
 			this.catchphrase = response.data.catchphrase; // キャッチフレーズデータ
 			this.answers = response.data.answers; // グラフ用データ（該当受講者分のリスト）
-			this.chartViewFlg = true;
+			this.printViewFlg = true;
 		}.bind(this));
 	},
 	// メソッド群
@@ -97,6 +100,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.print-inner{
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	color: #000;
+}
 .graph{
 	width: 834px;
 	display: flex;

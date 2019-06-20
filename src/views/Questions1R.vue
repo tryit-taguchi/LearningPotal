@@ -34,24 +34,13 @@ export default {
 	},
 	// メソッド群
 	methods: {
-		// バリデーション
-		validation: function () {
-			return true;
-		},
-		// 前ページへ
-		// prevPage: function(e){
-		// 	this.jump({ name: this.pageType+'_a' });
-		// },
-		// 回答
-		// nextPage: function(e){
-		// },
 		// -- サーバサイドからのコールバック
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
+			this.questionName = this.$store.state.session.question_atr[this.pageType].QUESTION_NAME;
+			this.questionCnt  = this.$store.state.session.question_atr[this.pageType].QUESTION_CNT;
 			this.getJson(this.getAPIPath()+'/'+this.pageType + '_r/' + this.getMemberId(),this.collback_getData);
-			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
-			this.questionCnt  = this.$parent.session.question_atr[this.pageType].QUESTION_CNT;
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {

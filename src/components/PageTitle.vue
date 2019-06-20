@@ -50,6 +50,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 .right {
   flex: 1 0 720px;
@@ -59,6 +60,7 @@ export default {
   align-items: center;
   line-height: 1;
   padding: 0 1em;
+  overflow: hidden;
 }
 .left + .right {
   color: #fff;

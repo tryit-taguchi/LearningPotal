@@ -31,7 +31,7 @@ export default {
     // セッション読み込み後
     callback_getSession: function() {
       // セッションを読み込み終わって状態を取得したら問題データを読み込む
-      this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
+      this.questionName = this.$store.state.session.question_atr[this.pageType].QUESTION_NAME;
       this.questionViewFlg = true;
     },
   },

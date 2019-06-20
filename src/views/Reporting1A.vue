@@ -17,9 +17,7 @@ export default {
 	data: function(){
 		return {
 			pageType: 'reporting_1',
-			questionNo: 1,
 			questionList: [],
-			questionName: "",
 			questionHtml: "",
 			questionExplanation : "",
 			chartList: {},
@@ -59,12 +57,10 @@ export default {
 		// セッション読み込み後
 		callback_getSession: function() {
 			// セッションを読み込み終わって状態を取得したら問題データを読み込む
-			this.questionNo = this.$parent.session.question_atr[this.pageType].currentQuestionNo;
 			this.getJson(this.getAPIPath()+'/'+this.pageType + '_a/' + this.getMemberId(),this.collback_getData);
-			this.questionName = this.$parent.session.question_atr[this.pageType].QUESTION_NAME;
-			this.questionHtml = this.$parent.session.question_atr[this.pageType].QUESTION_HTML;
-			this.questionExplanation = this.$parent.session.question_atr[this.pageType].QUESTION_EXPLANATION;
-			this.questionMaxValue = this.$parent.session.question_atr[this.pageType].ANSWER_SELECT_CNT;
+			this.questionHtml = this.$store.state.session.question_atr[this.pageType].QUESTION_HTML;
+			this.questionExplanation = this.$store.state.session.question_atr[this.pageType].QUESTION_EXPLANATION;
+			this.questionMaxValue = this.$store.state.session.question_atr[this.pageType].ANSWER_SELECT_CNT;
 		},
 		// 問題データ取得後
 		collback_getData: function(response) {

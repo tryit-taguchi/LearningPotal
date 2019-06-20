@@ -1,5 +1,5 @@
 <template>
-	<div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff'}">
+	<div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff',overflow:'hidden'}">
 		<apexchart type="radar" :width="width" :height="height" :options="apexChartRadarOptions" :series="apexChartRadarSeries" />
 	</div>
 </template>
