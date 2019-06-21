@@ -18,6 +18,9 @@ export default {
 					toolbar: {
 						show: false
 					},
+					animations: {
+						enabled: this.chartData.animations===undefined ? true : this.chartData.animations,
+					}
 				},
 				labels: this.chartData.answerList,
 				title: {
@@ -69,10 +72,10 @@ export default {
 'chartData' に渡されるオブジェクトの形式
 
 chartData: {
-  questionStr: "設問のタイトル",
-  answerList: ["選択肢1","選択肢2","選択肢3","選択肢4"],
-  dataset: {
-  }, // 会場 ％ (棒の長さに反映)
+	questionStr: "設問のタイトル",
+	answerList: ["選択肢1","選択肢2","選択肢3","選択肢4"],
+	dataset: {
+	}, // 会場 ％ (棒の長さに反映)
 }
 
 -->

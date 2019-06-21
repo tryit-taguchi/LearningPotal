@@ -108,15 +108,23 @@ export default {
   },
   methods: {
     setBarAnimation(){
-      this.$anime({
-        targets: this.$refs.series.querySelectorAll('.chart-series-bar-outer'),
-        width: (el,i)=>{
-          return ( this.chartOptions.series[el.getAttribute('data-series-id')].data[el.getAttribute('data-category-index')] / this.seriesMaxValue * 100 )+'%'
-        },
-        duration: 1000,
-        delay: 0,
-        easing: 'easeOutQuint'
-      })
+      if(this.chartOptions.animations === false){
+        // アニメーションなし
+        [...this.$refs.series.querySelectorAll('.chart-series-bar-outer')].map((el,i)=>{
+          el.style.width = ( this.chartOptions.series[el.getAttribute('data-series-id')].data[el.getAttribute('data-category-index')] / this.seriesMaxValue * 100 )+'%'
+        })
+      }else{
+        // アニメーションあり
+        this.$anime({
+          targets: this.$refs.series.querySelectorAll('.chart-series-bar-outer'),
+          width: (el,i)=>{
+            return ( this.chartOptions.series[el.getAttribute('data-series-id')].data[el.getAttribute('data-category-index')] / this.seriesMaxValue * 100 )+'%'
+          },
+          duration: 1000,
+          delay: 0,
+          easing: 'easeOutQuint'
+        })
+      }
     },
   }
 }

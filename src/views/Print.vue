@@ -89,7 +89,21 @@ export default {
 		var lectureType = this.$route.params.lectureType;
 		this.getJson(this.getAPIPath()+'/print/' + lectureDate + '/' + siteName + '/' + lectureType,function(response) {
 			this.catchphrase = response.data.catchphrase; // キャッチフレーズデータ
-			this.answers = response.data.answers; // グラフ用データ（該当受講者分のリスト）
+			const answers = response.data.answers; // グラフ用データ（該当受講者分のリスト）
+			answers.map(sub=>{
+				Object.keys(sub.raderChartList).map(type=>{
+					sub.raderChartList[type].member.animations = false
+					sub.raderChartList[type].site.animations = false
+				})
+				Object.keys(sub.compareBarChartList).map(type=>{
+					sub.compareBarChartList[type].before.animations = false
+					sub.compareBarChartList[type].after.animations = false
+				})
+				Object.keys(sub.multipleBarChartList).map(type=>{
+					sub.multipleBarChartList[type].chart.animations = false
+				})
+			})
+			this.answers = answers; // グラフ用データ（該当受講者分のリスト）
 			this.printViewFlg = true;
 		}.bind(this));
 	},
