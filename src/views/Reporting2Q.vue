@@ -11,9 +11,8 @@
 					{{question.QUESTION_STR}}
 				</question-title>
 				<reporting-radio-header />
-				<reporting-radio v-for="(answer, index) in question.answerList" :name="'Q_'+question.QUESTION_NO+'_'+index" :label="answer" :max-value="5" v-model="question.selectedNoList[index]" />
+				<reporting-radio v-for="(answer, index) in question.answerList" :name="'Q_'+question.QUESTION_NO+'_'+index" :label="answer" :max-value="5" v-model="question.selectedNoList[index]" :key="question.QUESTION_NO+'_'+index" />
 			</div>
-
 		</div>
 		<h2>フリーコメント（120文字まで）</h2>
 		<textarea-balloon name="freeComment" id="freeComment" value="" v-model="freeComment"></textarea-balloon>
