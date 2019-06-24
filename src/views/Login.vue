@@ -79,6 +79,11 @@
 			</table>
 			<base-button text="ログイン" @click="save" />
 			<p>{{errorMessage}}</p>
+
+			<div class="question-button">
+				<base-button text="本日用データ生成（デバッグ用）" @click="testData" />
+			</div>
+
 		</div>
 </template>
 
@@ -236,6 +241,13 @@ export default {
 				this.toLogout();
 				this.errorMessage = "登録されていない受講者です。";
 			}
+		},
+		// テストデータ生成
+		testData: function() {
+			// セッションを読み込み終わって状態を取得したら問題データを読み込む
+			this.getJson(this.getAPIPath()+'/createtestdata',function () {
+				alert("テストデータ用のセッティングをしました。");
+			});
 		},
 	}
 }
