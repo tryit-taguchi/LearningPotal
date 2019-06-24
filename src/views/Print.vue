@@ -2,7 +2,7 @@
 	<!-- データの読み込みが終わったらレンダリング -->
 	<div class="print-inner" v-if="printViewFlg">
 		<!-- 該当受講者分ループを回す 1受講者につき2枚 -->
-		<div v-for="(sub,no) in this.answers.slice(0, 1)">
+		<div v-for="(sub,no) in this.answers">
 			<div class="print_pages">
 				<div class="page-1">
 					<div class="header">

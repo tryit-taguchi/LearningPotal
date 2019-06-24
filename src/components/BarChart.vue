@@ -1,5 +1,5 @@
 <template>
-  <div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff'}">
+  <div :style="{width:width+'px',height:height+'px',color:'#000',backgroundColor:'#fff',margin: '0 auto'}">
     <div class="chart-outer">
       <div class="chart-header-outer">
         <div v-if="chartOptions.title.text" class="chart-header-title">
