@@ -130,7 +130,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .chart-outer{
   width: 100%;
   height: 100%;
@@ -215,7 +215,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: row;
-  box-shadow: inset 2px 0 0 0 #999;
+  // box-shadow: inset 2px 0 0 0 #999;
   &+&{
     margin-top: 2px;
   }

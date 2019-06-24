@@ -64,7 +64,10 @@ export default {
 </script>
 
 <style lang="scss">
-
+// 印刷時に線が浮き出てしまうため削除
+.apexcharts-grid{
+	display: none;
+}
 </style>
 
 <!--
