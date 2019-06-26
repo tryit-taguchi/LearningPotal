@@ -1,8 +1,9 @@
 <template>
   <div class="base-switch">
     <input
-      v-model="computedValue"
       type="checkbox"
+      :checked="isChecked"
+      @change="onChange"
       :true-value="trueValue"
       :false-value="falseValue"
     >
@@ -17,41 +18,36 @@ export default {
     event: 'change'
   },
   props: {
-    checked: [String, Number, Boolean, Function, Object, Array, Symbol],
+    checked: {},
     trueValue: {
-      type: [String, Number, Boolean, Function, Object, Array, Symbol],
       default: true
     },
     falseValue: {
-      type: [String, Number, Boolean, Function, Object, Array, Symbol],
       default: false
     }
   },
-  data() {
-    return {
-      newValue: this.checked
+  computed: {
+    isChecked: function(){
+      return this.checked === this.trueValue
     }
   },
-  computed: {
-    computedValue: {
-      get() {
-        return this.newValue
-      },
-      set(value) {
-        this.newValue = value
-        this.$emit('change', value)
-      }
+  methods: {
+    onChange: function(e){
+      this.$emit('change', this.isChecked ? this.falseValue : this.trueValue)
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+$width: 50px;
+$height: 30px;
+$padding: 2px;
 .base-switch {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 30px;
+  width: $width;
+  height: $height;
 }
 input {
   position: absolute;
@@ -68,9 +64,9 @@ input {
 
 input + .switch {
   position: relative;
-  width: 50px;
-  height: 30px;
-  border-radius: 25px;
+  width: $width;
+  height: $height;
+  border-radius: calc( #{$height} / 2 );
   background-color: #fff;
   transition: background-color .5s;
 }
@@ -78,15 +74,15 @@ input + .switch:after {
   content: "";
   position: absolute;
   display: block;
-  top: 2px;
-  left: 2px;
+  top: $padding;
+  left: $padding;
   background: #fff;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+  width: calc( #{$height} - #{$padding} * 2 );
+  height: calc( #{$height} - #{$padding} * 2 );
+  border-radius: calc( #{$height} / 2 );
   box-shadow: 0 0 3px rgba(0,0,0,1);
   border: 1px solid #999;
-  transition: right .5s, left .5s;
+  transition: left .5s;
   box-sizing: border-box;
 }
 
@@ -95,7 +91,7 @@ input:checked + .switch {
 }
 
 input:checked + .switch:after {
-  left: 22px;
+  left: calc( #{$width} - #{$height} + #{$padding} );
 }
 input:focus + .switch {
   box-shadow: 0 0 0 2px #06f;
