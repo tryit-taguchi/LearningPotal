@@ -46,6 +46,7 @@ $padding: 2px;
   display: inline-block;
   width: $width;
   height: $height;
+  vertical-align: middle;
   input {
     -webkit-appearance: none;
     position: absolute;

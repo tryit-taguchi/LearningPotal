@@ -5,10 +5,12 @@
 			<form @submit.prevent="submit">
 				<h2>有効設定</h2>
 				<!-- ON/OFF のラジオボタン -->
-				<div v-for="questionType in questionList" class="config-list">
-					<!-- <config-radio :name="questionType" :type="questionType" :title="statusHome.enableList[questionType].name" v-model="statusHome.enableList[questionType].value" /> -->
-					<base-switch v-model="statusHome.enableList[questionType].value" :true-value="1" :false-value="0" />
-					<span>{{statusHome.enableList[questionType].name}}</span>
+				<div class="config-list">
+					<div v-for="questionType in questionList" class="config-listitem">
+						<!-- <config-radio :name="questionType" :type="questionType" :title="statusHome.enableList[questionType].name" v-model="statusHome.enableList[questionType].value" /> -->
+						<span class="config-listitem-text">{{statusHome.enableList[questionType].name}}</span>
+						<span class="config-listitem-switch"><base-switch v-model="statusHome.enableList[questionType].value" :true-value="1" :false-value="0" /></span>
+					</div>
 				</div>
 				<p>{{errorMessage}}</p>
 				<div class="question-button">
@@ -131,14 +133,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.config-list{
+.config-listitem{
+	width: 240px;
+}
+.config-listitem{
 	display: flex;
 	align-items: center;
-	>*:not(:first-child){
-		margin-left: 10px;
-	}
 	&+&{
 		margin-top: 10px;
 	}
+}
+.config-listitem-text{
+	flex: 1 0 auto;
+}
+.config-listitem-switch{
+	margin-left: 10px;
 }
 </style>
