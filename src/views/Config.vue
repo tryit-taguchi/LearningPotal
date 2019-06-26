@@ -1,9 +1,7 @@
 <template>
 	<div v-if="pageViewFlg">
 		<main class="question-layout">
-			<div style="width:900px;margin-left:50px;">
-				<h1>設定画面</h1>
-			</div>
+			<page-title>設定画面</page-title>
 			<form @submit.prevent="submit">
 				<h2>有効設定</h2>
 				<!-- ON/OFF のラジオボタン -->
