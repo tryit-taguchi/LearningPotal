@@ -4,12 +4,13 @@
 			<div style="width:900px;margin-left:50px;">
 				<h1>設定画面</h1>
 			</div>
-			<br>
 			<form @submit.prevent="submit">
 				<h2>有効設定</h2>
 				<!-- ON/OFF のラジオボタン -->
-				<div v-for="questionType in questionList">
-					<config-radio :name="questionType" :type="questionType" :title="statusHome.enableList[questionType].name"  v-model="statusHome.enableList[questionType].value" />
+				<div v-for="questionType in questionList" class="config-list">
+					<!-- <config-radio :name="questionType" :type="questionType" :title="statusHome.enableList[questionType].name" v-model="statusHome.enableList[questionType].value" /> -->
+					<base-switch v-model="statusHome.enableList[questionType].value" :true-value="1" :false-value="0" />
+					<span>{{statusHome.enableList[questionType].name}}</span>
 				</div>
 				<p>{{errorMessage}}</p>
 				<div class="question-button">
@@ -36,6 +37,8 @@ export default {
 	// データ定義
 	data: function(){
 		return {
+			Model: false,
+			ModelTrueFalse: 'x',
 			infoMessage: '',
 			infoMessageViewFlg: false,
 			errorMessage: '',
@@ -128,3 +131,16 @@ export default {
 	}
 }
 </script>
+
+<style scoped lang="scss">
+.config-list{
+	display: flex;
+	align-items: center;
+	>*:not(:first-child){
+		margin-left: 10px;
+	}
+	&+&{
+		margin-top: 10px;
+	}
+}
+</style>
