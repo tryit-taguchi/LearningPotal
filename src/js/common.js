@@ -107,7 +107,7 @@ export default {
 					} catch(e) {
 						console.log(e);
 					}
-				});
+				}.bind(this));
 			}
 		},
 		// phpと同じようなempty
